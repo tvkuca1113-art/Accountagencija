@@ -53,17 +53,22 @@ const isCurrent = (href: string) =>
               <li>
                 <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
                   {item.label}
+                  <Icon name="arrow" size={20} class="nav__arrow" />
                 </a>
               </li>
             ))
           }
         </ul>
         <div class="nav__mobile-extra">
-          <a class="btn" href="/kontakt#upit">Zatražite ponudu</a>
+          <a class="btn" href="/kontakt#upit">Zatražite ponudu <Icon name="arrow" size={18} /></a>
           <a class="btn btn--ghost" href={primaryPhone.href} data-track="klik_telefon">
             <Icon name="phone" size={18} />
             {primaryPhone.display}
           </a>
+          <p class="nav__address">
+            <Icon name="pin" size={16} />
+            {site.address.street}, {site.address.city}
+          </p>
         </div>
       </div>
     </nav>
@@ -97,7 +102,7 @@ const isCurrent = (href: string) =>
 <style>
   .topbar {
     display: none;
-    background: var(--c-navy-900);
+    background: var(--c-navy-950);
     color: #c9d7e8;
     font-size: 0.875rem;
   }
@@ -136,9 +141,21 @@ const isCurrent = (href: string) =>
     position: sticky;
     top: 0;
     z-index: 50;
+    border-bottom: 1px solid var(--c-line);
+  }
+  /* Pozadina i zamućenje su na pseudo-elementu: backdrop-filter na samom zaglavlju pretvorio bi ga u okvir
+     za position: fixed potomke, pa se mobilni meni ne bi raširio preko ekrana. */
+  .header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background: rgb(255 255 255 / 0.94);
     backdrop-filter: saturate(1.4) blur(10px);
-    border-bottom: 1px solid var(--c-line);
+    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+  }
+  :global(.nav-open) .header::before {
+    background: #fff;
   }
   .header__inner {
     display: flex;
@@ -162,7 +179,9 @@ const isCurrent = (href: string) =>
     padding: 0;
   }
   .nav__list a {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     color: var(--c-navy-900);
     text-decoration: none;
     font-weight: 650;
@@ -191,39 +210,64 @@ const isCurrent = (href: string) =>
     display: inline-flex;
   }
 
-  /* Mobilni meni */
+  /* Mobilni meni: cijeli ekran ispod zaglavlja */
   @media (max-width: 1023px) {
     .nav__panel {
       display: none;
       position: fixed;
-      inset: var(--header-h) 0 0 0;
+      top: var(--header-h);
+      left: 0;
+      right: 0;
+      bottom: 0;
       z-index: 49;
-      padding: 16px var(--gutter) calc(32px + env(safe-area-inset-bottom));
+      padding: 8px var(--gutter) calc(32px + env(safe-area-inset-bottom));
       background: #fff;
       overflow-y: auto;
+      overscroll-behavior: contain;
     }
     :global(.nav-open) .nav__panel {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      animation: nav-in 0.22s ease-out;
     }
     :global(.nav-open) body {
       overflow: hidden;
     }
     .nav__list a {
-      padding: 16px 0;
-      font-size: 1.25rem;
+      padding: 18px 0;
+      font-size: 1.375rem;
+      font-weight: 700;
       border-bottom: 1px solid var(--c-line);
+    }
+    .nav__list :global(.nav__arrow) {
+      color: var(--c-blue-600);
     }
     .nav__mobile-extra {
       display: grid;
       gap: 12px;
       margin-top: 28px;
     }
+    .nav__address {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0 0;
+      font-size: 0.9375rem;
+      color: var(--c-ink-muted);
+    }
+  }
+  @keyframes nav-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
   }
 
   /* Desktop */
   @media (min-width: 1024px) {
     .nav__toggle,
-    .nav__mobile-extra {
+    .nav__mobile-extra,
+    .nav__list :global(.nav__arrow) {
       display: none;
     }
     .nav__list {

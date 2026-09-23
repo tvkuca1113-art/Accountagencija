@@ -72,7 +72,9 @@ const robots = !allowIndexing || noindex ? 'noindex, nofollow' : 'index, follow'
 
     <script>
       import { initClickTracking } from '../scripts/analytics.ts';
+      import { initMotion } from '../scripts/motion.ts';
       initClickTracking();
+      initMotion();
     </script>
   </body>
 </html>

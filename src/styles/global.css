@@ -337,6 +337,27 @@ a:hover {
   --btn-bg: var(--c-blue-100);
   --btn-fg: var(--c-navy-900);
 }
+/* Dugmad na tamnoj pozadini */
+.btn--bright {
+  --btn-bg: var(--c-blue-500);
+  --btn-fg: var(--c-navy-950); /* tamni tekst na svijetloplavoj: kontrast ≥ 5:1 */
+}
+.btn--bright:hover {
+  --btn-bg: #3ab8f2;
+  --btn-fg: var(--c-navy-950);
+}
+.btn--glass {
+  --btn-bg: rgb(255 255 255 / 0.06);
+  --btn-fg: #fff;
+  --btn-border: rgb(255 255 255 / 0.32);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.btn--glass:hover {
+  --btn-bg: rgb(255 255 255 / 0.14);
+  --btn-fg: #fff;
+  --btn-border: rgb(255 255 255 / 0.5);
+}
 .btn--small {
   min-height: 44px;
   padding: 10px 18px;
@@ -416,10 +437,24 @@ a:hover {
   box-shadow: var(--shadow-sm);
 }
 
-/* Zaglavlje podstranice */
+/* Zaglavlje podstranice (s tačkastim uzorkom i blagim sjajem u bojama znaka) */
 .page-head {
+  position: relative;
+  isolation: isolate;
   padding-block: clamp(24px, 3vw, 48px) clamp(32px, 4vw, 56px);
   background: var(--c-bg);
+}
+.page-head::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(45% 80% at 100% 0%, rgb(0 160 236 / 0.14) 0%, transparent 70%),
+    radial-gradient(rgb(15 35 64 / 0.08) 1px, transparent 1.2px) 0 0 / 22px 22px;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 45%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 45%);
+  pointer-events: none;
 }
 
 /* Obrasci */
@@ -597,6 +632,46 @@ a:hover {
 .option input:focus-visible + span {
   outline: 3px solid var(--c-focus);
   outline-offset: 2px;
+}
+
+/* Suptilan uzorak pozadine: tačkasta mreža i blagi sjaj u bojama znaka */
+.section--pattern {
+  position: relative;
+  isolation: isolate;
+}
+.section--pattern::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(40% 50% at 100% 0%, rgb(0 160 236 / 0.1) 0%, transparent 70%),
+    radial-gradient(35% 45% at 0% 100%, rgb(24 124 196 / 0.08) 0%, transparent 70%),
+    radial-gradient(rgb(15 35 64 / 0.09) 1px, transparent 1.2px) 0 0 / 22px 22px;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 70%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Pojavljivanje sadržaja pri skrolanju. Klasu .reveal-on dodaje skripta tek kad su animacije dozvoljene,
+   pa je bez JavaScripta i uz prefers-reduced-motion sav sadržaj odmah vidljiv. */
+.reveal-on [data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+.reveal-on [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+@media print {
+  .reveal-on [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 /* Mobilna donja traka zahtijeva prostor ispod sadržaja. */

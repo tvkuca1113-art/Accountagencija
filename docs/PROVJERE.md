@@ -1,6 +1,8 @@
 # Sažetak izvršenih provjera
 
-Stanje: 23. 9. 2026. Sve provjere izvršene su lokalno, u razvojnom okruženju. Stranica još nije objavljena na produkcijskoj domeni.
+Stanje: 23. 9. 2026. Provjere su izvršene lokalno, u razvojnom okruženju; pregledna verzija je objavljena na Vercelu (vercel.app adresa), ne na produkcijskoj domeni.
+
+**Izmjene nakon prvog pregleda na iPhoneu:** ispravljen mobilni meni (backdrop-filter na zaglavlju pravio je okvir za `position: fixed`, pa se meni nije širio preko ekrana; sada je zamućenje na pseudo-elementu i test provjerava visinu menija). Početna je redizajnirana: tamni hero u bojama znaka s fotografijom koja izranja iz pozadine, blagim uvećanjem i paralaksom, animiranim sjajem, linijama poslovne knjige i trima plohama; brojke se broje pri prikazu; sekcije se blago pojavljuju pri skrolanju. Sve animacije se gase uz `prefers-reduced-motion`, a bez JavaScripta sadržaj je odmah vidljiv.
 
 ## Radi i testirano
 
@@ -17,7 +19,7 @@ Stanje: 23. 9. 2026. Sve provjere izvršene su lokalno, u razvojnom okruženju. 
 - Forma: greške uz polja i fokus na prvo neispravno; prikazuje se samo polje za odabrani način kontakta; dugme onemogućeno tokom slanja, samo jedan zahtjev pri dvostrukom slanju; uspjeh tek nakon potvrde servera; pri grešci (503) unos ostaje i nudi se telefon.
 - Tok slanja s lažnim Resend serverom (bez slanja pravih e-mailova): server šalje jedan zahtjev pružaocu, ključ ostaje na serveru i ne pojavljuje se u pregledniku, predmet sadrži uslugu, Reply-To je posjetilac, primalac i pošiljalac su iz konfiguracije.
 - Server: honeypot i prebrzo popunjavanje → tiho odbijanje bez slanja; tuđe porijeklo → 403; serverska validacija → 422 s porukama po poljima; slanje bez JavaScripta → 303 na `/kontakt/poslano`; GET → 405; šesti zahtjev u prozoru → 429.
-- Mobilni meni (`aria-expanded`, Escape), FAQ (`<details>`), donja traka „Pozovite / Pošaljite upit“ (skriva se kad je forma na ekranu ili je polje u fokusu; tijelo ima prostor ispod sadržaja; safe-area).
+- Mobilni meni (`aria-expanded`, Escape, pokriva cijeli ekran ispod zaglavlja), FAQ (`<details>`), donja traka „Pozovite / Pošaljite upit“ (skriva se kad je forma na ekranu ili je polje u fokusu; tijelo ima prostor ispod sadržaja; safe-area).
 - Na mobitelu su naslov i primarni CTA iznad slike i unutar prvog ekrana.
 - Sidra (`/racunovodstvo#upit`, `/kontakt#upit`, `/korisni-alati#kalkulator`) staju ispod ljepljivog zaglavlja.
 - Tastatura: link za preskakanje na sadržaj, vidljiv fokus na svim linkovima.
@@ -28,8 +30,8 @@ Stanje: 23. 9. 2026. Sve provjere izvršene su lokalno, u razvojnom okruženju. 
 
 | Stranica | Performanse | Pristupačnost | Najbolje prakse | LCP | CLS | TBT |
 |---|---|---|---|---|---|---|
-| `/` | 99 | 100 | 100 | 2,0 s | 0 | 10 ms |
-| `/racunovodstvo` | 100 | 100 | 100 | 1,7 s | 0 | 0 ms |
+| `/` (novi hero s animacijama) | 99 | 100 | 100 | 2,1 s | 0 | 0 ms |
+| `/racunovodstvo` | 99 | 100 | 100 | 1,8 s | 0 | 0 ms |
 | `/korisni-alati` | 99 | 100 | 100 | 1,8 s | 0 | 0 ms |
 
 SEO: 100 uz `PUBLIC_ALLOW_INDEXING=true`; u demo načinu je niži samo zbog namjernog `noindex`. Laboratorijsko mjerenje služi za otkrivanje problema i **nije dokaz** da će LCP ≤ 2,5 s, INP ≤ 200 ms i CLS ≤ 0,1 biti ostvareni na 75. percentilu stvarnih posjeta. To se mjeri nakon objave (npr. Vercel Speed Insights ili CrUX).

@@ -30,7 +30,7 @@ const others = services.filter((s) => s.slug !== service.slug);
   ogImage={`/images/${service.image}-1200.webp`}
   jsonLd={[serviceSchema(service), breadcrumbSchema(crumbs)]}
 >
-  <section class="svc-hero">
+  <section class="svc-hero page-head">
     <div class="container">
       <Breadcrumbs items={crumbs} />
       <div class="svc-hero__grid">

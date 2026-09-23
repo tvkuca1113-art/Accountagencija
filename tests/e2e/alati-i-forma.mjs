@@ -156,13 +156,16 @@ const newPage = async (opts = {}) => {
   check('mobilni meni: zatvoren', (await toggle.getAttribute('aria-expanded')) === 'false' && await page.locator('#glavni-meni').isHidden());
   await toggle.click();
   check('mobilni meni: otvoren', (await toggle.getAttribute('aria-expanded')) === 'true' && await page.locator('#glavni-meni').isVisible());
+  await page.waitForTimeout(350); // kraj animacije otvaranja
+  const panelBox = await page.locator('#glavni-meni').boundingBox();
+  check('mobilni meni: pokriva ekran ispod zaglavlja', panelBox && panelBox.y + panelBox.height >= 800 - 1 && panelBox.height > 500, JSON.stringify(panelBox));
   await page.keyboard.press('Escape');
   check('mobilni meni: Escape zatvara', (await toggle.getAttribute('aria-expanded')) === 'false');
   const bar = page.locator('[data-mobile-bar]');
   check('donja traka vidljiva', await bar.isVisible());
   const h1Box = await page.locator('h1').boundingBox();
   const ctaBox = await page.locator('.hero__actions .btn').first().boundingBox();
-  const imgBox = await page.locator('.hero__img').boundingBox();
+  const imgBox = await page.locator('.hero__media').boundingBox();
   check('mobitel: naslov i CTA prije slike', h1Box.y < imgBox.y && ctaBox.y < imgBox.y && ctaBox.y + ctaBox.height < 800);
   await page.goto(BASE + '/kontakt#upit');
   await page.waitForTimeout(500);

@@ -22,7 +22,7 @@ const steps = [
     <div class="process__art">
       <AlignPlanes />
     </div>
-    <div>
+    <div data-reveal>
       <p class="eyebrow">Saradnja</p>
       <h2 id="saradnja-naslov">Saradnja u tri koraka</h2>
       <p class="lead">Jasan početak i dogovorena pravila, pa se vi možete baviti poslom.</p>
@@ -45,7 +45,23 @@ const steps = [
 
 <style>
   .process {
+    position: relative;
+    isolation: isolate;
     overflow: hidden;
+    background:
+      radial-gradient(50% 70% at 0% 50%, rgb(0 160 236 / 0.18) 0%, transparent 70%),
+      radial-gradient(40% 60% at 100% 0%, rgb(20 184 236 / 0.1) 0%, transparent 70%),
+      var(--c-navy-900);
+  }
+  .process::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: repeating-linear-gradient(180deg, transparent 0 43px, rgb(255 255 255 / 0.04) 43px 44px);
+    -webkit-mask-image: radial-gradient(70% 90% at 30% 50%, #000 0%, transparent 80%);
+    mask-image: radial-gradient(70% 90% at 30% 50%, #000 0%, transparent 80%);
+    pointer-events: none;
   }
   .process__grid {
     display: grid;

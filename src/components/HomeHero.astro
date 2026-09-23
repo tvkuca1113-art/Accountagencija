@@ -1,0 +1,387 @@
+---
+// Hero početne: tamna pozadina u bojama znaka, fotografija koja „izranja“ iz pozadine,
+// suptilne animacije (sjaj, linije poslovne knjige, tri plohe koje se poravnaju) i blagi paralaks.
+// Naslov i poziv na akciju su prvi u kodu i na mobitelu uvijek iznad fotografije.
+// Sve animacije se isključuju uz prefers-reduced-motion; bez JavaScripta prikazuje se završno stanje.
+import Icon from './Icon.astro';
+import ResponsiveImage from './ResponsiveImage.astro';
+import { site } from '../data/site.ts';
+
+const stats = site.stats.map((s) => {
+  const m = s.value.match(/^(\d+)(.*)$/);
+  return { ...s, number: m ? Number(m[1]) : null, suffix: m ? m[2] : '' };
+});
+---
+
+<section class="hero" aria-labelledby="hero-naslov">
+  <div class="hero__fx" aria-hidden="true">
+    <span class="hero__glow hero__glow--a"></span>
+    <span class="hero__glow hero__glow--b"></span>
+    <span class="hero__ledger"></span>
+    <span class="hero__sheets">
+      <span class="hero__sheet hero__sheet--1"></span>
+      <span class="hero__sheet hero__sheet--2"></span>
+      <span class="hero__sheet hero__sheet--3"></span>
+    </span>
+  </div>
+
+  <div class="container hero__content">
+    <div class="hero__text">
+      <p class="eyebrow hero__eyebrow">Računovodstvena agencija · Mostar</p>
+      <h1 id="hero-naslov">Vi vodite posao. Mi brinemo o&nbsp;računovodstvu.</h1>
+      <p class="hero__lead">
+        Od poslovnih knjiga i poreznih prijava do savjeta za sljedeći korak — ACCOUNT pruža podršku vašem poslovanju.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--bright" href="/kontakt#upit">Zatražite ponudu <Icon name="arrow" size={18} /></a>
+        <a class="btn btn--glass" href="#usluge">Pogledajte usluge</a>
+      </div>
+      <p class="hero__note">
+        <Icon name="doc" size={18} />
+        Dokumentaciju možete dostavljati i e-mailom.
+      </p>
+    </div>
+  </div>
+
+  <div class="hero__media">
+    <ResponsiveImage
+      name="account-hero"
+      alt="Radni sto s laptopom i tamnoplavim fasciklom s logotipom ACCOUNT, uz prozor s pogledom na Stari most u Mostaru"
+      sizes="(min-width: 900px) 62vw, 100vw"
+      priority
+      mobileArtDirection
+      class="hero__photo"
+    />
+    <dl class="hero__stats">
+      {
+        stats.map((s) => (
+          <div>
+            <dt>{s.label}</dt>
+            <dd data-count={s.number ?? undefined} data-suffix={s.suffix}>
+              {s.value}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 90% at 0% 0%, #13305a 0%, transparent 55%),
+      linear-gradient(180deg, var(--c-navy-900) 0%, var(--c-navy-950) 100%);
+    color: #c9d8ea;
+  }
+
+  /* Pozadinski efekti */
+  .hero__fx {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hero__glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(20px);
+  }
+  .hero__glow--a {
+    width: 560px;
+    height: 560px;
+    left: -180px;
+    top: -220px;
+    background: radial-gradient(circle, rgb(0 160 236 / 0.38) 0%, rgb(0 160 236 / 0) 68%);
+    animation: glow-drift 16s ease-in-out infinite alternate;
+  }
+  .hero__glow--b {
+    width: 460px;
+    height: 460px;
+    left: 30%;
+    bottom: -260px;
+    background: radial-gradient(circle, rgb(20 184 236 / 0.22) 0%, rgb(20 184 236 / 0) 70%);
+    animation: glow-drift 20s ease-in-out -6s infinite alternate-reverse;
+  }
+  /* Linije poslovne knjige s vertikalnom marginom, blijede prema rubovima */
+  .hero__ledger {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, transparent calc(var(--gutter) + 6px), rgb(20 184 236 / 0.16) calc(var(--gutter) + 6px), rgb(20 184 236 / 0.16) calc(var(--gutter) + 7px), transparent calc(var(--gutter) + 7px)),
+      repeating-linear-gradient(180deg, transparent 0 43px, rgb(255 255 255 / 0.05) 43px 44px);
+    -webkit-mask-image: radial-gradient(90% 80% at 15% 35%, #000 0%, transparent 75%);
+    mask-image: radial-gradient(90% 80% at 15% 35%, #000 0%, transparent 75%);
+    animation: ledger-in 1.4s ease-out both;
+  }
+
+  /* Tri tanke plohe (motiv iz znaka): ulaze razmaknute, poravnaju se i blago lebde */
+  .hero__sheets {
+    display: none;
+    position: absolute;
+    perspective: 1200px;
+  }
+  .hero__sheet {
+    position: absolute;
+    inset: 20% 12%;
+    border-radius: 6px;
+    transform-style: preserve-3d;
+    animation:
+      sheet-align 1.6s cubic-bezier(0.2, 0.75, 0.2, 1) both,
+      sheet-float 7s ease-in-out 1.8s infinite alternate;
+  }
+  .hero__sheet--1 {
+    --from: translate3d(-40px, 50px, 0) rotateX(58deg) rotateZ(-52deg);
+    --to: translate3d(0, 24px, 0) rotateX(58deg) rotateZ(-38deg);
+    background: rgb(24 124 196 / 0.55);
+  }
+  .hero__sheet--2 {
+    --from: translate3d(60px, 0, 0) rotateX(58deg) rotateZ(-20deg);
+    --to: translate3d(0, 10px, 0) rotateX(58deg) rotateZ(-38deg);
+    background: rgb(0 160 236 / 0.5);
+    animation-delay: 0.12s, 1.9s;
+  }
+  .hero__sheet--3 {
+    --from: translate3d(-20px, -60px, 0) rotateX(58deg) rotateZ(-46deg);
+    --to: translate3d(0, -4px, 0) rotateX(58deg) rotateZ(-38deg);
+    background:
+      repeating-linear-gradient(180deg, transparent 0 14px, rgb(15 35 64 / 0.16) 14px 15px),
+      rgb(244 249 254 / 0.85);
+    animation-delay: 0.24s, 2s;
+  }
+
+  @keyframes sheet-align {
+    from {
+      transform: var(--from);
+      opacity: 0;
+    }
+    to {
+      transform: var(--to);
+      opacity: 1;
+    }
+  }
+  @keyframes sheet-float {
+    from {
+      transform: var(--to);
+    }
+    to {
+      transform: var(--to) translate3d(0, 0, 10px);
+    }
+  }
+  @keyframes glow-drift {
+    to {
+      transform: translate3d(60px, 40px, 0);
+    }
+  }
+  @keyframes ledger-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  /* Sadržaj */
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    padding-block: 28px 0;
+  }
+  .hero__eyebrow {
+    color: var(--c-cyan-400);
+  }
+  .hero__eyebrow::before {
+    background: var(--c-cyan-400);
+  }
+  .hero h1 {
+    color: #fff;
+    max-width: 13ch;
+  }
+  .hero__lead {
+    max-width: 36rem;
+    margin-bottom: 24px;
+    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+    line-height: 1.6;
+    color: #c9d8ea;
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  @media (max-width: 899px) {
+    .hero__actions .btn {
+      min-height: 48px;
+      padding: 10px 18px;
+      font-size: 0.9375rem;
+    }
+    .hero__actions .btn :global(svg) {
+      display: none;
+    }
+  }
+  .hero__note {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 18px 0 0;
+    font-size: var(--fs-small);
+    color: #a9bdd6;
+  }
+  .hero__note :global(svg) {
+    color: var(--c-cyan-400);
+  }
+  .hero :global(:focus-visible) {
+    outline-color: #fff;
+  }
+
+  /* Fotografija */
+  .hero__media {
+    position: relative;
+    z-index: 1;
+    margin-top: -24px;
+    aspect-ratio: 4 / 5;
+    max-height: 620px;
+    width: 100%;
+  }
+  .hero__media :global(.hero__photo) {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
+  }
+  .hero__media :global(.hero__photo img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 60% 50%;
+    animation: hero-zoom 14s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+  }
+  @media (min-width: 768px) and (max-width: 899px) {
+    .hero__media {
+      aspect-ratio: 16 / 10;
+    }
+  }
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1.08);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  /* Brojke kao staklene oznake preko fotografije */
+  .hero__stats {
+    position: absolute;
+    left: var(--gutter);
+    bottom: 20px;
+    z-index: 2;
+    display: flex;
+    gap: 24px;
+    margin: 0;
+    padding: 14px 20px;
+    border-radius: var(--radius);
+    background: rgb(10 24 46 / 0.55);
+    border: 1px solid rgb(255 255 255 / 0.16);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .hero__stats div {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .hero__stats dd {
+    margin: 0;
+    font-size: 1.625rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+  .hero__stats dt {
+    font-size: 0.8125rem;
+    color: #b9cbe0;
+  }
+
+  /* Desktop: tekst lijevo na tamnoj pozadini, fotografija preko desnih ~60 % */
+  @media (min-width: 900px) {
+    .hero {
+      display: flex;
+      align-items: center;
+      min-height: clamp(600px, 76vh, 740px);
+    }
+    .hero__content {
+      padding-block: 88px 128px;
+    }
+    .hero__text {
+      max-width: 34rem;
+    }
+    .hero__media {
+      position: absolute;
+      inset: 0 0 0 auto;
+      width: 62%;
+      max-height: none;
+      aspect-ratio: auto;
+      margin: 0;
+    }
+    .hero__media :global(.hero__photo) {
+      inset: -6% 0;
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.4) 26%, #000 55%);
+      mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.4) 26%, #000 55%);
+    }
+    .hero__media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(0deg, rgb(10 24 46 / 0.85) 0%, rgb(10 24 46 / 0) 20%);
+      pointer-events: none;
+    }
+    /* Desno poravnanje: fascikl s logotipom (donji desni ugao scene) ostaje u kadru */
+    .hero__media :global(.hero__photo img) {
+      object-position: 100% 55%;
+    }
+    .hero__stats {
+      left: 22%;
+      bottom: 104px;
+    }
+    .hero__sheets {
+      display: block;
+      left: 45%;
+      top: 20px;
+      width: 300px;
+      height: 250px;
+      opacity: 0.8;
+    }
+  }
+
+  /* Blagi paralaks fotografije pri skrolanju (samo gdje preglednik podržava scroll-timeline) */
+  @supports (animation-timeline: scroll()) {
+    @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+      .hero__media :global(.hero__photo) {
+        animation: hero-parallax linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 100vh;
+      }
+    }
+  }
+  @keyframes hero-parallax {
+    to {
+      transform: translateY(8%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__glow,
+    .hero__ledger,
+    .hero__sheet,
+    .hero__media :global(.hero__photo img) {
+      animation: none !important;
+    }
+    .hero__sheet {
+      transform: var(--to);
+    }
+  }
+</style>

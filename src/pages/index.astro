@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
+import HomeHero from '../components/HomeHero.astro';
 import ResponsiveImage from '../components/ResponsiveImage.astro';
 import ProcessSection from '../components/ProcessSection.astro';
 import ServiceGuide from '../components/ServiceGuide.astro';
@@ -19,50 +20,12 @@ const [featured, ...rest] = services;
   description="Računovodstvo, porezne prijave i poslovno savjetovanje u Mostaru. Upoznajte usluge agencije ACCOUNT i zatražite ponudu za svoje poslovanje."
   jsonLd={[organizationSchema()]}
 >
-  <!-- Hero -->
-  <section class="hero" aria-labelledby="hero-naslov">
-    <div class="container hero__grid">
-      <div class="hero__text">
-        <p class="eyebrow">Računovodstvena agencija · Mostar</p>
-        <h1 id="hero-naslov">Vi vodite posao. Mi brinemo o&nbsp;računovodstvu.</h1>
-        <p class="lead">
-          Od poslovnih knjiga i poreznih prijava do savjeta za sljedeći korak — ACCOUNT pruža podršku vašem poslovanju.
-        </p>
-        <div class="hero__actions">
-          <a class="btn" href="/kontakt#upit">Zatražite ponudu <Icon name="arrow" size={18} /></a>
-          <a class="btn btn--ghost" href="#usluge">Pogledajte usluge</a>
-        </div>
-        <p class="hero__note">
-          <Icon name="doc" size={18} />
-          Dokumentaciju možete dostavljati i e-mailom.
-        </p>
-      </div>
-      <div class="hero__media">
-        <ResponsiveImage
-          name="account-hero"
-          alt="Radni sto s laptopom i tamnoplavim fasciklom s logotipom ACCOUNT, uz prozor s pogledom na Stari most u Mostaru"
-          sizes="(min-width: 1240px) 640px, (min-width: 900px) 52vw, 100vw"
-          priority
-          mobileArtDirection
-          class="media hero__img"
-        />
-        <dl class="hero__stats">
-          {
-            site.stats.map((s) => (
-              <div>
-                <dt>{s.label}</dt>
-                <dd>{s.value}</dd>
-              </div>
-            ))
-          }
-        </dl>
-      </div>
-    </div>
-  </section>
+  <HomeHero />
 
   <!-- Kome pomažemo -->
-  <section class="section section--tight audiences" aria-labelledby="kome-naslov">
+  <section class="audiences" aria-labelledby="kome-naslov">
     <div class="container">
+      <div class="audiences__panel">
       <h2 id="kome-naslov" class="audiences__title">Kome pomažemo</h2>
       <ul class="audiences__list">
         {
@@ -77,19 +40,20 @@ const [featured, ...rest] = services;
           ))
         }
       </ul>
+      </div>
     </div>
   </section>
 
   <!-- Usluge -->
-  <section class="section section--tint" id="usluge" aria-labelledby="usluge-naslov">
+  <section class="section section--tint section--pattern" id="usluge" aria-labelledby="usluge-naslov">
     <div class="container">
-      <div class="section-head">
+      <div class="section-head" data-reveal>
         <p class="eyebrow">Usluge</p>
         <h2 id="usluge-naslov">Podrška za svaku fazu poslovanja</h2>
         <p class="lead">Od prvog koraka i registracije do urednih knjiga, izvještaja i planiranja rasta.</p>
       </div>
 
-      <article class="svc-featured">
+      <article class="svc-featured" data-reveal>
         <ResponsiveImage
           name={featured.image}
           alt={featured.imageAlt}
@@ -97,6 +61,7 @@ const [featured, ...rest] = services;
           class="media svc-featured__media"
         />
         <div class="svc-featured__body">
+          <span class="svc-featured__index" aria-hidden="true">01</span>
           <h3><a href={`/${featured.slug}`}>{featured.title}</a></h3>
           <p class="svc-featured__benefit">{featured.benefit}</p>
           <ul class="checklist">
@@ -110,8 +75,9 @@ const [featured, ...rest] = services;
 
       <ul class="svc-grid">
         {
-          rest.map((s) => (
-            <li class="svc-card">
+          rest.map((s, i) => (
+            <li class="svc-card" data-reveal style={`--reveal-delay: ${(i % 2) * 0.08}s`}>
+              <span class="svc-card__index" aria-hidden="true">{String(i + 2).padStart(2, '0')}</span>
               <ResponsiveImage name={s.image} alt={s.imageAlt} sizes="(min-width: 1024px) 580px, (min-width: 640px) 50vw, 100vw" class="media svc-card__media" />
               <div class="svc-card__body">
                 <h3>
@@ -134,7 +100,7 @@ const [featured, ...rest] = services;
   <!-- Vodič -->
   <section class="section section--tint" aria-labelledby="vodic-naslov">
     <div class="container guide-wrap">
-      <div class="guide-wrap__intro">
+      <div class="guide-wrap__intro" data-reveal>
         <p class="eyebrow">Vodič</p>
         <h2 id="vodic-naslov">Koja vam usluga treba?</h2>
         <p class="lead">Odgovorite na tri kratka pitanja i dobit ćete preporuku te spisak informacija za prvi razgovor.</p>
@@ -148,7 +114,7 @@ const [featured, ...rest] = services;
   <!-- O agenciji -->
   <section class="section about" aria-labelledby="o-nama-naslov">
     <div class="container about__grid">
-      <div>
+      <div data-reveal>
         <p class="eyebrow">O agenciji</p>
         <h2 id="o-nama-naslov">Lokalna stručnost, jasan govor</h2>
         <p class="lead">
@@ -161,18 +127,20 @@ const [featured, ...rest] = services;
         </p>
         <a class="link-arrow" href="/o-nama">Više o nama <Icon name="arrow" size={18} /></a>
       </div>
-      <dl class="about__stats">
+      <dl class="about__stats" data-reveal>
         {
           site.stats.map((s) => (
             <div>
               <dt>{s.label}</dt>
-              <dd>{s.value}</dd>
+              <dd data-count={parseInt(s.value, 10)} data-suffix={s.value.replace(/^\d+/, '')}>
+                {s.value}
+              </dd>
             </div>
           ))
         }
         <div>
           <dt>uslužnih oblasti na jednom mjestu</dt>
-          <dd>5</dd>
+          <dd data-count="5">5</dd>
         </div>
       </dl>
     </div>
@@ -181,7 +149,7 @@ const [featured, ...rest] = services;
   <!-- Savjeti -->
   <section class="section section--tint" aria-labelledby="savjeti-naslov">
     <div class="container">
-      <div class="section-head section-head--row">
+      <div class="section-head section-head--row" data-reveal>
         <div>
           <p class="eyebrow">Savjeti</p>
           <h2 id="savjeti-naslov">Korisno za vaše poslovanje</h2>
@@ -195,12 +163,12 @@ const [featured, ...rest] = services;
   <!-- FAQ i kontakt -->
   <section class="section" aria-labelledby="faq-naslov">
     <div class="container faq-contact">
-      <div>
+      <div data-reveal>
         <p class="eyebrow">Česta pitanja</p>
         <h2 id="faq-naslov">Prije prvog razgovora</h2>
         <FaqList items={generalFaq.slice(0, 4)} />
       </div>
-      <aside class="contact-card" aria-labelledby="kontakt-kartica-naslov">
+      <aside class="contact-card" aria-labelledby="kontakt-kartica-naslov" data-reveal>
         <h2 id="kontakt-kartica-naslov">Kontaktirajte nas</h2>
         <p>Pošaljite upit ili nas pozovite. Ponudu pripremamo prema obimu i potrebama vašeg poslovanja.</p>
         <ul class="contact-card__list">
@@ -231,103 +199,33 @@ const [featured, ...rest] = services;
 </Base>
 
 <style>
-  /* Hero */
-  .hero {
-    padding-block: clamp(32px, 4vw, 72px) clamp(48px, 5vw, 96px);
-    background: linear-gradient(180deg, var(--c-bg) 0%, #fff 100%);
-  }
-  .hero__grid {
-    display: grid;
-    gap: 36px;
-    align-items: center;
-  }
-  @media (min-width: 900px) {
-    .hero__grid {
-      grid-template-columns: 1fr 1.05fr;
-      gap: 56px;
-    }
-  }
-  .hero__text h1 {
-    max-width: 13ch;
-  }
-  .hero__text .lead {
-    margin-bottom: 28px;
-  }
-  .hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .hero__note {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin: 22px 0 0;
-    font-size: var(--fs-small);
-    color: var(--c-ink-muted);
-  }
-  .hero__note svg {
-    color: var(--c-blue-600);
-  }
-  .hero__media {
-    position: relative;
-  }
-  :global(.media.hero__img) {
-    aspect-ratio: 4 / 5;
-    box-shadow: var(--shadow);
-  }
-  @media (min-width: 768px) {
-    :global(.media.hero__img) {
-      aspect-ratio: 16 / 10;
-    }
-  }
-  :global(.media.hero__img) :global(img) {
-    object-position: 100% 50%;
-  }
-  .hero__stats {
-    display: flex;
-    gap: 28px;
-    margin: 0;
-    position: absolute;
-    left: 16px;
-    bottom: 16px;
-    padding: 14px 20px;
-    border-radius: var(--radius);
-    background: rgb(255 255 255 / 0.95);
-    box-shadow: var(--shadow);
-  }
-  .hero__stats div {
-    display: flex;
-    flex-direction: column-reverse;
-  }
-  .hero__stats dd {
-    margin: 0;
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--c-navy-900);
-    line-height: 1.1;
-  }
-  .hero__stats dt {
-    font-size: 0.8125rem;
-    color: var(--c-ink-muted);
-  }
-  @media (min-width: 900px) {
-    .hero__stats {
-      left: -28px;
-      bottom: 28px;
-    }
-  }
-
-  /* Kome pomažemo */
+  /* Kome pomažemo: panel koji na desktopu pluta preko donjeg ruba heroja */
   .audiences {
-    padding-top: 0;
+    position: relative;
+    z-index: 3;
+    padding-block: 32px 8px;
+  }
+  .audiences__panel {
+    padding: 24px 0 0;
+  }
+  @media (min-width: 900px) {
+    .audiences {
+      margin-top: -76px;
+      padding-block: 0;
+    }
+    .audiences__panel {
+      padding: 28px 28px 28px;
+      border-radius: var(--radius-lg);
+      background: #fff;
+      box-shadow: 0 24px 60px -20px rgb(10 24 46 / 0.35), 0 2px 8px rgb(10 24 46 / 0.06);
+    }
   }
   .audiences__title {
-    font-size: 1rem;
-    letter-spacing: 0.12em;
+    font-size: 0.8125rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--c-ink-muted);
-    margin-bottom: 20px;
+    margin-bottom: 16px;
     font-weight: 700;
   }
   .audiences__list {
@@ -335,11 +233,21 @@ const [featured, ...rest] = services;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 12px;
+    gap: 10px;
   }
-  @media (min-width: 640px) {
+  @media (min-width: 480px) {
     .audiences__list {
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 639px) {
+    .audiences__list a {
+      gap: 2px;
+      padding: 14px 44px 14px 16px;
+    }
+    .audiences__list :global(.audiences__arrow) {
+      top: 50%;
+      margin-top: -10px;
     }
   }
   @media (min-width: 1024px) {
@@ -438,6 +346,36 @@ const [featured, ...rest] = services;
     .svc-grid {
       grid-template-columns: repeat(2, 1fr);
     }
+  }
+  .svc-card__index,
+  .svc-featured__index {
+    font-size: 0.8125rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--c-blue-600);
+  }
+  .svc-featured__index {
+    display: block;
+    margin-bottom: 12px;
+  }
+  .svc-card__index {
+    position: absolute;
+    z-index: 1;
+    top: 16px;
+    left: 16px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.92);
+    box-shadow: var(--shadow-sm);
+  }
+  /* Blago uvećanje fotografije pri prelasku mišem */
+  .svc-card :global(img),
+  .svc-featured :global(img) {
+    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .svc-card:hover :global(img),
+  .svc-featured:hover :global(img) {
+    transform: scale(1.04);
   }
   .svc-card {
     position: relative;

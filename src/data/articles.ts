@@ -22,7 +22,7 @@ export const articles: Article[] = [
     slug: 'prihod-i-dobit-nisu-isto',
     title: 'Prihod i dobit nisu isto',
     description:
-      'Zašto uspješan mjesec po prihodu ne mora biti uspješan i po rezultatu, i kako jednostavan pregled troškova pokazuje šta zaista ostaje.',
+      'Zašto uspješan mjesec po prihodu ne mora biti uspješan i po rezultatu i kako jednostavan pregled troškova pokazuje šta zaista ostaje.',
     published: '2026-09-23',
     updated: '2026-09-23',
     readingMinutes: 4,
@@ -67,7 +67,7 @@ export const articles: Article[] = [
     slug: 'sta-pripremiti-za-prvi-razgovor-s-racunovodjom',
     title: 'Šta pripremiti za prvi razgovor s računovođom',
     description:
-      'Kratka lista podataka i dokumenata s kojima prvi razgovor s računovođom brže prelazi u konkretan dogovor, i nekoliko navika koje čuvaju dokumentaciju urednom.',
+      'Kratka lista podataka i dokumenata s kojima prvi razgovor s računovođom brže prelazi u konkretan dogovor te nekoliko navika koje čuvaju dokumentaciju urednom.',
     published: '2026-09-23',
     updated: '2026-09-23',
     readingMinutes: 4,
@@ -139,10 +139,10 @@ export const articles: Article[] = [
 <p>Fiksni troškovi ne zavise od prodaje, a varijabilni rastu s njom. Ta podjela pokazuje koliki promet vam treba samo da biste pokrili troškove, odnosno gdje je vaš prag pokrića.</p>
 
 <h2>3. Procijenite kako ulaganje mijenja troškove</h2>
-<p>Novi zaposlenik, veći prostor ili rata za opremu najčešće povećavaju fiksne troškove. Nova oprema ponekad smanjuje varijabilne troškove, npr. manje otpada ili brža izrada. Upišite realne iznose, a ne one koji najbolje izgledaju.</p>
+<p>Novi radnik, veći prostor ili rata za opremu najčešće povećavaju fiksne troškove. Nova oprema ponekad smanjuje varijabilne troškove, npr. manje otpada ili brža izrada. Upišite realne iznose, a ne one koji najbolje izgledaju.</p>
 
 <h2>4. Izračunajte novi prag pokrića</h2>
-<p>Ako se nakon ulaganja prag pokrića znatno podigne, zapitajte se je li realno da promet toliko poraste i koliko bi to trajalo. Upravo za ovakvu provjeru možete koristiti naš kalkulator pokrića troškova.</p>
+<p>Ako se nakon ulaganja prag pokrića znatno podigne, zapitajte se da li je realno da promet toliko poraste i koliko bi to trajalo. Upravo za ovakvu provjeru možete koristiti naš kalkulator pokrića troškova.</p>
 
 <h2>5. Planirajte rezervu</h2>
 <p>Ulaganje rijetko počne donositi rezultat od prvog dana. Rezerva za nekoliko mjeseci fiksnih troškova daje prostor da novi dio posla zaživi bez pritiska na redovne obaveze.</p>

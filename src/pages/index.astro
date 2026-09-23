@@ -13,6 +13,17 @@ import { site, fullAddress } from '../data/site.ts';
 import { organizationSchema } from '../lib/schema.ts';
 
 const [featured, ...rest] = services;
+
+// Traka povjerenja: samo potvrđene tvrdnje agencije i činjenice s postojećeg weba.
+const trust = [
+  { icon: 'shield', title: 'Ovlašteno zastupanje', text: 'stranih poreznih obveznika' },
+  { icon: 'pin', title: 'Lokalno, u Mostaru', text: 'Lacina bb, Villa Neretva' },
+  { icon: 'mail', title: 'Dokumentacija i e-mailom', text: 'digitalna dostava dokumentacije' },
+  { icon: 'handshake', title: 'Individualna ponuda', text: 'prema obimu i složenosti posla' },
+] as const;
+
+// Visine stubića u mini grafikonu kalkulatora (ilustracija, bez podataka).
+const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
 ---
 
 <Base
@@ -22,10 +33,28 @@ const [featured, ...rest] = services;
 >
   <HomeHero />
 
+  <!-- Traka povjerenja -->
+  <section class="trust" aria-label="Zašto nam klijenti vjeruju">
+    <div class="container">
+      <ul class="trust__list">
+        {
+          trust.map((t) => (
+            <li>
+              <span class="trust__icon"><Icon name={t.icon} size={22} /></span>
+              <span>
+                <strong>{t.title}</strong>
+                <span>{t.text}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
   <!-- Kome pomažemo -->
   <section class="audiences" aria-labelledby="kome-naslov">
     <div class="container">
-      <div class="audiences__panel">
       <h2 id="kome-naslov" class="audiences__title">Kome pomažemo</h2>
       <ul class="audiences__list">
         {
@@ -40,7 +69,6 @@ const [featured, ...rest] = services;
           ))
         }
       </ul>
-      </div>
     </div>
   </section>
 
@@ -111,38 +139,61 @@ const [featured, ...rest] = services;
     </div>
   </section>
 
-  <!-- O agenciji -->
-  <section class="section about" aria-labelledby="o-nama-naslov">
-    <div class="container about__grid">
-      <div data-reveal>
-        <p class="eyebrow">O agenciji</p>
-        <h2 id="o-nama-naslov">Lokalna stručnost, jasan govor</h2>
-        <p class="lead">
-          ACCOUNT je računovodstvena agencija iz Mostara. Firmama, obrtima, udruženjima i inostranim preduzećima pomažemo da
-          imaju uredne evidencije i jasan pregled poslovanja.
-        </p>
-        <p>
-          Pored računovodstva i poreznih prijava, savjetujemo o poslovnim i poreznim pitanjima, pomažemo pri registraciji i
-          pripremamo poslovne projekte.
-        </p>
-        <a class="link-arrow" href="/o-nama">Više o nama <Icon name="arrow" size={18} /></a>
-      </div>
-      <dl class="about__stats" data-reveal>
-        {
-          site.stats.map((s) => (
+  <!-- Zašto ACCOUNT -->
+  <section class="section bento-section" aria-labelledby="zasto-naslov">
+    <div class="container">
+      <div class="bento">
+        <article class="bento__card bento__card--about" data-reveal>
+          <p class="eyebrow">Zašto ACCOUNT</p>
+          <h2 id="zasto-naslov">Lokalna stručnost, jasan govor</h2>
+          <p>
+            ACCOUNT je računovodstvena agencija iz Mostara. Firmama, obrtima, udruženjima i inostranim preduzećima pomažemo
+            da imaju uredne evidencije i jasan pregled poslovanja, uz ovlašteno zastupanje stranih poreznih obveznika.
+          </p>
+          <dl class="bento__stats">
+            {
+              site.stats.map((s) => (
+                <div>
+                  <dt>{s.label}</dt>
+                  <dd data-count={parseInt(s.value, 10)} data-suffix={s.value.replace(/^\d+/, '')}>
+                    {s.value}
+                  </dd>
+                </div>
+              ))
+            }
             <div>
-              <dt>{s.label}</dt>
-              <dd data-count={parseInt(s.value, 10)} data-suffix={s.value.replace(/^\d+/, '')}>
-                {s.value}
-              </dd>
+              <dt>uslužnih oblasti</dt>
+              <dd data-count="5">5</dd>
             </div>
-          ))
-        }
-        <div>
-          <dt>uslužnih oblasti na jednom mjestu</dt>
-          <dd data-count="5">5</dd>
-        </div>
-      </dl>
+          </dl>
+          <a class="link-arrow bento__link-light" href="/o-nama">Više o nama <Icon name="arrow" size={18} /></a>
+        </article>
+
+        <a class="bento__card bento__card--calc" href="/korisni-alati#kalkulator" data-reveal style="--reveal-delay: 0.08s">
+          <span class="bento__tag">Kalkulator</span>
+          <h3>Koliki promet vam treba da pokrijete troškove?</h3>
+          <p>Unesite fiksne i varijabilne troškove i odmah vidite prag pokrića. Izračun ostaje u vašem pregledniku.</p>
+          <span class="mini-chart" aria-hidden="true">
+            <span class="mini-chart__line"><span>prag pokrića</span></span>
+            {miniBars.map((h, i) => <i style={`--h:${h}; --i:${i}`} class:list={{ 'is-above': h > 0.55 }} />)}
+          </span>
+          <span class="link-arrow">Isprobajte kalkulator <Icon name="arrow" size={18} /></span>
+        </a>
+
+        <a class="bento__card bento__card--config" href="/korisni-alati#konfigurator" data-reveal style="--reveal-delay: 0.16s">
+          <span class="bento__icon"><Icon name="sliders" size={24} /></span>
+          <h3>Pripremite upit</h3>
+          <p>Označite vrstu i obim poslovanja, a sažetak pošaljite uz upit.</p>
+          <span class="link-arrow">Konfigurator upita <Icon name="arrow" size={18} /></span>
+        </a>
+
+        <a class="bento__card bento__card--call" href={site.phones[0].href} data-track="klik_telefon" data-reveal style="--reveal-delay: 0.24s">
+          <span class="bento__icon"><Icon name="phone" size={24} /></span>
+          <h3>Radije razgovor?</h3>
+          <span class="bento__phone">{site.phones[0].display}</span>
+          <span class="bento__sub">ili fiksni {site.phones[1].display}</span>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -199,34 +250,81 @@ const [featured, ...rest] = services;
 </Base>
 
 <style>
-  /* Kome pomažemo: panel koji na desktopu pluta preko donjeg ruba heroja */
-  .audiences {
+  /* Traka povjerenja: na desktopu panel koji pluta preko donjeg ruba heroja */
+  .trust {
     position: relative;
     z-index: 3;
-    padding-block: 32px 8px;
+    padding-top: 20px;
   }
-  .audiences__panel {
-    padding: 24px 0 0;
+  .trust__list {
+    list-style: none;
+    margin: 0;
+    padding: 18px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px 14px;
+    border-radius: var(--radius-lg);
+    background: #fff;
+    border: 1px solid var(--c-line);
+    box-shadow: 0 20px 50px -24px rgb(10 24 46 / 0.35);
+  }
+  .trust__list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: var(--c-ink-muted);
+  }
+  .trust__list strong {
+    display: block;
+    color: var(--c-navy-900);
+    font-size: 0.9375rem;
+  }
+  .trust__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--c-blue-100);
+    color: var(--c-blue-600);
+  }
+  @media (max-width: 479px) {
+    .trust__list {
+      grid-template-columns: 1fr;
+    }
   }
   @media (min-width: 900px) {
-    .audiences {
-      margin-top: -76px;
-      padding-block: 0;
+    .trust {
+      margin-top: -64px;
+      padding-top: 0;
     }
-    .audiences__panel {
-      padding: 28px 28px 28px;
-      border-radius: var(--radius-lg);
-      background: #fff;
+    .trust__list {
+      padding: 24px 28px;
+      gap: 20px 24px;
+      border: 0;
       box-shadow: 0 24px 60px -20px rgb(10 24 46 / 0.35), 0 2px 8px rgb(10 24 46 / 0.06);
     }
   }
+  @media (min-width: 1180px) {
+    .trust__list {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .trust__list li + li {
+      padding-left: 24px;
+      border-left: 1px solid var(--c-line);
+    }
+  }
+
+  /* Kome pomažemo */
+  .audiences {
+    padding-block: clamp(40px, 5vw, 72px) 8px;
+  }
   .audiences__title {
-    font-size: 0.8125rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--c-ink-muted);
-    margin-bottom: 16px;
-    font-weight: 700;
+    font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
+    margin-bottom: 20px;
   }
   .audiences__list {
     list-style: none;
@@ -444,45 +542,221 @@ const [featured, ...rest] = services;
     }
   }
 
-  /* O agenciji */
-  .about__grid {
+  /* Zašto ACCOUNT: bento mreža */
+  .bento {
     display: grid;
-    gap: 40px;
-    align-items: center;
+    gap: 16px;
   }
-  @media (min-width: 900px) {
-    .about__grid {
-      grid-template-columns: 1.2fr 1fr;
-      gap: 72px;
+  @media (min-width: 768px) {
+    .bento {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .bento__card--about {
+      grid-column: 1 / -1;
     }
   }
-  .about__stats {
-    display: grid;
-    gap: 0;
-    margin: 0;
-    border-top: 1px solid var(--c-line);
+  @media (min-width: 1024px) {
+    .bento {
+      grid-template-columns: 1.25fr 1fr 1fr;
+      grid-template-rows: auto auto;
+    }
+    .bento__card--about {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+    }
+    .bento__card--calc {
+      grid-column: 2 / span 2;
+    }
   }
-  .about__stats div {
+  .bento__card {
+    position: relative;
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 20px;
-    padding: 22px 0;
-    border-bottom: 1px solid var(--c-line);
+    flex-direction: column;
+    gap: 10px;
+    padding: clamp(24px, 3vw, 36px);
+    border-radius: var(--radius-lg);
+    background: var(--c-bg);
+    border: 1px solid var(--c-line);
+    color: var(--c-ink);
+    text-decoration: none;
+    overflow: hidden;
+    transition:
+      transform 0.25s ease,
+      box-shadow 0.25s ease,
+      border-color 0.25s ease;
   }
-  .about__stats dd {
+  a.bento__card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+    border-color: var(--c-blue-200);
+    color: var(--c-ink);
+  }
+  .bento__card h3 {
     margin: 0;
-    min-width: 4.5ch;
-    font-size: clamp(2.25rem, 1.8rem + 1.6vw, 3.25rem);
+    font-size: clamp(1.1875rem, 1.05rem + 0.5vw, 1.5rem);
+  }
+  .bento__card p {
+    margin: 0;
+    color: var(--c-ink-muted);
+  }
+  .bento__card .link-arrow {
+    margin-top: auto;
+    padding-top: 8px;
+    color: var(--c-blue-600);
+  }
+
+  .bento__card--about {
+    justify-content: center;
+    background:
+      radial-gradient(70% 60% at 100% 0%, rgb(0 160 236 / 0.28) 0%, transparent 70%),
+      var(--c-navy-900);
+    border: 0;
+    color: #c9d8ea;
+  }
+  .bento__card--about .eyebrow {
+    color: var(--c-cyan-400);
+    margin-bottom: 4px;
+  }
+  .bento__card--about h2 {
+    color: #fff;
+    margin: 0 0 6px;
+  }
+  .bento__card--about p {
+    color: #c9d8ea;
+  }
+  .bento__stats {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: start;
+    gap: 8px clamp(20px, 4vw, 36px);
+    margin: 18px 0 10px;
+  }
+  .bento__stats div {
+    display: flex;
+    flex-direction: column;
+  }
+  .bento__stats dd {
+    order: -1;
+  }
+  .bento__stats dd {
+    margin: 0;
+    font-size: clamp(2rem, 1.6rem + 1.6vw, 3rem);
     font-weight: 800;
     letter-spacing: -0.03em;
-    color: var(--c-blue-600);
     line-height: 1;
+    color: #fff;
+    font-variant-numeric: tabular-nums;
   }
-  .about__stats dt {
-    font-weight: 650;
-    color: var(--c-navy-900);
+  .bento__stats dt {
+    margin-top: 6px;
+    font-size: 0.875rem;
+    color: #a9bdd6;
+  }
+  .bento__card--about .bento__link-light {
+    margin-top: 8px;
+    color: #fff;
+  }
+  .bento__link-light:hover {
+    color: var(--c-cyan-400);
+  }
+
+  .bento__tag {
+    align-self: flex-start;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--c-blue-100);
+    color: var(--c-blue-700);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .bento__icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #fff;
+    color: var(--c-blue-600);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Mini grafikon s pragom pokrića */
+  .mini-chart {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    gap: 8px;
+    height: 110px;
+    margin-top: 10px;
+    padding: 10px 12px 0;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid var(--c-line);
+  }
+  .mini-chart i {
+    flex: 1;
+    height: calc(var(--h) * 100%);
+    border-radius: 5px 5px 0 0;
+    background: #c3d2e4;
+    transform-origin: bottom;
+  }
+  .mini-chart i.is-above {
+    background: linear-gradient(180deg, #33b6f2, var(--c-blue-500));
+  }
+  .mini-chart__line {
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 55%;
+    border-top: 2px dashed var(--c-navy-700);
+    z-index: 1;
+  }
+  .mini-chart__line span {
+    position: absolute;
+    left: 0;
+    top: -24px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: var(--c-navy-900);
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 700;
+  }
+  :global(.reveal-on) .bento__card--calc:not(.is-revealed) .mini-chart i {
+    transform: scaleY(0);
+  }
+  .bento__card--calc .mini-chart i {
+    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition-delay: calc(0.3s + var(--i) * 0.07s);
+  }
+
+  .bento__card--call {
+    background: linear-gradient(135deg, var(--c-blue-600), var(--c-blue-700));
+    border: 0;
+    color: #fff;
+  }
+  a.bento__card--call:hover {
+    color: #fff;
+    border-color: transparent;
+  }
+  .bento__card--call h3 {
+    color: #fff;
+  }
+  .bento__card--call .bento__icon {
+    background: rgb(255 255 255 / 0.16);
+    color: #fff;
+    box-shadow: none;
+  }
+  .bento__phone {
+    margin-top: auto;
+    font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .bento__sub {
+    font-size: 0.875rem;
+    color: #eef6fd;
   }
 
   /* Savjeti */

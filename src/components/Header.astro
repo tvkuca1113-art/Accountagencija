@@ -40,6 +40,11 @@ const isCurrent = (href: string) =>
       <span class="visually-hidden"> — početna stranica</span>
     </a>
 
+    <a class="header__call" href={primaryPhone.href} data-track="klik_telefon">
+      <Icon name="phone" size={20} />
+      <span class="visually-hidden">Pozovite {primaryPhone.display}</span>
+    </a>
+
     <nav class="nav" aria-label="Glavna navigacija">
       <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="glavni-meni" data-nav-toggle>
         <span class="nav__toggle-open"><Icon name="menu" size={24} /></span>
@@ -172,6 +177,21 @@ const isCurrent = (href: string) =>
   .header__cta {
     display: none;
   }
+  /* Telefon jednim dodirom u mobilnom zaglavlju */
+  .header__call {
+    display: inline-grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-right: -12px;
+    border-radius: 50%;
+    background: var(--c-blue-100);
+    color: var(--c-blue-600);
+  }
+  .header__call:hover {
+    background: var(--c-blue-200);
+    color: var(--c-blue-700);
+  }
 
   .nav__list {
     list-style: none;
@@ -267,6 +287,7 @@ const isCurrent = (href: string) =>
   @media (min-width: 1024px) {
     .nav__toggle,
     .nav__mobile-extra,
+    .header__call,
     .nav__list :global(.nav__arrow) {
       display: none;
     }

@@ -2,6 +2,8 @@
 
 Stanje: 23. 9. 2026. Provjere su izvršene lokalno, u razvojnom okruženju; pregledna verzija je objavljena na Vercelu (vercel.app adresa), ne na produkcijskoj domeni.
 
+**Izmjene nakon drugog pregleda (na zahtjev naručioca):** animacija triju ploha (iz Superprompta) zamijenjena je animiranim „Mjesečnim pregledom“ — ilustrativna kartica izvještaja (oznaka „Primjer“, bez iznosa) u kojoj rastu stupci prihoda i troškova, redom se štikliraju tri koraka saradnje i iskače potvrda. U heroju su plohe zamijenjene plutajućim karticama usluga. Početna je dobila traku povjerenja ispod heroja (ovlašteno zastupanje, lokacija, dostava e-mailom, individualna ponuda), bento sekciju „Zašto ACCOUNT“ s najavama kalkulatora i konfiguratora i karticom za poziv te dugme za poziv u mobilnom zaglavlju. Pravopisni pregled cijelog vidljivog teksta (bosanski standard): „S naših mreža“, „da li je realno“, „novi radnik“, „ne čuvamo“, interpunkcija u opisima članaka. „Porezni obveznik“ je zadržan kao zakonski termin i potvrđena formulacija agencije.
+
 **Izmjene nakon prvog pregleda na iPhoneu:** ispravljen mobilni meni (backdrop-filter na zaglavlju pravio je okvir za `position: fixed`, pa se meni nije širio preko ekrana; sada je zamućenje na pseudo-elementu i test provjerava visinu menija). Početna je redizajnirana: tamni hero u bojama znaka s fotografijom koja izranja iz pozadine, blagim uvećanjem i paralaksom, animiranim sjajem, linijama poslovne knjige i trima plohama; brojke se broje pri prikazu; sekcije se blago pojavljuju pri skrolanju. Sve animacije se gase uz `prefers-reduced-motion`, a bez JavaScripta sadržaj je odmah vidljiv.
 
 ## Radi i testirano
@@ -30,7 +32,7 @@ Stanje: 23. 9. 2026. Provjere su izvršene lokalno, u razvojnom okruženju; preg
 
 | Stranica | Performanse | Pristupačnost | Najbolje prakse | LCP | CLS | TBT |
 |---|---|---|---|---|---|---|
-| `/` (novi hero s animacijama) | 99 | 100 | 100 | 2,1 s | 0 | 0 ms |
+| `/` (hero, traka povjerenja, bento, animirani pregled) | 98 | 100 | 100 | 2,2 s | 0 | 0 ms |
 | `/racunovodstvo` | 99 | 100 | 100 | 1,8 s | 0 | 0 ms |
 | `/korisni-alati` | 99 | 100 | 100 | 1,8 s | 0 | 0 ms |
 

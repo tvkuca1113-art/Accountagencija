@@ -1,5 +1,5 @@
 ---
-import AlignPlanes from './AlignPlanes.astro';
+import ReportCard from './ReportCard.astro';
 
 const steps = [
   {
@@ -19,9 +19,6 @@ const steps = [
 
 <section class="section section--navy process" aria-labelledby="saradnja-naslov">
   <div class="container process__grid">
-    <div class="process__art">
-      <AlignPlanes />
-    </div>
     <div data-reveal>
       <p class="eyebrow">Saradnja</p>
       <h2 id="saradnja-naslov">Saradnja u tri koraka</h2>
@@ -39,6 +36,9 @@ const steps = [
           ))
         }
       </ol>
+    </div>
+    <div class="process__art">
+      <ReportCard />
     </div>
   </div>
 </section>
@@ -70,21 +70,12 @@ const steps = [
   }
   @media (min-width: 900px) {
     .process__grid {
-      grid-template-columns: 0.9fr 1.1fr;
-      gap: 64px;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 72px;
     }
   }
   .process__art {
-    order: 2;
-    max-width: 360px;
     width: 100%;
-    margin-inline: auto;
-  }
-  @media (min-width: 900px) {
-    .process__art {
-      order: 0;
-      max-width: none;
-    }
   }
   .process__steps {
     list-style: none;

@@ -1,6 +1,6 @@
 ---
 // Hero početne: tamna pozadina u bojama znaka, fotografija koja „izranja“ iz pozadine,
-// suptilne animacije (sjaj, linije poslovne knjige, tri plohe koje se poravnaju) i blagi paralaks.
+// suptilne animacije (sjaj, linije poslovne knjige, plutajuće kartice usluga) i blagi paralaks.
 // Naslov i poziv na akciju su prvi u kodu i na mobitelu uvijek iznad fotografije.
 // Sve animacije se isključuju uz prefers-reduced-motion; bez JavaScripta prikazuje se završno stanje.
 import Icon from './Icon.astro';
@@ -18,11 +18,6 @@ const stats = site.stats.map((s) => {
     <span class="hero__glow hero__glow--a"></span>
     <span class="hero__glow hero__glow--b"></span>
     <span class="hero__ledger"></span>
-    <span class="hero__sheets">
-      <span class="hero__sheet hero__sheet--1"></span>
-      <span class="hero__sheet hero__sheet--2"></span>
-      <span class="hero__sheet hero__sheet--3"></span>
-    </span>
   </div>
 
   <div class="container hero__content">
@@ -52,6 +47,18 @@ const stats = site.stats.map((s) => {
       mobileArtDirection
       class="hero__photo"
     />
+    <div class="hero__chips" aria-hidden="true">
+      <span class="hero__chip hero__chip--a">
+        <span class="hero__chip-icon hero__chip-icon--ok">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+        </span>
+        <span><strong>Redovne porezne prijave</strong><small>Evidencije i prijave na jednom mjestu</small></span>
+      </span>
+      <span class="hero__chip hero__chip--b">
+        <span class="hero__spark"><i style="--h:.45"></i><i style="--h:.7"></i><i style="--h:.55"></i><i style="--h:.9"></i></span>
+        <span><strong>Periodični izvještaji</strong><small>Jasan pregled prihoda i troškova</small></span>
+      </span>
+    </div>
     <dl class="hero__stats">
       {
         stats.map((s) => (
@@ -118,59 +125,6 @@ const stats = site.stats.map((s) => {
     animation: ledger-in 1.4s ease-out both;
   }
 
-  /* Tri tanke plohe (motiv iz znaka): ulaze razmaknute, poravnaju se i blago lebde */
-  .hero__sheets {
-    display: none;
-    position: absolute;
-    perspective: 1200px;
-  }
-  .hero__sheet {
-    position: absolute;
-    inset: 20% 12%;
-    border-radius: 6px;
-    transform-style: preserve-3d;
-    animation:
-      sheet-align 1.6s cubic-bezier(0.2, 0.75, 0.2, 1) both,
-      sheet-float 7s ease-in-out 1.8s infinite alternate;
-  }
-  .hero__sheet--1 {
-    --from: translate3d(-40px, 50px, 0) rotateX(58deg) rotateZ(-52deg);
-    --to: translate3d(0, 24px, 0) rotateX(58deg) rotateZ(-38deg);
-    background: rgb(24 124 196 / 0.55);
-  }
-  .hero__sheet--2 {
-    --from: translate3d(60px, 0, 0) rotateX(58deg) rotateZ(-20deg);
-    --to: translate3d(0, 10px, 0) rotateX(58deg) rotateZ(-38deg);
-    background: rgb(0 160 236 / 0.5);
-    animation-delay: 0.12s, 1.9s;
-  }
-  .hero__sheet--3 {
-    --from: translate3d(-20px, -60px, 0) rotateX(58deg) rotateZ(-46deg);
-    --to: translate3d(0, -4px, 0) rotateX(58deg) rotateZ(-38deg);
-    background:
-      repeating-linear-gradient(180deg, transparent 0 14px, rgb(15 35 64 / 0.16) 14px 15px),
-      rgb(244 249 254 / 0.85);
-    animation-delay: 0.24s, 2s;
-  }
-
-  @keyframes sheet-align {
-    from {
-      transform: var(--from);
-      opacity: 0;
-    }
-    to {
-      transform: var(--to);
-      opacity: 1;
-    }
-  }
-  @keyframes sheet-float {
-    from {
-      transform: var(--to);
-    }
-    to {
-      transform: var(--to) translate3d(0, 0, 10px);
-    }
-  }
   @keyframes glow-drift {
     to {
       transform: translate3d(60px, 40px, 0);
@@ -273,6 +227,85 @@ const stats = site.stats.map((s) => {
     }
   }
 
+  /* Plutajuće kartice usluga preko fotografije */
+  .hero__chips {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .hero__chip {
+    position: absolute;
+    left: var(--gutter);
+    top: 24%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px 10px 10px;
+    border-radius: 14px;
+    background: rgb(255 255 255 / 0.92);
+    box-shadow: 0 18px 40px -16px rgb(5 15 30 / 0.55);
+    color: var(--c-navy-900);
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    animation:
+      chip-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s both,
+      chip-float 6s ease-in-out 1.6s infinite alternate;
+  }
+  .hero__chip strong {
+    display: block;
+    font-weight: 750;
+  }
+  .hero__chip small {
+    display: block;
+    color: var(--c-ink-muted);
+    font-size: 0.75rem;
+  }
+  .hero__chip--b {
+    display: none;
+    animation-delay: 1s, 2.2s;
+  }
+  .hero__chip-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+  .hero__chip-icon--ok {
+    background: #17784a;
+    color: #fff;
+  }
+  .hero__spark {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    flex: none;
+    width: 30px;
+    height: 30px;
+    padding: 6px;
+    border-radius: 8px;
+    background: var(--c-blue-100);
+  }
+  .hero__spark i {
+    flex: 1;
+    height: calc(var(--h) * 100%);
+    border-radius: 2px;
+    background: var(--c-blue-500);
+  }
+  @keyframes chip-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px) scale(0.96);
+    }
+  }
+  @keyframes chip-float {
+    to {
+      translate: 0 -6px;
+    }
+  }
+
   /* Brojke kao staklene oznake preko fotografije */
   .hero__stats {
     position: absolute;
@@ -347,13 +380,15 @@ const stats = site.stats.map((s) => {
       left: 22%;
       bottom: 104px;
     }
-    .hero__sheets {
-      display: block;
-      left: 45%;
-      top: 20px;
-      width: 300px;
-      height: 250px;
-      opacity: 0.8;
+    .hero__chip--a {
+      left: 14%;
+      right: auto;
+      top: 20%;
+    }
+    .hero__chip--b {
+      display: flex;
+      left: 30%;
+      top: 50%;
     }
   }
 
@@ -376,12 +411,9 @@ const stats = site.stats.map((s) => {
   @media (prefers-reduced-motion: reduce) {
     .hero__glow,
     .hero__ledger,
-    .hero__sheet,
+    .hero__chip,
     .hero__media :global(.hero__photo img) {
       animation: none !important;
-    }
-    .hero__sheet {
-      transform: var(--to);
     }
   }
 </style>

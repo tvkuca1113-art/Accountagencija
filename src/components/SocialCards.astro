@@ -1,0 +1,85 @@
+---
+// Tri lagane kartice s temama posljednjih objava i originalnim linkovima — bez ugrađenog feeda
+// koji bi usporio prikaz. Automatski feed uvoditi samo kroz podržanu integraciju s rezervnim prikazom.
+import Icon from './Icon.astro';
+import { socialPosts, formatDate } from '../data/articles.ts';
+import { site } from '../data/site.ts';
+
+const instagram = site.social.find((s) => s.name === 'Instagram')!;
+const facebook = site.social.find((s) => s.name === 'Facebook')!;
+---
+
+<div class="social">
+  <ul class="social__list">
+    {
+      socialPosts.map((p) => (
+        <li class="social__card">
+          <p class="social__meta">
+            <Icon name="instagram" size={18} />
+            <time datetime={p.date}>{formatDate(p.date)}</time>
+          </p>
+          <h3>{p.topic}</h3>
+          <p>{p.summary}</p>
+          <a href={p.url} rel="noopener" target="_blank" class="link-arrow">
+            Pogledajte objavu<span class="visually-hidden"> „{p.topic}“ na Instagramu (otvara se u novom prozoru)</span>
+            <Icon name="external" size={16} />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="social__follow">
+    Pratite nas na
+    <a href={instagram.url} rel="noopener" target="_blank">Instagramu<span class="visually-hidden"> (otvara se u novom prozoru)</span></a>
+    i
+    <a href={facebook.url} rel="noopener" target="_blank">Facebooku<span class="visually-hidden"> (otvara se u novom prozoru)</span></a>.
+  </p>
+</div>
+
+<style>
+  .social__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 16px;
+  }
+  @media (min-width: 768px) {
+    .social__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .social__card {
+    display: flex;
+    flex-direction: column;
+    padding: 22px;
+    border-radius: var(--radius);
+    background: #fff;
+    border: 1px solid var(--c-line);
+  }
+  .social__card h3 {
+    font-size: 1.0625rem;
+    margin-bottom: 6px;
+  }
+  .social__card p {
+    font-size: var(--fs-small);
+    color: var(--c-ink-muted);
+  }
+  .social__card .link-arrow {
+    margin-top: auto;
+    font-size: 0.9375rem;
+  }
+  .social__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--c-blue-600) !important;
+  }
+  .social__follow {
+    margin: 20px 0 0;
+    color: var(--c-ink-muted);
+  }
+</style>

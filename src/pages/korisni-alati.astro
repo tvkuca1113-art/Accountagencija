@@ -1,0 +1,150 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ServiceGuide from '../components/ServiceGuide.astro';
+import Configurator from '../components/Configurator.astro';
+import BreakEvenCalculator from '../components/BreakEvenCalculator.astro';
+import { breadcrumbSchema } from '../lib/schema.ts';
+
+const crumbs = [
+  { name: 'Početna', path: '/' },
+  { name: 'Korisni alati', path: '/korisni-alati' },
+];
+
+const tools = [
+  { id: 'vodic', icon: 'compass', title: 'Koja vam usluga treba?', text: 'Tri pitanja do preporuke i liste za prvi razgovor.' },
+  { id: 'konfigurator', icon: 'sliders', title: 'Konfigurator upita', text: 'Sažetak obima vašeg poslovanja za bržu ponudu.' },
+  { id: 'kalkulator', icon: 'calculator', title: 'Kalkulator pokrića troškova', text: 'Koliki promet vam treba da pokrijete troškove.' },
+] as const;
+---
+
+<Base
+  title="Korisni alati: vodič, konfigurator i kalkulator | ACCOUNT"
+  description="Besplatni alati agencije ACCOUNT: vodič za izbor računovodstvene usluge, konfigurator upita i kalkulator praga pokrića troškova."
+  jsonLd={[breadcrumbSchema(crumbs)]}
+>
+  <section class="page-head">
+    <div class="container">
+      <Breadcrumbs items={crumbs} />
+      <h1>Korisni alati</h1>
+      <p class="lead">Brzo odaberite uslugu, pripremite upit ili izračunajte prag pokrića troškova. Sve radi u vašem pregledniku.</p>
+      <ul class="tool-nav">
+        {
+          tools.map((t) => (
+            <li>
+              <a href={`#${t.id}`}>
+                <Icon name={t.icon} size={24} />
+                <span>
+                  <strong>{t.title}</strong>
+                  <span>{t.text}</span>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="vodic-naslov">
+    <div class="container tool">
+      <div class="tool__head">
+        <p class="eyebrow">Vodič</p>
+        <h2 id="vodic-naslov">Koja vam usluga treba?</h2>
+        <p>Odgovorite na tri pitanja o situaciji, potrebnoj podršci i obimu poslovanja. Rezultat vidite odmah, bez ostavljanja kontakt podataka.</p>
+      </div>
+      <ServiceGuide id="vodic" />
+    </div>
+  </section>
+
+  <section class="section section--tint" id="konfigurator" aria-labelledby="konfigurator-naslov">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Konfigurator upita</p>
+        <h2 id="konfigurator-naslov">Pripremite upit za ponudu</h2>
+        <p>
+          Označite osnovne podatke o poslovanju. Sažetak možete prenijeti u kontakt formu i pregledati prije slanja. Konfigurator
+          ne računa cijenu: ponudu pripremamo prema obimu i potrebama vašeg poslovanja.
+        </p>
+      </div>
+      <Configurator />
+    </div>
+  </section>
+
+  <section class="section" id="kalkulator" aria-labelledby="kalkulator-naslov">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Kalkulator</p>
+        <h2 id="kalkulator-naslov">Koliki promet vam treba da pokrijete troškove?</h2>
+        <p>
+          <strong>Fiksni troškovi</strong> ostaju isti bez obzira na to koliko prodate, npr. zakup ili plate.
+          <strong>Varijabilni troškovi</strong> rastu s prodajom, npr. materijal ili roba. Kalkulator pokazuje koliki mjesečni
+          promet pokriva oboje i, ako želite, koliki promet donosi željeni planski višak.
+        </p>
+        <p class="tool__privacy">Izračun se radi samo u vašem pregledniku. Unesene iznose ne šaljemo i ne spremamo.</p>
+      </div>
+      <BreakEvenCalculator />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tool-nav {
+    list-style: none;
+    margin: 32px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+  }
+  @media (min-width: 900px) {
+    .tool-nav {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .tool-nav a {
+    display: flex;
+    gap: 14px;
+    height: 100%;
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    background: #fff;
+    border: 1px solid var(--c-line);
+    text-decoration: none;
+    color: var(--c-ink);
+  }
+  .tool-nav a:hover {
+    border-color: var(--c-blue-600);
+  }
+  .tool-nav svg {
+    flex: none;
+    color: var(--c-blue-600);
+    margin-top: 2px;
+  }
+  .tool-nav a > span {
+    display: grid;
+    gap: 2px;
+  }
+  .tool-nav strong {
+    color: var(--c-navy-900);
+  }
+  .tool-nav a span span {
+    font-size: 0.9rem;
+    color: var(--c-ink-muted);
+  }
+  .tool {
+    display: grid;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (min-width: 1024px) {
+    .tool {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 56px;
+    }
+  }
+  .tool__privacy {
+    font-size: var(--fs-small);
+    color: var(--c-ink-muted);
+  }
+</style>

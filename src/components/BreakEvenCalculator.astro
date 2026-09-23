@@ -1,0 +1,319 @@
+---
+// Kalkulator pokrića troškova. Izračun se radi isključivo lokalno u pregledniku;
+// unosi se ne šalju serveru ni analitici i ne upisuju se u URL.
+import Icon from './Icon.astro';
+---
+
+<div class="calc" data-calc>
+  <form class="calc__form" data-calc-form novalidate>
+    <div class="calc__field">
+      <label for="calc-f">Mjesečni fiksni troškovi</label>
+      <p class="hint" id="calc-f-hint">Troškovi koji ostaju isti bez obzira na prodaju: zakup, plate, pretplate, računovodstvo.</p>
+      <div class="calc__inputs">
+        <div class="calc__num">
+          <input id="calc-f" class="input" name="fixed" type="text" inputmode="decimal" autocomplete="off" aria-describedby="calc-f-hint calc-f-err" placeholder="npr. 2.000" />
+          <span class="calc__unit">KM</span>
+        </div>
+        <input type="range" min="0" max="50000" step="100" value="0" data-sync="fixed" aria-label="Fiksni troškovi, klizač" />
+      </div>
+      <p class="field-error" id="calc-f-err" data-error="fixed"></p>
+    </div>
+
+    <div class="calc__field">
+      <label for="calc-v">Varijabilni troškovi kao procenat prihoda</label>
+      <p class="hint" id="calc-v-hint">Troškovi koji rastu s prodajom: materijal, roba, provizije. Ako od 100 KM prihoda 40 KM ode na njih, upišite 40.</p>
+      <div class="calc__inputs">
+        <div class="calc__num">
+          <input id="calc-v" class="input" name="variablePct" type="text" inputmode="decimal" autocomplete="off" aria-describedby="calc-v-hint calc-v-err" placeholder="npr. 40" />
+          <span class="calc__unit">%</span>
+        </div>
+        <input type="range" min="0" max="99" step="1" value="0" data-sync="variablePct" aria-label="Varijabilni troškovi u procentima, klizač" />
+      </div>
+      <p class="field-error" id="calc-v-err" data-error="variablePct"></p>
+    </div>
+
+    <div class="calc__field">
+      <label for="calc-d">Željeni mjesečni višak <span class="optional">(opcionalno)</span></label>
+      <p class="hint" id="calc-d-hint">Iznos koji želite da ostane nakon pokrića unesenih troškova.</p>
+      <div class="calc__inputs">
+        <div class="calc__num">
+          <input id="calc-d" class="input" name="surplus" type="text" inputmode="decimal" autocomplete="off" aria-describedby="calc-d-hint calc-d-err" placeholder="npr. 1.000" />
+          <span class="calc__unit">KM</span>
+        </div>
+        <input type="range" min="0" max="50000" step="100" value="0" data-sync="surplus" aria-label="Željeni višak, klizač" />
+      </div>
+      <p class="field-error" id="calc-d-err" data-error="surplus"></p>
+    </div>
+
+    <p class="calc__vat">Prihode i troškove unesite na istoj osnovi u pogledu PDV-a: ili oboje s PDV-om, ili oboje bez njega.</p>
+
+    <button type="reset" class="btn btn--ghost btn--small">
+      <Icon name="reset" size={18} /> Poništi unos
+    </button>
+  </form>
+
+  <div class="calc__result" aria-live="polite" data-calc-result>
+    <p class="calc__placeholder" data-calc-placeholder>Unesite fiksne troškove i procenat varijabilnih troškova da vidite rezultat.</p>
+    <div data-calc-ok hidden>
+      <p class="calc__label">Prag pokrića troškova</p>
+      <p class="calc__value"><span data-calc-breakeven></span> <span class="calc__per">mjesečno</span></p>
+      <p class="calc__explain">Pri ovom mjesečnom prometu prihodi pokrivaju fiksne i varijabilne troškove koje ste unijeli.</p>
+      <div data-calc-target-wrap hidden>
+        <p class="calc__label">Promet za pojednostavljeni planski višak od <span data-calc-surplus></span></p>
+        <p class="calc__value"><span data-calc-target></span> <span class="calc__per">mjesečno</span></p>
+      </div>
+    </div>
+    <p class="calc__warning" data-calc-nothreshold hidden>
+      Uz varijabilne troškove od 100 % ili više svaki prihod odmah odlazi na troškove, pa u ovom modelu nema konačnog praga
+      pokrića. Provjerite unos ili razgovarajte s računovođom o strukturi troškova.
+    </p>
+    <ul class="calc__notes">
+      <li>Planski višak nije neto dobit, novčani tok ni porezni obračun.</li>
+      <li>Porezi, doprinosi, krediti i druge stavke koje niste unijeli nisu uračunati.</li>
+      <li>Alat ne procjenjuje da li će prihod biti i naplaćen.</li>
+    </ul>
+  </div>
+</div>
+<p class="calc__disclaimer">Informativan izračun na osnovu vaših unosa. Za detaljan pregled poslovanja razgovarajte s računovođom.</p>
+
+<script>
+  import { calculateBreakEven, formatKM, parseAmount, type FieldError } from '../lib/breakeven.ts';
+  import { track } from '../scripts/analytics.ts';
+
+  const root = document.querySelector<HTMLElement>('[data-calc]');
+  if (root) {
+    const form = root.querySelector<HTMLFormElement>('[data-calc-form]')!;
+    const $ = <T extends HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
+    const fields = ['fixed', 'variablePct', 'surplus'] as const;
+    const input = (name: string) => form.querySelector<HTMLInputElement>(`input[name="${name}"]`)!;
+    const slider = (name: string) => form.querySelector<HTMLInputElement>(`input[data-sync="${name}"]`)!;
+    const touched = new Set<string>();
+    let tracked = false;
+
+    const messages: Record<string, Record<FieldError, string>> = {
+      fixed: { empty: 'Upišite fiksne troškove (može i 0).', invalid: 'Upišite broj, npr. 2.000 ili 2000,50.', negative: 'Iznos ne može biti negativan.', range: '' },
+      variablePct: { empty: 'Upišite procenat (može i 0).', invalid: 'Upišite broj, npr. 40 ili 37,5.', negative: '', range: 'Procenat ne može biti negativan.' },
+      surplus: { empty: '', invalid: 'Upišite broj, npr. 1.000.', negative: 'Iznos ne može biti negativan.', range: '' },
+    };
+
+    const setError = (name: string, msg: string) => {
+      const el = form.querySelector<HTMLElement>(`[data-error="${name}"]`)!;
+      el.textContent = msg;
+      input(name).setAttribute('aria-invalid', msg ? 'true' : 'false');
+    };
+
+    const update = () => {
+      const values = { fixed: input('fixed').value, variablePct: input('variablePct').value, surplus: input('surplus').value };
+      const result = calculateBreakEven(values);
+      const ok = $('[data-calc-ok]');
+      const none = $('[data-calc-nothreshold]');
+      const placeholder = $('[data-calc-placeholder]');
+      ok.hidden = true;
+      none.hidden = true;
+      placeholder.hidden = true;
+
+      for (const f of fields) {
+        const err = result.status === 'invalid' ? result.errors[f] : undefined;
+        // Greška „prazno“ prikazuje se tek kad je korisnik već dirao polje.
+        setError(f, err && (err !== 'empty' || touched.has(f)) ? messages[f][err] : '');
+      }
+
+      if (result.status === 'ok') {
+        $('[data-calc-breakeven]').textContent = formatKM(result.breakEven);
+        const wrap = $('[data-calc-target-wrap]');
+        wrap.hidden = result.target === null;
+        if (result.target !== null) {
+          $('[data-calc-target]').textContent = formatKM(result.target);
+          $('[data-calc-surplus]').textContent = formatKM(result.surplus);
+        }
+        ok.hidden = false;
+      } else if (result.status === 'no-threshold') {
+        none.hidden = false;
+      } else {
+        placeholder.hidden = false;
+      }
+    };
+
+    for (const f of fields) {
+      const num = input(f);
+      const range = slider(f);
+      num.addEventListener('input', () => {
+        touched.add(f);
+        const parsed = parseAmount(num.value);
+        if (parsed.ok) range.value = String(Math.min(Number(range.max), Math.max(0, parsed.value)));
+        update();
+      });
+      num.addEventListener('blur', () => {
+        touched.add(f);
+        update();
+      });
+      range.addEventListener('input', () => {
+        touched.add(f);
+        num.value = range.value;
+        update();
+      });
+    }
+
+    form.addEventListener('input', () => {
+      if (!tracked) {
+        tracked = true;
+        track('koristenje_alata', 'kalkulator'); // bez unesenih iznosa
+      }
+    });
+
+    form.addEventListener('reset', () => {
+      touched.clear();
+      requestAnimationFrame(() => {
+        for (const f of fields) slider(f).value = '0';
+        update();
+        input('fixed').focus();
+      });
+    });
+
+    form.addEventListener('submit', (e) => e.preventDefault());
+    update();
+  }
+</script>
+
+<style>
+  .calc {
+    display: grid;
+    gap: 24px;
+  }
+  @media (min-width: 1024px) {
+    .calc {
+      grid-template-columns: 1.25fr 1fr;
+      align-items: start;
+    }
+  }
+  .calc__form {
+    display: grid;
+    gap: 26px;
+    padding: clamp(20px, 3vw, 32px);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    background: #fff;
+  }
+  .calc__field {
+    display: grid;
+    gap: 6px;
+  }
+  .calc__field label {
+    font-weight: 750;
+    color: var(--c-navy-900);
+  }
+  .calc__field .optional {
+    font-weight: 500;
+    color: var(--c-ink-muted);
+  }
+  .calc__field .hint {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--c-ink-muted);
+  }
+  .calc__inputs {
+    display: grid;
+    gap: 14px;
+    align-items: center;
+    margin-top: 6px;
+  }
+  @media (min-width: 560px) {
+    .calc__inputs {
+      grid-template-columns: 11rem 1fr;
+    }
+  }
+  .calc__num {
+    position: relative;
+  }
+  .calc__num .input {
+    padding-right: 52px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 650;
+  }
+  .calc__unit {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--c-ink-muted);
+    font-weight: 700;
+    font-size: 0.9rem;
+    pointer-events: none;
+  }
+  input[type='range'] {
+    width: 100%;
+    height: 44px;
+    accent-color: var(--c-blue-600);
+    cursor: pointer;
+  }
+  .calc__vat {
+    margin: 0;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--c-bg);
+    font-size: 0.9rem;
+  }
+  .calc__form .btn {
+    justify-self: start;
+  }
+  .calc__result {
+    padding: clamp(20px, 3vw, 32px);
+    border-radius: var(--radius-lg);
+    background: var(--c-navy-900);
+    color: #d3e0ef;
+  }
+  @media (min-width: 1024px) {
+    .calc__result {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+    }
+  }
+  .calc__placeholder {
+    color: #b3c5dc;
+  }
+  .calc__label {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: #a9bdd6;
+  }
+  .calc__value {
+    margin: 4px 0 12px;
+    font-size: clamp(1.875rem, 1.5rem + 1.5vw, 2.625rem);
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.15;
+  }
+  .calc__per {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #a9bdd6;
+    letter-spacing: 0;
+  }
+  .calc__explain {
+    font-size: 0.9375rem;
+    margin-bottom: 24px;
+  }
+  .calc__warning {
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    background: rgb(255 255 255 / 0.08);
+    border-left: 3px solid #ffcf66;
+    color: #fff;
+  }
+  .calc__notes {
+    margin: 20px 0 0;
+    padding: 18px 0 0 1.1em;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    font-size: 0.875rem;
+    color: #a9bdd6;
+    display: grid;
+    gap: 6px;
+  }
+  .calc__disclaimer {
+    margin: 20px 0 0;
+    font-size: 0.9375rem;
+    color: var(--c-ink-muted);
+  }
+</style>

@@ -1,0 +1,72 @@
+---
+// <picture> s AVIF/WebP varijantama iz scripts/optimize-images.mjs, eksplicitnim dimenzijama (bez CLS-a)
+// i odgođenim učitavanjem osim kad je slika prioritetna (hero).
+import type { ImageName } from '../data/services.ts';
+
+interface Props {
+  name: ImageName;
+  alt: string;
+  sizes: string;
+  priority?: boolean;
+  class?: string;
+  /** Za hero: poseban kadar 4:5 za uske ekrane. */
+  mobileArtDirection?: boolean;
+  objectPosition?: string;
+}
+
+const variants: Record<string, { widths: number[]; width: number; height: number }> = {
+  'account-hero': { widths: [640, 960, 1280, 1506], width: 1506, height: 941 },
+  'account-hero-mobile': { widths: [480, 753], width: 753, height: 941 },
+  card: { widths: [480, 800, 1200], width: 1200, height: 900 },
+};
+
+// Žarišta za rezanje u uže okvire (16:10, 16:9): logo i ključni motiv ostaju vidljivi.
+const focal: Partial<Record<ImageName, string>> = {
+  'account-poslovni-projekti': '50% 0%', // notes s logotipom je uz gornji rub
+};
+
+const { name, alt, sizes, priority = false, class: className, mobileArtDirection = false, objectPosition = focal[name] } = Astro.props;
+const v = variants[name] ?? variants.card;
+const srcset = (base: string, widths: number[], ext: string) =>
+  widths.map((w) => `/images/${base}-${w}.${ext} ${w}w`).join(', ');
+const fallback = `/images/${name}-${v.widths.at(-2) ?? v.widths[0]}.webp`;
+const mobile = variants['account-hero-mobile'];
+const mobileMedia = '(max-width: 767px)';
+---
+
+<picture class={className}>
+  {
+    mobileArtDirection && (
+      <>
+        <source
+          media={mobileMedia}
+          type="image/avif"
+          srcset={srcset(`${name}-mobile`, mobile.widths, 'avif')}
+          sizes="100vw"
+          width={mobile.width}
+          height={mobile.height}
+        />
+        <source
+          media={mobileMedia}
+          type="image/webp"
+          srcset={srcset(`${name}-mobile`, mobile.widths, 'webp')}
+          sizes="100vw"
+          width={mobile.width}
+          height={mobile.height}
+        />
+      </>
+    )
+  }
+  <source type="image/avif" srcset={srcset(name, v.widths, 'avif')} sizes={sizes} />
+  <source type="image/webp" srcset={srcset(name, v.widths, 'webp')} sizes={sizes} />
+  <img
+    src={fallback}
+    alt={alt}
+    width={v.width}
+    height={v.height}
+    loading={priority ? 'eager' : 'lazy'}
+    decoding={priority ? 'sync' : 'async'}
+    fetchpriority={priority ? 'high' : undefined}
+    style={objectPosition ? `object-position: ${objectPosition}` : undefined}
+  />
+</picture>

@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleCards from '../../components/ArticleCards.astro';
+import SocialCards from '../../components/SocialCards.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { breadcrumbSchema } from '../../lib/schema.ts';
+
+const crumbs = [
+  { name: 'Početna', path: '/' },
+  { name: 'Savjeti', path: '/savjeti' },
+];
+---
+
+<Base
+  title="Savjeti za poslovanje | Agencija ACCOUNT Mostar"
+  description="Kratki praktični savjeti o prihodima i troškovima, urednoj dokumentaciji i planiranju ulaganja, od računovodstvene agencije ACCOUNT."
+  jsonLd={[breadcrumbSchema(crumbs)]}
+>
+  <section class="page-head">
+    <div class="container">
+      <Breadcrumbs items={crumbs} />
+      <h1>Savjeti</h1>
+      <p class="lead">Kratki i praktični tekstovi o temama s kojima se vlasnici firmi i obrta svakodnevno susreću.</p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container">
+      <h2 class="visually-hidden">Članci</h2>
+      <ArticleCards />
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="mreze-naslov">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="mreze-naslov">Sa naših mreža</h2>
+        <p>Posljednje teme s Instagrama agencije ACCOUNT.</p>
+      </div>
+      <SocialCards />
+    </div>
+  </section>
+
+  <CtaBand title="Imate pitanje o svom poslovanju?" />
+</Base>

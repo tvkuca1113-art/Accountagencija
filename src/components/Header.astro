@@ -1,0 +1,250 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { nav, site, primaryPhone } from '../data/site.ts';
+import { services } from '../data/services.ts';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const serviceSlugs = services.map((s) => `/${s.slug}`);
+const isCurrent = (href: string) =>
+  path === href || (href === '/usluge' && serviceSlugs.includes(path)) || (href !== '/' && path.startsWith(`${href}/`));
+---
+
+<div class="topbar">
+  <div class="container topbar__inner">
+    <span class="topbar__place">
+      <Icon name="pin" size={16} />
+      {site.address.street}, {site.address.city}
+    </span>
+    <span class="topbar__contacts">
+      {
+        site.phones.map((p) => (
+          <a href={p.href} data-track="klik_telefon">
+            <Icon name="phone" size={16} />
+            {p.display}
+          </a>
+        ))
+      }
+      <a href={`mailto:${site.email}`}>
+        <Icon name="mail" size={16} />
+        {site.email}
+      </a>
+    </span>
+  </div>
+</div>
+
+<header class="header" data-header>
+  <div class="container header__inner">
+    <a href="/" class="header__logo">
+      <Logo />
+      <span class="visually-hidden"> — početna stranica</span>
+    </a>
+
+    <nav class="nav" aria-label="Glavna navigacija">
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="glavni-meni" data-nav-toggle>
+        <span class="nav__toggle-open"><Icon name="menu" size={24} /></span>
+        <span class="nav__toggle-close"><Icon name="close" size={24} /></span>
+        <span class="visually-hidden">Meni</span>
+      </button>
+      <div class="nav__panel" id="glavni-meni" data-nav-panel>
+        <ul class="nav__list">
+          {
+            nav.map((item) => (
+              <li>
+                <a href={item.href} aria-current={isCurrent(item.href) ? 'page' : undefined}>
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="nav__mobile-extra">
+          <a class="btn" href="/kontakt#upit">Zatražite ponudu</a>
+          <a class="btn btn--ghost" href={primaryPhone.href} data-track="klik_telefon">
+            <Icon name="phone" size={18} />
+            {primaryPhone.display}
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <a class="btn btn--small header__cta" href="/kontakt#upit">Zatražite ponudu</a>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const panel = document.querySelector<HTMLElement>('[data-nav-panel]');
+  if (toggle && panel) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      document.documentElement.classList.toggle('nav-open', open);
+    };
+    toggle.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    panel.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+    matchMedia('(min-width: 1024px)').addEventListener('change', (e) => e.matches && setOpen(false));
+  }
+</script>
+
+<style>
+  .topbar {
+    display: none;
+    background: var(--c-navy-900);
+    color: #c9d7e8;
+    font-size: 0.875rem;
+  }
+  @media (min-width: 1024px) {
+    .topbar {
+      display: block;
+    }
+  }
+  .topbar__inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    min-height: 40px;
+  }
+  .topbar__place,
+  .topbar__contacts,
+  .topbar a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .topbar__contacts {
+    gap: 24px;
+  }
+  .topbar a {
+    color: #e6eef8;
+    text-decoration: none;
+  }
+  .topbar a:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(255 255 255 / 0.94);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--c-line);
+  }
+  .header__inner {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    min-height: var(--header-h);
+  }
+  .header__logo {
+    display: inline-flex;
+    text-decoration: none;
+    margin-right: auto;
+    padding-block: 8px;
+  }
+  .header__cta {
+    display: none;
+  }
+
+  .nav__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav__list a {
+    display: block;
+    color: var(--c-navy-900);
+    text-decoration: none;
+    font-weight: 650;
+  }
+  .nav__list a[aria-current='page'] {
+    color: var(--c-blue-600);
+  }
+
+  .nav__toggle {
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-right: -8px;
+    border: 0;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--c-navy-900);
+    cursor: pointer;
+  }
+  .nav__toggle-close,
+  :global(.nav-open) .nav__toggle-open {
+    display: none;
+  }
+  :global(.nav-open) .nav__toggle-close {
+    display: inline-flex;
+  }
+
+  /* Mobilni meni */
+  @media (max-width: 1023px) {
+    .nav__panel {
+      display: none;
+      position: fixed;
+      inset: var(--header-h) 0 0 0;
+      z-index: 49;
+      padding: 16px var(--gutter) calc(32px + env(safe-area-inset-bottom));
+      background: #fff;
+      overflow-y: auto;
+    }
+    :global(.nav-open) .nav__panel {
+      display: block;
+    }
+    :global(.nav-open) body {
+      overflow: hidden;
+    }
+    .nav__list a {
+      padding: 16px 0;
+      font-size: 1.25rem;
+      border-bottom: 1px solid var(--c-line);
+    }
+    .nav__mobile-extra {
+      display: grid;
+      gap: 12px;
+      margin-top: 28px;
+    }
+  }
+
+  /* Desktop */
+  @media (min-width: 1024px) {
+    .nav__toggle,
+    .nav__mobile-extra {
+      display: none;
+    }
+    .nav__list {
+      display: flex;
+      gap: 4px;
+    }
+    .nav__list a {
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 0.975rem;
+    }
+    .nav__list a:hover {
+      background: var(--c-bg);
+      color: var(--c-navy-900);
+    }
+    .nav__list a[aria-current='page'] {
+      background: var(--c-blue-100);
+      color: var(--c-navy-900);
+    }
+    .header__cta {
+      display: inline-flex;
+    }
+  }
+</style>

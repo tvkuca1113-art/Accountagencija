@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Privremena ikona (motiv triju poravnatih ploha). Zamijeniti ikonom izvedenom iz originalnog logotipa. -->
+  <rect width="64" height="64" rx="14" fill="#0f2340"/>
+  <rect x="14" y="36" width="36" height="8" rx="2" fill="#234571"/>
+  <rect x="14" y="27" width="36" height="8" rx="2" fill="#0098e8"/>
+  <rect x="14" y="18" width="36" height="8" rx="2" fill="#f4f9fe"/>
+</svg>

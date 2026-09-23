@@ -1,0 +1,38 @@
+---
+import Base from '../layouts/Base.astro';
+import { services } from '../data/services.ts';
+---
+
+<Base title="Stranica nije pronađena | Agencija ACCOUNT" description="Tražena stranica ne postoji." noindex>
+  <section class="section">
+    <div class="container nf">
+      <p class="eyebrow">Greška 404</p>
+      <h1>Stranica nije pronađena</h1>
+      <p class="lead">Stranica je možda premještena. Pogledajte naše usluge ili se vratite na početnu.</p>
+      <div class="nf__actions">
+        <a class="btn" href="/">Početna stranica</a>
+        <a class="btn btn--ghost" href="/kontakt">Kontakt</a>
+      </div>
+      <ul class="nf__links">
+        {services.map((s) => <li><a href={`/${s.slug}`}>{s.title}</a></li>)}
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    max-width: 44rem;
+  }
+  .nf__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 28px 0 40px;
+  }
+  .nf__links {
+    display: grid;
+    gap: 8px;
+    padding-left: 1.2em;
+  }
+</style>

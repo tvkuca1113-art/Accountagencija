@@ -1,0 +1,177 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ContactForm from '../components/ContactForm.astro';
+import SocialCards from '../components/SocialCards.astro';
+import { site, fullAddress } from '../data/site.ts';
+import { breadcrumbSchema, organizationSchema } from '../lib/schema.ts';
+
+const crumbs = [
+  { name: 'Početna', path: '/' },
+  { name: 'Kontakt', path: '/kontakt' },
+];
+---
+
+<Base
+  title="Kontakt | Računovodstvena agencija ACCOUNT Mostar"
+  description="Pošaljite upit ili pozovite agenciju ACCOUNT: +387 62 675 596, +387 36 550 385. Lacina bb, Villa Neretva, Mostar."
+  jsonLd={[organizationSchema(), breadcrumbSchema(crumbs)]}
+>
+  <section class="page-head">
+    <div class="container">
+      <Breadcrumbs items={crumbs} />
+      <h1>Kontakt</h1>
+      <p class="lead">Pošaljite upit, pozovite nas ili pišite e-mailom. Ponudu pripremamo prema obimu i potrebama vašeg poslovanja.</p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container contact-grid">
+      <aside class="contact-info" aria-labelledby="podaci-naslov">
+        <h2 id="podaci-naslov">Kontakt podaci</h2>
+        <dl>
+          {
+            site.phones.map((p) => (
+              <div>
+                <dt>
+                  <Icon name="phone" size={18} /> {p.label} telefon
+                </dt>
+                <dd>
+                  <a href={p.href} data-track="klik_telefon">{p.display}</a>
+                </dd>
+              </div>
+            ))
+          }
+          <div>
+            <dt><Icon name="mail" size={18} /> E-mail</dt>
+            <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+          </div>
+          <div>
+            <dt><Icon name="pin" size={18} /> Adresa</dt>
+            <dd>
+              <address>{site.address.street}<br />{site.address.postalCode} {site.address.city}, {site.address.country}</address>
+              <a class="link-arrow" href={site.mapsUrl} rel="noopener" target="_blank">
+                Otvorite u Google Maps<span class="visually-hidden">: {fullAddress} (otvara se u novom prozoru)</span>
+                <Icon name="external" size={16} />
+              </a>
+            </dd>
+          </div>
+        </dl>
+
+        <h3 class="contact-info__social-title">Društvene mreže</h3>
+        <ul class="contact-info__social">
+          {
+            site.social.map((s) => (
+              <li>
+                <a href={s.url} rel="noopener" target="_blank">
+                  <Icon name={s.name === 'Instagram' ? 'instagram' : 'facebook'} size={20} />
+                  {s.name} <span class="contact-info__handle">{s.handle}</span>
+                  <span class="visually-hidden"> (otvara se u novom prozoru)</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+
+      <div class="form-card" id="upit">
+        <h2 id="upit-naslov">Pošaljite upit</h2>
+        <p class="form-intro">Dovoljno je ostaviti jedan način kontakta: e-mail ili telefon.</p>
+        <ContactForm headingId="upit-naslov" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="mreze-naslov">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="mreze-naslov">Sa naših mreža</h2>
+        <p>Teme o kojima nedavno pišemo na Instagramu.</p>
+      </div>
+      <SocialCards />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact-grid {
+    display: grid;
+    gap: 40px;
+    align-items: start;
+  }
+  @media (min-width: 1024px) {
+    .contact-grid {
+      grid-template-columns: 0.75fr 1.25fr;
+      gap: 56px;
+    }
+  }
+  .contact-info h2,
+  .form-card h2 {
+    font-size: 1.5rem;
+  }
+  .contact-info dl {
+    margin: 24px 0 0;
+    display: grid;
+    gap: 22px;
+  }
+  .contact-info dt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--c-ink-muted);
+    margin-bottom: 4px;
+  }
+  .contact-info dt svg {
+    color: var(--c-blue-600);
+  }
+  .contact-info dd {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 650;
+    overflow-wrap: anywhere;
+  }
+  .contact-info dd > a {
+    color: var(--c-navy-900);
+  }
+  .contact-info address {
+    font-style: normal;
+    margin-bottom: 8px;
+  }
+  .contact-info .link-arrow {
+    font-size: 0.9375rem;
+  }
+  .contact-info__social-title {
+    margin-top: 36px;
+    font-size: 1rem;
+  }
+  .contact-info__social {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .contact-info__social a {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 44px;
+    font-weight: 650;
+    color: var(--c-navy-900);
+    text-decoration: none;
+  }
+  .contact-info__social a:hover {
+    color: var(--c-blue-600);
+  }
+  .contact-info__handle {
+    font-weight: 500;
+    color: var(--c-ink-muted);
+  }
+  .form-intro {
+    color: var(--c-ink-muted);
+    margin-bottom: 24px;
+  }
+</style>

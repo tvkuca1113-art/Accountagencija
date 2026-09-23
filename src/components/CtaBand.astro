@@ -1,0 +1,100 @@
+---
+import Icon from './Icon.astro';
+import { primaryPhone, site } from '../data/site.ts';
+
+interface Props {
+  title?: string;
+  text?: string;
+  service?: string;
+}
+const {
+  title = 'Razgovarajmo o vašem poslovanju',
+  text = 'Opišite šta vam treba, a mi ćemo pripremiti ponudu prema obimu i potrebama vašeg poslovanja.',
+  service,
+} = Astro.props;
+const href = service ? `/kontakt?usluga=${service}#upit` : '/kontakt#upit';
+---
+
+<section class="cta section--tight" aria-labelledby="cta-naslov">
+  <div class="container">
+    <div class="cta__box">
+      <div>
+        <h2 id="cta-naslov">{title}</h2>
+        <p>{text}</p>
+      </div>
+      <div class="cta__actions">
+        <a class="btn btn--light" href={href}>
+          Zatražite ponudu
+          <Icon name="arrow" size={18} />
+        </a>
+        <a class="cta__phone" href={primaryPhone.href} data-track="klik_telefon">
+          <Icon name="phone" size={18} />
+          {primaryPhone.display}
+        </a>
+        <a class="cta__phone" href={`mailto:${site.email}`}>
+          <Icon name="mail" size={18} />
+          Pišite nam e-mailom
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta__box {
+    display: grid;
+    gap: 28px;
+    align-items: center;
+    padding: clamp(28px, 4vw, 56px);
+    border-radius: var(--radius-lg);
+    background: var(--c-navy-900);
+    color: #c9d8ea;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta__box::after {
+    content: '';
+    position: absolute;
+    right: -80px;
+    top: -80px;
+    width: 280px;
+    height: 280px;
+    border-radius: 40px;
+    transform: rotate(18deg);
+    background: linear-gradient(135deg, rgb(0 152 232 / 0.35), rgb(0 152 232 / 0));
+    pointer-events: none;
+  }
+  @media (min-width: 900px) {
+    .cta__box {
+      grid-template-columns: 1.4fr 1fr;
+    }
+  }
+  .cta__box h2 {
+    color: #fff;
+    font-size: clamp(1.625rem, 1.3rem + 1.2vw, 2.25rem);
+  }
+  .cta__box p {
+    margin: 0;
+    max-width: 34rem;
+  }
+  .cta__actions {
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+    position: relative;
+    z-index: 1;
+  }
+  .cta__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    font-weight: 650;
+    text-decoration: none;
+    min-height: 44px;
+  }
+  .cta__phone:hover {
+    color: #fff;
+    text-decoration: underline;
+  }
+</style>

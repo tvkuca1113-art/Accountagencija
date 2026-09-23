@@ -1,0 +1,357 @@
+---
+// Vodič „Koja vam usluga treba?“ — tri kratka koraka, rezultat bez traženja kontakt podataka.
+// Odabiri ostaju sačuvani pri povratku između koraka (polja ostaju u DOM-u).
+import Icon from './Icon.astro';
+import { services } from '../data/services.ts';
+
+interface Props {
+  id?: string;
+}
+const { id = 'vodic' } = Astro.props;
+
+const data = services.map((s) => ({ slug: s.slug, title: s.title, benefit: s.benefit, prepare: s.prepare }));
+
+const situations = [
+  { value: 'pokrecem', label: 'Pokrećem posao' },
+  { value: 'poslujem', label: 'Već poslujem' },
+  { value: 'racunovodstvo', label: 'Tražim računovodstvenu podršku' },
+  { value: 'inostrano', label: 'Predstavljam inostrano preduzeće' },
+];
+const needs = [
+  { value: 'knjige', label: 'Vođenje knjiga i redovne prijave' },
+  { value: 'savjet', label: 'Savjet o finansijama ili porezima' },
+  { value: 'registracija', label: 'Registracija firme, obrta ili udruženja' },
+  { value: 'plan', label: 'Poslovni plan ili projekt' },
+  { value: 'nisam', label: 'Nisam siguran/na' },
+];
+const volumes = [
+  { value: 'jos-ne', label: 'Još ne poslujem' },
+  { value: 'mali', label: 'Manji obim, nekoliko dokumenata mjesečno' },
+  { value: 'srednji', label: 'Redovan promet, možda i zaposleni' },
+  { value: 'veci', label: 'Veći obim ili više djelatnosti' },
+  { value: 'ne-znam', label: 'Ne znam procijeniti' },
+];
+---
+
+<div class="guide" data-guide data-services={JSON.stringify(data)} id={id}>
+  <form class="guide__form" data-guide-form novalidate>
+    <p class="guide__progress" data-guide-progress aria-live="polite">Korak 1 od 3</p>
+    <div class="guide__bar" aria-hidden="true"><span data-guide-bar></span></div>
+
+    <fieldset class="guide__step" data-step="1">
+      <legend tabindex="-1">Šta najbolje opisuje vašu situaciju?</legend>
+      <div class="guide__options">
+        {
+          situations.map((o) => (
+            <label class="option">
+              <input type="radio" name="situacija" value={o.value} />
+              <span>{o.label}</span>
+            </label>
+          ))
+        }
+      </div>
+    </fieldset>
+
+    <fieldset class="guide__step" data-step="2" hidden>
+      <legend tabindex="-1">Kakva vam podrška treba? <span class="guide__hint">Možete odabrati više opcija.</span></legend>
+      <div class="guide__options">
+        {
+          needs.map((o) => (
+            <label class="option">
+              <input type="checkbox" name="podrska" value={o.value} />
+              <span>{o.label}</span>
+            </label>
+          ))
+        }
+      </div>
+    </fieldset>
+
+    <fieldset class="guide__step" data-step="3" hidden>
+      <legend tabindex="-1">Kakav je obim vašeg poslovanja?</legend>
+      <div class="guide__options">
+        {
+          volumes.map((o) => (
+            <label class="option">
+              <input type="radio" name="obim" value={o.value} />
+              <span>{o.label}</span>
+            </label>
+          ))
+        }
+      </div>
+    </fieldset>
+
+    <p class="field-error" data-guide-error role="alert"></p>
+
+    <div class="guide__nav" data-guide-nav hidden>
+      <button type="button" class="btn btn--ghost btn--small" data-guide-back hidden>
+        <Icon name="back" size={18} /> Nazad
+      </button>
+      <button type="submit" class="btn btn--small" data-guide-next>
+        <span data-guide-next-label>Dalje</span> <Icon name="arrow" size={18} />
+      </button>
+    </div>
+    <noscript>
+      <p class="guide__noscript">
+        Vodič koristi JavaScript. Sve usluge možete pogledati na stranici <a href="/usluge">Usluge</a>.
+      </p>
+    </noscript>
+  </form>
+
+  <section class="guide__result" data-guide-result hidden aria-labelledby={`${id}-rezultat`}>
+    <h3 id={`${id}-rezultat`} tabindex="-1">Preporučujemo da počnete s ovim</h3>
+    <ul class="guide__recs" data-guide-recs></ul>
+    <div class="guide__prepare">
+      <h4>Za prvi razgovor pripremite</h4>
+      <ul class="checklist" data-guide-prepare></ul>
+    </div>
+    <div class="guide__result-actions">
+      <a class="btn" href="/kontakt#upit" data-guide-cta>
+        Pošaljite upit za ovu uslugu <Icon name="arrow" size={18} />
+      </a>
+      <button type="button" class="btn btn--ghost" data-guide-restart>
+        <Icon name="reset" size={18} /> Promijenite odgovore
+      </button>
+    </div>
+    <p class="guide__note">Preporuka je informativna i zasniva se samo na vašim odgovorima. Tačan obim posla dogovaramo u razgovoru.</p>
+  </section>
+</div>
+
+<script>
+  import { track } from '../scripts/analytics.ts';
+
+  type Svc = { slug: string; title: string; benefit: string; prepare: string[] };
+
+  for (const root of document.querySelectorAll<HTMLElement>('[data-guide]')) {
+    const services: Svc[] = JSON.parse(root.dataset.services ?? '[]');
+    const form = root.querySelector<HTMLFormElement>('[data-guide-form]')!;
+    const steps = [...root.querySelectorAll<HTMLFieldSetElement>('[data-step]')];
+    const progress = root.querySelector<HTMLElement>('[data-guide-progress]')!;
+    const bar = root.querySelector<HTMLElement>('[data-guide-bar]')!;
+    const nav = root.querySelector<HTMLElement>('[data-guide-nav]')!;
+    const back = root.querySelector<HTMLButtonElement>('[data-guide-back]')!;
+    const nextLabel = root.querySelector<HTMLElement>('[data-guide-next-label]')!;
+    const error = root.querySelector<HTMLElement>('[data-guide-error]')!;
+    const result = root.querySelector<HTMLElement>('[data-guide-result]')!;
+    let current = 0;
+    let tracked = false;
+
+    nav.hidden = false;
+
+    const show = (index: number, focus = true) => {
+      current = index;
+      steps.forEach((s, i) => (s.hidden = i !== index));
+      back.hidden = index === 0;
+      nextLabel.textContent = index === steps.length - 1 ? 'Prikaži preporuku' : 'Dalje';
+      progress.textContent = `Korak ${index + 1} od ${steps.length}`;
+      bar.style.width = `${((index + 1) / steps.length) * 100}%`;
+      error.textContent = '';
+      if (focus) steps[index].querySelector<HTMLElement>('legend')?.focus();
+    };
+
+    const valueOf = (name: string) => form.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`)?.value;
+    const valuesOf = (name: string) =>
+      [...form.querySelectorAll<HTMLInputElement>(`input[name="${name}"]:checked`)].map((i) => i.value);
+
+    const stepValid = () => {
+      if (current === 0 && !valueOf('situacija')) return 'Odaberite situaciju koja vam najviše odgovara.';
+      if (current === 1 && valuesOf('podrska').length === 0) return 'Odaberite barem jednu opciju ili „Nisam siguran/na“.';
+      if (current === 2 && !valueOf('obim')) return 'Odaberite obim poslovanja ili „Ne znam procijeniti“.';
+      return '';
+    };
+
+    const recommend = () => {
+      const situation = valueOf('situacija');
+      const needs = valuesOf('podrska');
+      const recs: string[] = [];
+      const add = (slug: string) => !recs.includes(slug) && recs.push(slug);
+      if (situation === 'inostrano') add('zastupanje-inostranih-poduzeca');
+      if (situation === 'pokrecem') add('registracija-firmi-obrta-udruzenja');
+      if (needs.includes('registracija')) add('registracija-firmi-obrta-udruzenja');
+      if (needs.includes('knjige') || situation === 'racunovodstvo') add('racunovodstvo');
+      if (needs.includes('savjet')) add('konzultantske-usluge');
+      if (needs.includes('plan')) add('poslovni-projekti');
+      if (recs.length === 0) add(situation === 'poslujem' ? 'racunovodstvo' : 'konzultantske-usluge');
+      // Nakon registracije obično slijedi vođenje knjiga.
+      if (situation === 'pokrecem') add('racunovodstvo');
+      return recs.map((slug) => services.find((s) => s.slug === slug)!).filter(Boolean);
+    };
+
+    const renderResult = () => {
+      const recs = recommend();
+      const recsEl = result.querySelector<HTMLUListElement>('[data-guide-recs]')!;
+      recsEl.replaceChildren(
+        ...recs.map((s, i) => {
+          const li = document.createElement('li');
+          li.className = i === 0 ? 'is-primary' : '';
+          const a = document.createElement('a');
+          a.href = `/${s.slug}`;
+          a.textContent = s.title;
+          const p = document.createElement('p');
+          p.textContent = s.benefit;
+          li.append(a, p);
+          return li;
+        }),
+      );
+      const prepare = [...new Set(recs.flatMap((s) => s.prepare))].slice(0, 6);
+      result.querySelector('[data-guide-prepare]')!.replaceChildren(
+        ...prepare.map((t) => {
+          const li = document.createElement('li');
+          li.textContent = t;
+          return li;
+        }),
+      );
+      result.querySelector<HTMLAnchorElement>('[data-guide-cta]')!.href = `/kontakt?usluga=${recs[0].slug}#upit`;
+      form.hidden = true;
+      result.hidden = false;
+      result.querySelector<HTMLElement>('h3')?.focus();
+    };
+
+    form.addEventListener('change', () => {
+      error.textContent = '';
+      if (!tracked) {
+        tracked = true;
+        track('koristenje_alata', 'vodic');
+      }
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msg = stepValid();
+      if (msg) {
+        error.textContent = msg;
+        return;
+      }
+      if (current < steps.length - 1) show(current + 1);
+      else renderResult();
+    });
+
+    back.addEventListener('click', () => show(Math.max(0, current - 1)));
+
+    root.querySelector('[data-guide-restart]')!.addEventListener('click', () => {
+      result.hidden = true;
+      form.hidden = false;
+      show(0);
+    });
+
+    show(0, false);
+  }
+</script>
+
+<style>
+  .guide {
+    background: #fff;
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    padding: clamp(20px, 3vw, 40px);
+    box-shadow: var(--shadow);
+  }
+  .guide__progress {
+    margin: 0 0 8px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--c-blue-600);
+  }
+  .guide__bar {
+    height: 4px;
+    border-radius: 4px;
+    background: var(--c-blue-100);
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .guide__bar span {
+    display: block;
+    height: 100%;
+    width: 33.33%;
+    background: var(--c-blue-600);
+    border-radius: inherit;
+    transition: width 0.3s ease;
+  }
+  .guide__step {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .guide__step legend {
+    padding: 0;
+    margin-bottom: 20px;
+    font-size: var(--fs-h3);
+    font-weight: 750;
+    color: var(--c-navy-900);
+    line-height: 1.3;
+  }
+  .guide__hint {
+    display: block;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--c-ink-muted);
+    margin-top: 4px;
+  }
+  .guide__options {
+    display: grid;
+    gap: 10px;
+  }
+  @media (min-width: 640px) {
+    .guide__options {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .guide__form .field-error {
+    margin-top: 16px;
+  }
+  .guide__nav {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .guide__nav [data-guide-next] {
+    margin-left: auto;
+  }
+  .guide__noscript {
+    margin-top: 20px;
+  }
+  .guide__result h3:focus {
+    outline: none;
+  }
+  .guide__recs {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 28px;
+    display: grid;
+    gap: 12px;
+  }
+  .guide__recs li {
+    padding: 16px 18px;
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-sm);
+  }
+  .guide__recs li.is-primary {
+    border-color: var(--c-blue-600);
+    background: var(--c-blue-100);
+  }
+  .guide__recs a {
+    font-weight: 750;
+    font-size: 1.0625rem;
+  }
+  .guide__recs p {
+    margin: 4px 0 0;
+    color: var(--c-ink-muted);
+    font-size: var(--fs-small);
+  }
+  .guide__prepare h4 {
+    font-size: 1rem;
+    margin-bottom: 14px;
+  }
+  .guide__result-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  .guide__note {
+    margin: 20px 0 0;
+    font-size: 0.875rem;
+    color: var(--c-ink-muted);
+  }
+</style>

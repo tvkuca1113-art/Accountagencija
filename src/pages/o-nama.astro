@@ -1,0 +1,243 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import ResponsiveImage from '../components/ResponsiveImage.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { services } from '../data/services.ts';
+import { site } from '../data/site.ts';
+import { breadcrumbSchema, organizationSchema } from '../lib/schema.ts';
+
+const crumbs = [
+  { name: 'Početna', path: '/' },
+  { name: 'O nama', path: '/o-nama' },
+];
+
+const principles = [
+  { title: 'Preciznost', text: 'Uredne evidencije i provjerene brojke osnova su svake dobre odluke.' },
+  { title: 'Jasan govor', text: 'Objašnjavamo razumljivo, bez nepotrebnog stručnog žargona.' },
+  { title: 'Dostupnost', text: 'Znate kome se javljate i kako do nas: telefonom, e-mailom ili uživo u Mostaru.' },
+];
+---
+
+<Base
+  title="O nama | Računovodstvena agencija ACCOUNT Mostar"
+  description="ACCOUNT je računovodstvena agencija iz Mostara s više od 10 godina iskustva. Upoznajte naš pristup i oblasti u kojima pomažemo."
+  jsonLd={[organizationSchema(), breadcrumbSchema(crumbs)]}
+>
+  <section class="page-head">
+    <div class="container about-head">
+      <div>
+        <Breadcrumbs items={crumbs} />
+        <h1>O agenciji ACCOUNT</h1>
+        <p class="lead">
+          Računovodstvena agencija iz Mostara. Pomažemo firmama, obrtima, udruženjima i inostranim preduzećima da imaju uredne
+          evidencije, jasan pregled poslovanja i podršku kada donose važne odluke.
+        </p>
+      </div>
+      <ResponsiveImage
+        name="account-poslovni-projekti"
+        alt="Otvorena bilježnica sa skicama, plave kartice i olovka na drvenom radnom stolu"
+        sizes="(min-width: 900px) 520px, 100vw"
+        priority
+        class="media about-head__media"
+      />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container about-body">
+      <div class="prose">
+        <h2>Šta radimo</h2>
+        <p>
+          Vodimo poslovne knjige i evidencije, pripremamo finansijske izvještaje i redovne porezne prijave. Savjetujemo o
+          poslovnim i poreznim pitanjima, pružamo podršku i zastupanje stranim poreznim obveznicima, pomažemo pri registraciji
+          firmi, obrta i udruženja te pripremamo poslovne projekte i planove.
+        </p>
+        <p>
+          Saradnja počinje razgovorom o vašim potrebama. Nakon toga dogovaramo obim posla, način dostave dokumentacije i
+          dinamiku izvještavanja. Dokumentaciju možete dostavljati i e-mailom.
+        </p>
+        <h2>Kako radimo</h2>
+        <p>
+          Cijenu određujemo individualno, prema obimu i složenosti posla, jer ne postoje dvije iste firme. Tako plaćate
+          podršku koja odgovara vašem poslovanju.
+        </p>
+        <p>
+          Profesionalni profil Aldijane Šute možete pogledati na
+          <a href={site.linkedinPersonal} rel="noopener" target="_blank">LinkedInu<span class="visually-hidden"> (otvara se u novom prozoru)</span></a>.
+        </p>
+      </div>
+      <aside>
+        <dl class="facts">
+          {
+            site.stats.map((s) => (
+              <div>
+                <dd>{s.value}</dd>
+                <dt>{s.label}</dt>
+              </div>
+            ))
+          }
+          <div>
+            <dd>Mostar</dd>
+            <dt>{site.address.street}</dt>
+          </div>
+        </dl>
+      </aside>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="principi-naslov">
+    <div class="container">
+      <h2 id="principi-naslov">Do čega nam je stalo</h2>
+      <ul class="principles">
+        {
+          principles.map((p) => (
+            <li>
+              <h3>{p.title}</h3>
+              <p>{p.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="oblasti-naslov">
+    <div class="container">
+      <h2 id="oblasti-naslov">Oblasti u kojima pomažemo</h2>
+      <ul class="areas">
+        {
+          services.map((s) => (
+            <li>
+              <a href={`/${s.slug}`}>
+                <span>
+                  <strong>{s.title}</strong>
+                  <span>{s.benefit}</span>
+                </span>
+                <Icon name="arrow" size={18} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>
+
+<style>
+  .page-head {
+    padding-block: clamp(24px, 3vw, 48px) clamp(40px, 4vw, 72px);
+    background: var(--c-bg);
+  }
+  .about-head {
+    display: grid;
+    gap: 32px;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .about-head {
+      grid-template-columns: 1.1fr 1fr;
+      gap: 64px;
+    }
+  }
+  :global(.media.about-head__media) {
+    aspect-ratio: 4 / 3;
+  }
+  .about-body {
+    display: grid;
+    gap: 48px;
+  }
+  @media (min-width: 900px) {
+    .about-body {
+      grid-template-columns: 1.5fr 1fr;
+      gap: 72px;
+    }
+  }
+  .about-body .prose h2:first-child {
+    margin-top: 0;
+  }
+  .facts {
+    margin: 0;
+    padding: 8px 28px;
+    border-radius: var(--radius-lg);
+    background: var(--c-navy-900);
+  }
+  .facts div {
+    padding: 22px 0;
+    border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  }
+  .facts div:last-child {
+    border-bottom: 0;
+  }
+  .facts dd {
+    margin: 0;
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+  .facts dt {
+    color: #a9bdd6;
+  }
+  .principles {
+    list-style: none;
+    margin: 32px 0 0;
+    padding: 0;
+    display: grid;
+    gap: 20px;
+  }
+  @media (min-width: 768px) {
+    .principles {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .principles li {
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    background: #fff;
+    border-top: 3px solid var(--c-blue-500);
+  }
+  .principles p {
+    margin: 0;
+    color: var(--c-ink-muted);
+  }
+  .areas {
+    list-style: none;
+    margin: 24px 0 0;
+    padding: 0;
+    border-top: 1px solid var(--c-line);
+  }
+  .areas a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 4px;
+    border-bottom: 1px solid var(--c-line);
+    text-decoration: none;
+    color: var(--c-ink);
+  }
+  .areas a > span {
+    display: grid;
+    gap: 2px;
+  }
+  .areas strong {
+    color: var(--c-navy-900);
+    font-size: 1.0625rem;
+  }
+  .areas a span span {
+    color: var(--c-ink-muted);
+    font-size: var(--fs-small);
+  }
+  .areas a:hover strong {
+    color: var(--c-blue-600);
+  }
+  .areas svg {
+    flex: none;
+    color: var(--c-blue-600);
+  }
+</style>

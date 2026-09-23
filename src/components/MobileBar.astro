@@ -1,0 +1,103 @@
+---
+// Diskretna donja traka na mobitelu. Skriva se dok je forma na ekranu ili dok je aktivno polje za unos
+// (otvorena tastatura), da ne prekriva formu ni obavijesti.
+import Icon from './Icon.astro';
+import { primaryPhone } from '../data/site.ts';
+---
+
+<div class="mobile-bar" data-mobile-bar>
+  <a class="mobile-bar__btn mobile-bar__btn--call" href={primaryPhone.href} data-track="klik_telefon">
+    <Icon name="phone" size={20} />
+    Pozovite
+  </a>
+  <a class="mobile-bar__btn mobile-bar__btn--inquiry" href="/kontakt#upit">
+    <Icon name="send" size={20} />
+    Pošaljite upit
+  </a>
+</div>
+
+<script>
+  const bar = document.querySelector<HTMLElement>('[data-mobile-bar]');
+  if (bar) {
+    document.body.classList.add('has-mobile-bar');
+    let fieldFocused = false;
+    let formVisible = false;
+    const update = () => bar.classList.toggle('is-hidden', fieldFocused || formVisible);
+
+    document.addEventListener('focusin', (e) => {
+      fieldFocused = (e.target as HTMLElement).matches('input, textarea, select');
+      update();
+    });
+    document.addEventListener('focusout', () => {
+      fieldFocused = false;
+      // Kratka odgoda: fokus može odmah preći na sljedeće polje.
+      setTimeout(update, 120);
+    });
+
+    const forms = document.querySelectorAll('[data-hide-mobile-bar]');
+    if (forms.length && 'IntersectionObserver' in window) {
+      const visible = new Set<Element>();
+      const io = new IntersectionObserver((entries) => {
+        for (const entry of entries) entry.isIntersecting ? visible.add(entry.target) : visible.delete(entry.target);
+        formVisible = visible.size > 0;
+        update();
+      });
+      forms.forEach((f) => io.observe(f));
+    }
+  }
+</script>
+
+<style>
+  .mobile-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 8px;
+    padding: 8px var(--gutter) calc(8px + env(safe-area-inset-bottom));
+    background: rgb(255 255 255 / 0.96);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid var(--c-line);
+    box-shadow: 0 -6px 20px -12px rgb(15 35 64 / 0.25);
+    transition:
+      transform 0.2s ease,
+      visibility 0.2s;
+  }
+  .mobile-bar.is-hidden {
+    transform: translateY(110%);
+    visibility: hidden;
+  }
+  @media (min-width: 768px) {
+    .mobile-bar {
+      display: none;
+    }
+  }
+  :global(.nav-open) .mobile-bar {
+    display: none;
+  }
+  .mobile-bar__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 48px;
+    border-radius: 999px;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 0.975rem;
+  }
+  .mobile-bar__btn--call {
+    border: 1.5px solid var(--c-line);
+    color: var(--c-navy-900);
+  }
+  .mobile-bar__btn--inquiry {
+    background: var(--c-blue-600);
+    color: #fff;
+  }
+  .mobile-bar__btn--inquiry:hover {
+    color: #fff;
+  }
+</style>

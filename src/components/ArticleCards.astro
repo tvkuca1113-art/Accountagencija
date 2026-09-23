@@ -1,0 +1,103 @@
+---
+import ResponsiveImage from './ResponsiveImage.astro';
+import { articles, formatDate } from '../data/articles.ts';
+
+interface Props {
+  headingLevel?: 'h2' | 'h3';
+}
+const { headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+---
+
+<ul class="articles">
+  {
+    articles.map((a) => (
+      <li class="article-card">
+        <ResponsiveImage name={a.image} alt="" sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw" class="article-card__media media" />
+        <div class="article-card__body">
+          <p class="article-card__meta">
+            <time datetime={a.published}>{formatDate(a.published)}</time> · {a.readingMinutes} min čitanja
+          </p>
+          <H class="article-card__title">
+            <a href={`/savjeti/${a.slug}`}>{a.title}</a>
+          </H>
+          <p>{a.description}</p>
+        </div>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .articles {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 24px;
+  }
+  @media (min-width: 640px) {
+    .articles {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .articles {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .article-card {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    background: #fff;
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition:
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+  }
+  .article-card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+  }
+  :global(.media.article-card__media) {
+    aspect-ratio: 16 / 9;
+    border-radius: 0;
+  }
+  .article-card__body {
+    padding: 22px 24px 26px;
+  }
+  .article-card__meta {
+    margin: 0 0 8px;
+    font-size: 0.85rem;
+    color: var(--c-ink-muted);
+  }
+  .article-card__title {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+  }
+  .article-card__title a {
+    color: var(--c-navy-900);
+    text-decoration: none;
+  }
+  /* Cijela kartica je klikabilna preko linka u naslovu. */
+  .article-card__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .article-card__title a:focus-visible {
+    outline: none;
+  }
+  .article-card:has(a:focus-visible) {
+    outline: 3px solid var(--c-focus);
+    outline-offset: 3px;
+  }
+  .article-card__body p:last-child {
+    margin: 0;
+    color: var(--c-ink-muted);
+    font-size: var(--fs-small);
+  }
+</style>

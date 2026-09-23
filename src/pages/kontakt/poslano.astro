@@ -1,0 +1,39 @@
+---
+// Potvrda za slanje bez JavaScripta: server preusmjerava ovdje tek nakon što je pružalac prihvatio poruku.
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { primaryPhone } from '../../data/site.ts';
+---
+
+<Base title="Upit je poslan | Agencija ACCOUNT" description="Vaš upit je poslan agenciji ACCOUNT." noindex>
+  <section class="section">
+    <div class="container done">
+      <Icon name="check" size={40} />
+      <h1>Hvala, upit je poslan.</h1>
+      <p class="lead">
+        Odgovorit ćemo vam putem kanala koji ste odabrali. Ako je hitno, pozovite nas na
+        <a href={primaryPhone.href} data-track="klik_telefon">{primaryPhone.display}</a>.
+      </p>
+      <a class="btn btn--ghost" href="/">Nazad na početnu</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .done {
+    max-width: 40rem;
+    text-align: center;
+    display: grid;
+    justify-items: center;
+  }
+  .done > svg {
+    color: var(--c-success);
+    margin-bottom: 16px;
+  }
+  .done h1 {
+    font-size: clamp(2rem, 1.6rem + 1.6vw, 3rem);
+  }
+  .done .lead {
+    margin-bottom: 28px;
+  }
+</style>

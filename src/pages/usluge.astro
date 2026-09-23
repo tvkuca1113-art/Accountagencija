@@ -1,0 +1,118 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import ResponsiveImage from '../components/ResponsiveImage.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ProcessSection from '../components/ProcessSection.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { services } from '../data/services.ts';
+import { breadcrumbSchema } from '../lib/schema.ts';
+
+const crumbs = [
+  { name: 'Početna', path: '/' },
+  { name: 'Usluge', path: '/usluge' },
+];
+---
+
+<Base
+  title="Usluge: računovodstvo, savjetovanje i registracija | ACCOUNT Mostar"
+  description="Računovodstvo i knjigovodstvo, poslovno i porezno savjetovanje, podrška inostranim preduzećima, registracija firmi i obrta te poslovni projekti u Mostaru."
+  jsonLd={[breadcrumbSchema(crumbs)]}
+>
+  <section class="page-head">
+    <div class="container">
+      <Breadcrumbs items={crumbs} />
+      <h1>Usluge</h1>
+      <p class="lead">
+        Pet oblasti u kojima pomažemo firmama, obrtima, udruženjima i inostranim preduzećima. Odaberite uslugu za detalje ili
+        iskoristite <a href="/korisni-alati#vodic">vodič za izbor usluge</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="container">
+      <ol class="svc-list">
+        {
+          services.map((s, i) => (
+            <li class:list={['svc-row', { 'svc-row--flip': i % 2 === 1 }]}>
+              <ResponsiveImage name={s.image} alt={s.imageAlt} sizes="(min-width: 900px) 540px, 100vw" class="media svc-row__media" />
+              <div class="svc-row__body">
+                <h2>
+                  <a href={`/${s.slug}`}>{s.title}</a>
+                </h2>
+                <p class="svc-row__benefit">{s.benefit}</p>
+                <ul class="checklist">{s.scope.slice(0, 3).map((t) => <li>{t}</li>)}</ul>
+                <div class="svc-row__actions">
+                  <a class="btn btn--small" href={`/${s.slug}`}>
+                    Detalji usluge<span class="visually-hidden">: {s.title}</span>
+                  </a>
+                  <a class="link-arrow" href={`/kontakt?usluga=${s.slug}#upit`}>
+                    Upit za ovu uslugu<span class="visually-hidden">: {s.title}</span> <Icon name="arrow" size={18} />
+                  </a>
+                </div>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <ProcessSection />
+  <CtaBand />
+</Base>
+
+<style>
+  .page-head {
+    padding-block: clamp(24px, 3vw, 48px) clamp(24px, 3vw, 40px);
+    background: var(--c-bg);
+  }
+  .svc-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: clamp(48px, 6vw, 88px);
+  }
+  .svc-row {
+    display: grid;
+    gap: 28px;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .svc-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+    }
+    .svc-row--flip :global(.media.svc-row__media) {
+      order: 2;
+    }
+  }
+  :global(.media.svc-row__media) {
+    aspect-ratio: 4 / 3;
+  }
+  .svc-row h2 {
+    font-size: clamp(1.625rem, 1.35rem + 1vw, 2.25rem);
+  }
+  .svc-row h2 a {
+    color: var(--c-navy-900);
+    text-decoration: none;
+  }
+  .svc-row h2 a:hover {
+    color: var(--c-blue-600);
+  }
+  .svc-row__benefit {
+    font-size: 1.125rem;
+    color: var(--c-ink-muted);
+  }
+  .svc-row .checklist {
+    margin: 20px 0 28px;
+  }
+  .svc-row__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 24px;
+  }
+</style>

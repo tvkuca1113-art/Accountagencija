@@ -1,0 +1,420 @@
+---
+// Kontakt forma. Radi i bez JavaScripta (obični POST na /api/upit); uz JavaScript šalje se asinhrono,
+// greške se prikazuju uz polja, unos ostaje sačuvan, a uspjeh se prikazuje tek kad server potvrdi prihvat slanja.
+import Icon from './Icon.astro';
+import { serviceOptions } from '../data/services.ts';
+import { primaryPhone } from '../data/site.ts';
+
+interface Props {
+  service?: string;
+  headingId?: string;
+}
+const { service = '', headingId } = Astro.props;
+---
+
+<form
+  class="cform"
+  action="/api/upit"
+  method="post"
+  data-contact-form
+  data-hide-mobile-bar
+  data-phone-href={primaryPhone.href}
+  data-phone-display={primaryPhone.display}
+  novalidate
+  aria-labelledby={headingId}
+>
+  <div class="cform__grid">
+    <div class="field">
+      <label for="cf-name">Ime i prezime</label>
+      <input id="cf-name" class="input" name="name" type="text" autocomplete="name" required maxlength="100" aria-describedby="cf-name-err" />
+      <p class="field-error" id="cf-name-err" data-error-for="name"></p>
+    </div>
+
+    <div class="field">
+      <label for="cf-company">Firma <span class="optional">(opcionalno)</span></label>
+      <input id="cf-company" class="input" name="company" type="text" autocomplete="organization" maxlength="120" aria-describedby="cf-company-err" />
+      <p class="field-error" id="cf-company-err" data-error-for="company"></p>
+    </div>
+
+    <fieldset class="field cform__full" aria-describedby="cf-method-err">
+      <legend>Kako da vas kontaktiramo?</legend>
+      <div class="choice-group">
+        <label class="choice">
+          <input type="radio" name="contactMethod" value="email" checked />
+          <span><Icon name="mail" size={18} /> E-mailom</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="contactMethod" value="telefon" />
+          <span><Icon name="phone" size={18} /> Telefonom</span>
+        </label>
+      </div>
+      <p class="field-error" id="cf-method-err" data-error-for="contactMethod"></p>
+    </fieldset>
+
+    <div class="field" data-method-field="email">
+      <label for="cf-email">E-mail <span class="optional" data-email-optional>(ako odaberete e-mail)</span></label>
+      <input id="cf-email" class="input" name="email" type="email" autocomplete="email" maxlength="254" aria-describedby="cf-email-err" />
+      <p class="field-error" id="cf-email-err" data-error-for="email"></p>
+    </div>
+
+    <div class="field" data-method-field="telefon">
+      <label for="cf-phone">Telefon <span class="optional" data-phone-optional>(ako odaberete poziv)</span></label>
+      <input id="cf-phone" class="input" name="phone" type="tel" autocomplete="tel" maxlength="30" aria-describedby="cf-phone-err" />
+      <p class="field-error" id="cf-phone-err" data-error-for="phone"></p>
+    </div>
+
+    <div class="field cform__full">
+      <label for="cf-service">Usluga</label>
+      <select id="cf-service" class="select" name="service" required aria-describedby="cf-service-err">
+        <option value="" selected={!service}>Odaberite uslugu</option>
+        {serviceOptions.map((o) => <option value={o.value} selected={o.value === service}>{o.label}</option>)}
+      </select>
+      <p class="field-error" id="cf-service-err" data-error-for="service"></p>
+    </div>
+
+    <div class="field cform__full">
+      <label for="cf-message">Poruka</label>
+      <p class="hint" id="cf-message-hint">Ukratko opišite poslovanje i šta vam treba.</p>
+      <textarea id="cf-message" class="textarea" name="message" rows="5" required maxlength="4000" aria-describedby="cf-message-hint cf-message-err"></textarea>
+      <p class="field-error" id="cf-message-err" data-error-for="message"></p>
+    </div>
+
+    <div class="cform__summary cform__full" data-summary hidden>
+      <div class="cform__summary-head">
+        <h3>Sažetak iz konfiguratora</h3>
+        <button type="button" class="cform__summary-remove" data-summary-remove>Ukloni sažetak</button>
+      </div>
+      <pre data-summary-text></pre>
+      <textarea name="summary" hidden data-summary-field></textarea>
+      <label class="cform__check">
+        <input type="checkbox" name="attach_summary" value="da" checked data-summary-attach />
+        Pošalji ovaj sažetak uz upit
+      </label>
+      <p class="field-error" data-error-for="summary"></p>
+    </div>
+  </div>
+
+  <!-- Zaštita od automatskih prijava: polje nije vidljivo ljudima. -->
+  <div class="cform__trap" aria-hidden="true">
+    <label for="cf-adresa-2">Ne popunjavajte ovo polje</label>
+    <input id="cf-adresa-2" name="adresa_2" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <input type="hidden" name="started_at" value="" data-started-at />
+
+  <div class="cform__footer">
+    <button type="submit" class="btn" data-submit>
+      <span data-submit-label>Pošaljite upit</span>
+      <Icon name="send" size={18} />
+    </button>
+    <p class="cform__privacy">
+      Podatke koristimo samo da bismo odgovorili na upit. Više u <a href="/politika-privatnosti">politici privatnosti</a>.
+    </p>
+  </div>
+
+  <div class="cform__status" role="status" aria-live="polite" data-status></div>
+</form>
+
+<div class="cform__success" data-success hidden tabindex="-1">
+  <Icon name="check" size={28} />
+  <div>
+    <h3>Hvala, upit je poslan.</h3>
+    <p>Odgovorit ćemo vam putem kanala koji ste odabrali. Ako je hitno, pozovite nas na <a href={primaryPhone.href} data-track="klik_telefon">{primaryPhone.display}</a>.</p>
+    <button type="button" class="btn btn--ghost btn--small" data-new-inquiry>Pošaljite novi upit</button>
+  </div>
+</div>
+
+<script>
+  import { validateInquiry, ERROR_TEXT, type InquiryField } from '../lib/inquiry.ts';
+  import { track } from '../scripts/analytics.ts';
+
+  const STORAGE_KEY = 'account:sazetak-upita';
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  const escapeHtml = (t: string) =>
+    t.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+
+  if (form) {
+    const PHONE = { href: form.dataset.phoneHref ?? '', display: form.dataset.phoneDisplay ?? '' };
+    const success = document.querySelector<HTMLElement>('[data-success]')!;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const submitLabel = form.querySelector<HTMLElement>('[data-submit-label]')!;
+    const fieldNames: InquiryField[] = ['name', 'company', 'contactMethod', 'email', 'phone', 'service', 'message', 'summary'];
+    let sending = false;
+    let opened = false;
+
+    form.querySelector<HTMLInputElement>('[data-started-at]')!.value = String(Date.now());
+
+    // Unaprijed odabrana usluga iz linka (?usluga=…).
+    const preset = new URLSearchParams(location.search).get('usluga');
+    const select = form.querySelector<HTMLSelectElement>('select[name="service"]')!;
+    if (preset && [...select.options].some((o) => o.value === preset)) select.value = preset;
+
+    // Prikaz samo polja za odabrani način kontakta.
+    const methodFields = form.querySelectorAll<HTMLElement>('[data-method-field]');
+    const optionalHints = form.querySelectorAll<HTMLElement>('[data-phone-optional], [data-email-optional]');
+    const syncMethod = () => {
+      const method = form.querySelector<HTMLInputElement>('input[name="contactMethod"]:checked')?.value ?? 'email';
+      methodFields.forEach((el) => (el.hidden = el.dataset.methodField !== method));
+      optionalHints.forEach((el) => (el.hidden = true));
+      form.querySelector<HTMLInputElement>('input[name="email"]')!.required = method === 'email';
+      form.querySelector<HTMLInputElement>('input[name="phone"]')!.required = method === 'telefon';
+    };
+    form.querySelectorAll('input[name="contactMethod"]').forEach((r) => r.addEventListener('change', syncMethod));
+    syncMethod();
+
+    // Sažetak iz konfiguratora — prikazan korisniku, može se ukloniti prije slanja.
+    const summaryBox = form.querySelector<HTMLElement>('[data-summary]')!;
+    const summaryField = form.querySelector<HTMLTextAreaElement>('[data-summary-field]')!;
+    let summary = '';
+    try {
+      summary = sessionStorage.getItem(STORAGE_KEY) ?? '';
+    } catch {}
+    if (summary) {
+      summaryBox.hidden = false;
+      summaryBox.querySelector('[data-summary-text]')!.textContent = summary;
+      summaryField.value = summary;
+    }
+    const clearSummary = () => {
+      summaryBox.hidden = true;
+      summaryField.value = '';
+      form.querySelector<HTMLInputElement>('[data-summary-attach]')!.checked = false;
+      try {
+        sessionStorage.removeItem(STORAGE_KEY);
+      } catch {}
+    };
+    form.querySelector('[data-summary-remove]')!.addEventListener('click', clearSummary);
+
+    form.addEventListener('focusin', () => {
+      if (!opened) {
+        opened = true;
+        track('otvaranje_forme');
+      }
+    });
+
+    const setFieldError = (name: string, message: string) => {
+      const el = form.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
+      if (el) el.textContent = message;
+      form.querySelectorAll<HTMLElement>(`[name="${name}"]:not([type="radio"])`).forEach((input) => {
+        if (message) input.setAttribute('aria-invalid', 'true');
+        else input.removeAttribute('aria-invalid');
+      });
+    };
+    const clearErrors = () => fieldNames.forEach((n) => setFieldError(n, ''));
+    const focusFirstError = (names: string[]) => {
+      const first = fieldNames.find((n) => names.includes(n));
+      if (!first) return;
+      const el = form.querySelector<HTMLElement>(`[name="${first}"]:not([hidden])`);
+      el?.focus();
+    };
+
+    const setStatus = (html: string, kind: 'error' | 'info' | '' = '') => {
+      status.className = `cform__status${kind ? ` is-${kind}` : ''}`;
+      status.innerHTML = html;
+    };
+
+    // Greške se uklanjaju čim korisnik ispravi polje.
+    form.addEventListener('input', (e) => {
+      const name = (e.target as HTMLInputElement).name;
+      if (name) setFieldError(name, '');
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (sending) return; // sprječava dvostruko slanje
+      clearErrors();
+      setStatus('');
+
+      const data = new FormData(form);
+      const attach = data.get('attach_summary') === 'da';
+      const check = validateInquiry({
+        ...Object.fromEntries(fieldNames.map((n) => [n, data.get(n) ?? ''])),
+        summary: attach ? String(data.get('summary') ?? '') : '',
+      });
+      if (!check.ok) {
+        Object.entries(check.errors).forEach(([k, code]) => setFieldError(k, ERROR_TEXT[code!] ?? ''));
+        setStatus('Provjerite označena polja.', 'error');
+        focusFirstError(Object.keys(check.errors));
+        return;
+      }
+
+      sending = true;
+      submit.disabled = true;
+      form.setAttribute('aria-busy', 'true');
+      submitLabel.textContent = 'Šaljem…';
+
+      try {
+        const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        const body = await res.json().catch(() => ({}));
+        if (res.ok && body.ok) {
+          track('uspjesan_upit');
+          form.reset();
+          clearSummary();
+          syncMethod();
+          form.hidden = true;
+          success.hidden = false;
+          success.focus();
+          return;
+        }
+        if (body.code === 'invalid' && body.errors) {
+          Object.entries(body.errors as Record<string, string>).forEach(([k, msg]) => setFieldError(k, msg));
+          setStatus('Provjerite označena polja.', 'error');
+          focusFirstError(Object.keys(body.errors));
+          return;
+        }
+        setStatus(
+          `${escapeHtml(body.message ?? 'Upit trenutno nije moguće poslati.')} Vaš unos je sačuvan. Možete nas pozvati na <a href="${PHONE.href}">${PHONE.display}</a>.`,
+          'error',
+        );
+      } catch {
+        setStatus(
+          `Veza nije uspjela. Vaš unos je sačuvan — pokušajte ponovo ili nas pozovite na <a href="${PHONE.href}">${PHONE.display}</a>.`,
+          'error',
+        );
+      } finally {
+        sending = false;
+        submit.disabled = false;
+        form.removeAttribute('aria-busy');
+        submitLabel.textContent = 'Pošaljite upit';
+      }
+    });
+
+    success.querySelector('[data-new-inquiry]')!.addEventListener('click', () => {
+      success.hidden = true;
+      form.hidden = false;
+      form.querySelector<HTMLInputElement>('[data-started-at]')!.value = String(Date.now());
+      form.querySelector<HTMLInputElement>('input[name="name"]')!.focus();
+    });
+  }
+</script>
+
+<style>
+  .cform__grid {
+    display: grid;
+    gap: 20px;
+  }
+  @media (min-width: 640px) {
+    .cform__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .cform__full {
+      grid-column: 1 / -1;
+    }
+  }
+  .cform fieldset.field {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+  }
+  .cform fieldset legend {
+    padding: 0;
+    margin-bottom: 8px;
+  }
+  .field[hidden] {
+    display: none;
+  }
+  .cform__summary {
+    padding: 18px;
+    border-radius: var(--radius);
+    background: var(--c-blue-100);
+    border: 1px solid var(--c-blue-200);
+  }
+  .cform__summary-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .cform__summary h3 {
+    font-size: 1rem;
+    margin: 0 0 8px;
+  }
+  .cform__summary-remove {
+    border: 0;
+    background: none;
+    padding: 8px 0;
+    color: var(--c-blue-600);
+    font: inherit;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  .cform__summary pre {
+    margin: 0 0 12px;
+    font: inherit;
+    font-size: 0.9375rem;
+    white-space: pre-wrap;
+  }
+  .cform__check {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+  }
+  .cform__check input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--c-blue-600);
+  }
+  .cform__trap {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .cform__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 24px;
+    margin-top: 28px;
+  }
+  .cform__privacy {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--c-ink-muted);
+    max-width: 26rem;
+  }
+  .cform__status:not(:empty) {
+    margin-top: 20px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+  }
+  .cform__status.is-error {
+    background: #fdecea;
+    color: #8a1c12;
+    border-left: 3px solid var(--c-danger);
+  }
+  .cform__status.is-error :global(a) {
+    color: #8a1c12;
+  }
+  .cform__success {
+    display: flex;
+    gap: 16px;
+    padding: 24px;
+    border-radius: var(--radius);
+    background: #e8f5ee;
+    border: 1px solid #b7dfc8;
+    color: #0f3d27;
+  }
+  .cform__success[hidden] {
+    display: none;
+  }
+  .cform__success > svg {
+    flex: none;
+    color: var(--c-success);
+  }
+  .cform__success h3 {
+    color: #0f3d27;
+    margin-bottom: 6px;
+  }
+  .cform__success:focus {
+    outline: 3px solid var(--c-focus);
+    outline-offset: 3px;
+  }
+</style>

@@ -1,0 +1,269 @@
+---
+// Konfigurator upita: prikuplja osnovne podatke o obimu i pravi sažetak koji korisnik, uz svoje znanje,
+// prenosi u kontakt formu. Nije kalkulator cijene — bez odobrenog cjenovnika ne prikazuje iznose.
+import Icon from './Icon.astro';
+import { services } from '../data/services.ts';
+
+const businessTypes = ['Firma (d.o.o. i sl.)', 'Obrt ili samostalna djelatnost', 'Udruženje', 'Inostrano preduzeće', 'Tek pokrećem posao'];
+const documents = ['Do 20', '21–50', '51–150', '151–300', 'Više od 300', 'Ne znam'];
+const employees = ['Nema zaposlenih', '1–5', '6–20', 'Više od 20'];
+const vat = ['U sistemu PDV-a', 'Nije u sistemu PDV-a', 'Nisam siguran/na'];
+---
+
+<form class="config" data-config novalidate>
+  <fieldset class="config__group">
+    <legend>Vrsta poslovanja</legend>
+    <div class="config__options">
+      {
+        businessTypes.map((v) => (
+          <label class="option">
+            <input type="radio" name="vrsta" value={v} />
+            <span>{v}</span>
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+
+  <fieldset class="config__group">
+    <legend>Približan broj dokumenata mjesečno <span class="config__hint">Ulazne i izlazne fakture, izvodi i sl.</span></legend>
+    <div class="choice-group">
+      {
+        documents.map((v) => (
+          <label class="choice">
+            <input type="radio" name="dokumenti" value={v} />
+            <span>{v}</span>
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+
+  <fieldset class="config__group">
+    <legend>Broj zaposlenih</legend>
+    <div class="choice-group">
+      {
+        employees.map((v) => (
+          <label class="choice">
+            <input type="radio" name="zaposleni" value={v} />
+            <span>{v}</span>
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+
+  <fieldset class="config__group">
+    <legend>PDV status</legend>
+    <div class="choice-group">
+      {
+        vat.map((v) => (
+          <label class="choice">
+            <input type="radio" name="pdv" value={v} />
+            <span>{v}</span>
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+
+  <fieldset class="config__group">
+    <legend>Usluge koje vas zanimaju <span class="config__hint">Možete odabrati više.</span></legend>
+    <div class="config__options">
+      {
+        services.map((s) => (
+          <label class="option">
+            <input type="checkbox" name="usluge" value={s.slug} data-label={s.title} />
+            <span>{s.title}</span>
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+
+  <div class="config__summary" aria-labelledby="konfigurator-sazetak-naslov">
+    <h3 id="konfigurator-sazetak-naslov">Sažetak vašeg upita</h3>
+    <p class="config__empty" data-config-empty>Odaberite opcije iznad i ovdje ćete vidjeti sažetak.</p>
+    <dl class="config__list" data-config-list hidden></dl>
+    <p class="config__price">Ponudu pripremamo prema obimu i potrebama vašeg poslovanja.</p>
+    <p class="field-error" data-config-error role="alert"></p>
+    <button type="submit" class="btn">
+      Prenesite sažetak u upit <Icon name="arrow" size={18} />
+    </button>
+    <p class="config__note">
+      Sažetak se prenosi samo u kontakt formu na ovoj stranici. Prije slanja ga možete pregledati ili ukloniti.
+    </p>
+  </div>
+  <noscript><p>Konfigurator koristi JavaScript. Upit možete poslati i direktno putem <a href="/kontakt#upit">kontakt forme</a>.</p></noscript>
+</form>
+
+<script>
+  import { track } from '../scripts/analytics.ts';
+
+  const STORAGE_KEY = 'account:sazetak-upita';
+  const form = document.querySelector<HTMLFormElement>('[data-config]');
+
+  if (form) {
+    const list = form.querySelector<HTMLElement>('[data-config-list]')!;
+    const empty = form.querySelector<HTMLElement>('[data-config-empty]')!;
+    const error = form.querySelector<HTMLElement>('[data-config-error]')!;
+    let tracked = false;
+
+    const read = () => {
+      const one = (name: string) => form.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`)?.value ?? '';
+      const services = [...form.querySelectorAll<HTMLInputElement>('input[name="usluge"]:checked')];
+      return {
+        rows: [
+          ['Vrsta poslovanja', one('vrsta')],
+          ['Dokumenata mjesečno', one('dokumenti')],
+          ['Broj zaposlenih', one('zaposleni')],
+          ['PDV status', one('pdv')],
+          ['Usluge', services.map((s) => s.dataset.label).join(', ')],
+        ].filter(([, v]) => v) as [string, string][],
+        firstService: services[0]?.value ?? 'nisam-siguran',
+      };
+    };
+
+    const render = () => {
+      const { rows } = read();
+      list.replaceChildren(
+        ...rows.flatMap(([k, v]) => {
+          const dt = document.createElement('dt');
+          dt.textContent = k;
+          const dd = document.createElement('dd');
+          dd.textContent = v;
+          return [dt, dd];
+        }),
+      );
+      list.hidden = rows.length === 0;
+      empty.hidden = rows.length > 0;
+    };
+
+    form.addEventListener('change', () => {
+      error.textContent = '';
+      render();
+      if (!tracked) {
+        tracked = true;
+        track('koristenje_alata', 'konfigurator');
+      }
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const { rows, firstService } = read();
+      if (rows.length === 0) {
+        error.textContent = 'Odaberite barem jednu opciju da bismo mogli pripremiti sažetak.';
+        return;
+      }
+      const text = rows.map(([k, v]) => `${k}: ${v}`).join('\n');
+      try {
+        sessionStorage.setItem(STORAGE_KEY, text);
+      } catch {
+        error.textContent = 'Preglednik ne dozvoljava privremeno čuvanje sažetka. Opišite ove podatke direktno u poruci.';
+        return;
+      }
+      location.href = `/kontakt?usluga=${encodeURIComponent(firstService)}#upit`;
+    });
+
+    render();
+  }
+</script>
+
+<style>
+  .config {
+    display: grid;
+    gap: 28px;
+  }
+  @media (min-width: 1024px) {
+    .config {
+      grid-template-columns: 1.35fr 1fr;
+      align-items: start;
+    }
+    .config__summary {
+      grid-column: 2;
+      grid-row: 1 / span 5;
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+    }
+  }
+  .config__group {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .config__group legend {
+    padding: 0;
+    margin-bottom: 14px;
+    font-weight: 750;
+    font-size: 1.0625rem;
+    color: var(--c-navy-900);
+  }
+  .config__hint {
+    display: block;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--c-ink-muted);
+  }
+  .config__options {
+    display: grid;
+    gap: 10px;
+  }
+  @media (min-width: 640px) {
+    .config__options {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .config__summary {
+    padding: clamp(20px, 3vw, 32px);
+    border-radius: var(--radius-lg);
+    background: var(--c-navy-900);
+    color: #d3e0ef;
+  }
+  .config__summary h3 {
+    color: #fff;
+  }
+  .config__empty {
+    color: #a9bdd6;
+  }
+  .config__list {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    margin: 0 0 20px;
+    font-size: 0.9375rem;
+  }
+  .config__list :global(dt) {
+    color: #9fb4cf;
+  }
+  .config__list :global(dd) {
+    margin: 0;
+    color: #fff;
+    font-weight: 650;
+  }
+  .config__price {
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    background: rgb(255 255 255 / 0.07);
+    border-left: 3px solid var(--c-cyan-400);
+    color: #fff;
+    font-weight: 600;
+  }
+  .config__summary .field-error {
+    color: #ffb4ab;
+    margin-bottom: 12px;
+  }
+  .config__summary .btn {
+    --btn-bg: #fff;
+    --btn-fg: var(--c-navy-900);
+    width: 100%;
+  }
+  .config__summary .btn:hover {
+    --btn-bg: var(--c-blue-100);
+  }
+  .config__note {
+    margin: 14px 0 0;
+    font-size: 0.85rem;
+    color: #a9bdd6;
+  }
+</style>

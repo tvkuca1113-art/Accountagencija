@@ -1,0 +1,276 @@
+---
+// Podstranice usluga na postojećim URL-ovima (/racunovodstvo, /konzultantske-usluge, /zastupanje-inostranih-poduzeca)
+// i novim URL-ovima za razdvojene „Ostale usluge“ (/registracija-firmi-obrta-udruzenja, /poslovni-projekti).
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import ResponsiveImage from '../components/ResponsiveImage.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import FaqList from '../components/FaqList.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { services, type Service } from '../data/services.ts';
+import { primaryPhone } from '../data/site.ts';
+import { breadcrumbSchema, serviceSchema } from '../lib/schema.ts';
+
+export function getStaticPaths() {
+  return services.map((service) => ({ params: { usluga: service.slug }, props: { service } }));
+}
+
+const { service } = Astro.props as { service: Service };
+const crumbs = [
+  { name: 'Početna', path: '/' },
+  { name: 'Usluge', path: '/usluge' },
+  { name: service.title, path: `/${service.slug}` },
+];
+const others = services.filter((s) => s.slug !== service.slug);
+---
+
+<Base
+  title={service.metaTitle}
+  description={service.metaDescription}
+  ogImage={`/images/${service.image}-1200.webp`}
+  jsonLd={[serviceSchema(service), breadcrumbSchema(crumbs)]}
+>
+  <section class="svc-hero">
+    <div class="container">
+      <Breadcrumbs items={crumbs} />
+      <div class="svc-hero__grid">
+        <div>
+          <h1>{service.h1}</h1>
+          <p class="lead">{service.intro}</p>
+          <div class="svc-hero__actions">
+            <a class="btn" href="#upit">Zatražite ponudu <Icon name="arrow" size={18} /></a>
+            <a class="btn btn--ghost" href={primaryPhone.href} data-track="klik_telefon">
+              <Icon name="phone" size={18} />
+              {primaryPhone.display}
+            </a>
+          </div>
+        </div>
+        <ResponsiveImage
+          name={service.image}
+          alt={service.imageAlt}
+          sizes="(min-width: 1240px) 580px, (min-width: 900px) 48vw, 100vw"
+          priority
+          class="media svc-hero__media"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container two-col">
+      <div>
+        <h2>Kome je namijenjeno</h2>
+        <ul class="checklist">{service.forWhom.map((t) => <li>{t}</li>)}</ul>
+      </div>
+      <div class="scope">
+        <h2>Obuhvat usluge</h2>
+        <ul class="checklist">{service.scope.map((t) => <li>{t}</li>)}</ul>
+        <p class="scope__note">Tačan obuhvat i dinamiku dogovaramo prema vašem poslovanju.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="koraci-naslov">
+    <div class="container">
+      <div class="section-head">
+        <h2 id="koraci-naslov">Kako sarađujemo</h2>
+      </div>
+      <ol class="steps">
+        {
+          service.steps.map((s, i) => (
+            <li>
+              <span class="steps__num" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container two-col two-col--wide-right">
+      <div>
+        <h2>Za prvi razgovor pripremite</h2>
+        <p>Nije potrebno imati sve odgovore. Ovi podaci pomažu da brže pripremimo odgovarajuću ponudu.</p>
+        <ul class="checklist">{service.prepare.map((t) => <li>{t}</li>)}</ul>
+      </div>
+      <div>
+        <h2>Česta pitanja</h2>
+        <FaqList items={service.faq} />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tint" id="upit" aria-labelledby="upit-naslov">
+    <div class="container form-wrap">
+      <div>
+        <p class="eyebrow">Upit</p>
+        <h2 id="upit-naslov">Zatražite ponudu za ovu uslugu</h2>
+        <p>Usluga „{service.title}“ je već odabrana u formi. Ponudu pripremamo prema obimu i potrebama vašeg poslovanja.</p>
+        <p>
+          Radije biste razgovarali? Pozovite nas na
+          <a href={primaryPhone.href} data-track="klik_telefon">{primaryPhone.display}</a>.
+        </p>
+      </div>
+      <div class="form-card">
+        <ContactForm service={service.slug} headingId="upit-naslov" />
+      </div>
+    </div>
+  </section>
+
+  <nav class="section section--tight" aria-labelledby="ostale-naslov">
+    <div class="container">
+      <h2 id="ostale-naslov" class="others__title">Ostale usluge</h2>
+      <ul class="others">
+        {
+          others.map((s) => (
+            <li>
+              <a href={`/${s.slug}`}>
+                {s.title}
+                <Icon name="arrow" size={18} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </nav>
+</Base>
+
+<style>
+  .svc-hero {
+    padding-block: clamp(24px, 3vw, 48px) clamp(48px, 5vw, 88px);
+    background: linear-gradient(180deg, var(--c-bg) 0%, #fff 100%);
+  }
+  .svc-hero__grid {
+    display: grid;
+    gap: 32px;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .svc-hero__grid {
+      grid-template-columns: 1.05fr 1fr;
+      gap: 56px;
+    }
+  }
+  .svc-hero h1 {
+    font-size: clamp(2.125rem, 1.6rem + 2vw, 3.5rem);
+  }
+  .svc-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+  :global(.media.svc-hero__media) {
+    aspect-ratio: 4 / 3;
+    box-shadow: var(--shadow);
+  }
+  .two-col {
+    display: grid;
+    gap: 48px;
+  }
+  @media (min-width: 900px) {
+    .two-col {
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+    }
+    .two-col--wide-right {
+      grid-template-columns: 1fr 1.2fr;
+    }
+  }
+  .two-col h2 {
+    font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
+    margin-bottom: 20px;
+  }
+  .scope {
+    padding: clamp(24px, 3vw, 36px);
+    border-radius: var(--radius-lg);
+    background: var(--c-bg);
+  }
+  .scope__note {
+    margin: 20px 0 0;
+    font-size: var(--fs-small);
+    color: var(--c-ink-muted);
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 20px;
+    counter-reset: step;
+  }
+  @media (min-width: 768px) {
+    .steps {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .steps li {
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    background: #fff;
+    border: 1px solid var(--c-line);
+  }
+  .steps__num {
+    display: block;
+    margin-bottom: 16px;
+    font-size: 0.875rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--c-blue-600);
+  }
+  .steps h3 {
+    font-size: 1.125rem;
+  }
+  .steps p {
+    margin: 0;
+    color: var(--c-ink-muted);
+  }
+  .form-wrap {
+    display: grid;
+    gap: 32px;
+    align-items: start;
+  }
+  @media (min-width: 1024px) {
+    .form-wrap {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 56px;
+    }
+  }
+  .others__title {
+    font-size: 1.25rem;
+  }
+  .others {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 12px;
+  }
+  @media (min-width: 768px) {
+    .others {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  .others a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    border: 1px solid var(--c-line);
+    color: var(--c-navy-900);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .others a:hover {
+    border-color: var(--c-blue-600);
+    color: var(--c-blue-600);
+  }
+</style>

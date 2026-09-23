@@ -1,0 +1,87 @@
+---
+// Nativni <details>/<summary>: preglednik sam izlaže stanje otvoreno/zatvoreno čitačima ekrana,
+// pa stanje uvijek odgovara prikazu, i radi bez JavaScripta.
+import type { Faq } from '../data/services.ts';
+
+interface Props {
+  items: Faq[];
+}
+const { items } = Astro.props;
+---
+
+<div class="faq">
+  {
+    items.map((item) => (
+      <details class="faq__item">
+        <summary class="faq__q">
+          <span>{item.q}</span>
+          <span class="faq__icon" aria-hidden="true" />
+        </summary>
+        <div class="faq__a">
+          <p>{item.a}</p>
+        </div>
+      </details>
+    ))
+  }
+</div>
+
+<style>
+  .faq {
+    border-top: 1px solid var(--c-line);
+  }
+  .faq__item {
+    border-bottom: 1px solid var(--c-line);
+  }
+  .faq__q {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 0;
+    font-weight: 700;
+    font-size: 1.0625rem;
+    color: var(--c-navy-900);
+    cursor: pointer;
+    list-style: none;
+  }
+  .faq__q::-webkit-details-marker {
+    display: none;
+  }
+  .faq__q:hover {
+    color: var(--c-blue-600);
+  }
+  .faq__icon {
+    position: relative;
+    flex: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--c-blue-100);
+  }
+  .faq__icon::before,
+  .faq__icon::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 12px;
+    height: 2px;
+    margin: -1px 0 0 -6px;
+    border-radius: 2px;
+    background: var(--c-blue-600);
+    transition: transform 0.2s ease;
+  }
+  .faq__icon::after {
+    transform: rotate(90deg);
+  }
+  .faq__item[open] .faq__icon::after {
+    transform: rotate(0deg);
+  }
+  .faq__a {
+    padding: 0 48px 20px 0;
+    color: var(--c-ink-muted);
+  }
+  .faq__a p {
+    margin: 0;
+  }
+</style>

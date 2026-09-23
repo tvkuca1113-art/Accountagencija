@@ -1,5 +1,6 @@
 /* ACCOUNT — dizajnerski sistem.
-   Plavi tonovi uzorkovani su s logotipa na priloženim scenama; potvrditi tačne vrijednosti prema originalnom Logo.png. */
+   Plavi tonovi preuzeti su iz originalnog znaka: #00A0EC (svijetla ploha), #187CC4 (tamna ploha), #14B8EC (akcent).
+   Za tekst i dugmad koristi se nešto tamnija nijansa (#1D6DB3) radi kontrasta s bijelom ≥ 4,5:1. */
 
 /* Manrope (SIL OFL 1.1, public/fonts/Manrope-OFL.txt), samo latinični podskupovi — latin-ext sadrži č, ć, đ, š i ž. */
 @font-face {
@@ -28,10 +29,11 @@
   --c-navy-700: #234571;
   --c-blue-700: #185c99;
   --c-blue-600: #1d6db3; /* dugmad i linkovi: kontrast s bijelom ≥ 5:1 */
-  --c-blue-500: #0098e8; /* prepoznatljiva plava iz znaka — za veće površine i ikone */
+  --c-blue-500: #00a0ec; /* svijetla ploha znaka — za veće površine i ikone */
+  --c-blue-logo: #187cc4; /* tamna ploha znaka */
   --c-blue-200: #bcdcf5;
   --c-blue-100: #e4f1fb;
-  --c-cyan-400: #3cc4e8; /* mala količina akcenta */
+  --c-cyan-400: #14b8ec; /* akcent iz znaka, u maloj količini */
   --c-bg: #f3f7fb;
   --c-surface: #ffffff;
   --c-ink: #0f2340;

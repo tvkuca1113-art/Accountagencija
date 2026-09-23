@@ -31,10 +31,11 @@ Ako članak navodi porezne stope, rokove ili propise, provjeriti ih kod nadležn
 
 ## Logo
 
-1. Originalnu datoteku (npr. `Logo.png` ili `logo.svg`) staviti u `public/brand/`.
-2. U `src/data/site.ts` postaviti, npr.: `logo: { src: '/brand/Logo.png', width: 600, height: 240 }` (stvarne dimenzije datoteke).
-3. Zaglavlje, podnožje i strukturirani podaci tada koriste originalni znak u izvornim proporcijama. Znak se ne crta iznova i ne preuzima s fotografija.
-4. Favicon (`public/favicon.svg`) je privremen. Zamijeniti ga ikonom izvedenom iz originalnog logotipa.
+- Izvornik originalnog znaka: `source-images/brand/account-znak-original.png`.
+- Web varijante: `public/brand/account-znak.png` (puna veličina, za strukturirane podatke) i `account-znak-112.png` / `.webp` (zaglavlje i podnožje). Od izvornika se razlikuju samo po uklonjenom praznom prozirnom rubu.
+- Putanje i izvorne dimenzije (806×1025) upisane su u `src/data/site.ts` (`logo`). Komponenta `src/components/Logo.astro` prikazuje znak u izvornim proporcijama i naziv „ACCOUNT“ kao tekst.
+- Favicon: `public/favicon-32.png`, `favicon-48.png` i `apple-touch-icon.png` (bijela pozadina), izvedeni iz istog izvornika.
+- Ako agencija dostavi vektorsku verziju (SVG) ili zvaničnu kombinaciju znaka i naziva, zamijeniti datoteke i dimenzije u `site.ts`.
 
 ## Slike
 

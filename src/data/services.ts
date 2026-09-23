@@ -146,22 +146,21 @@ export const services: Service[] = [
     h1: 'Zastupanje i podrška inostranim preduzećima u BiH',
     metaTitle: 'Podrška inostranim preduzećima u BiH | Agencija ACCOUNT',
     metaDescription:
-      'Lokalna računovodstvena i administrativna podrška stranim poreznim obveznicima i inostranim preduzećima koja posluju u Bosni i Hercegovini.',
+      'Ovlašteno zastupanje stranih poreznih obveznika i lokalna podrška za administrativne i računovodstvene potrebe inostranih preduzeća u BiH.',
     benefit: 'Lokalna podrška za administrativne i računovodstvene potrebe poslovanja u BiH.',
     image: 'account-inostrana-preduzeca',
     imageAlt:
       'Globus, nalivpero i tamnoplavi kožni fascikl s logotipom ACCOUNT na radnom stolu, u pozadini laptop s video-sastankom',
     intro:
-      'Inostranim preduzećima i stranim poreznim obveznicima pružamo lokalnu podršku za računovodstvene i administrativne obaveze poslovanja u Bosni i Hercegovini.',
+      'Pružamo ovlašteno zastupanje stranih poreznih obveznika i lokalnu podršku za administrativne i računovodstvene potrebe poslovanja u Bosni i Hercegovini.',
     forWhom: [
       'Inostrana preduzeća koja posluju ili planiraju poslovati u BiH.',
-      'Strani porezni obveznici kojima treba lokalni kontakt za računovodstvene obaveze.',
+      'Strani porezni obveznici kojima je potrebno ovlašteno zastupanje.',
     ],
     scope: [
-      'Zastupanje stranih poreznih obveznika u računovodstvenim i poreznim pitanjima, u dogovorenom obimu.',
-      'Vođenje evidencija i poslovnih knjiga.',
-      'Pomoć oko administrativnih koraka poslovanja u BiH.',
-      'Redovna komunikacija o obavezama i rokovima.',
+      'Ovlašteno zastupanje stranih poreznih obveznika.',
+      'Lokalna podrška za administrativne i računovodstvene potrebe poslovanja u BiH.',
+      'Vođenje evidencija i poslovnih knjiga, kao dio računovodstvene podrške.',
     ],
     steps: [
       { title: 'Razgovor o potrebama', text: 'Upoznajemo vaše poslovanje u BiH i obaveze koje iz njega proizlaze.' },
@@ -177,7 +176,7 @@ export const services: Service[] = [
     faq: [
       {
         q: 'Da li je ovo advokatsko zastupanje?',
-        a: 'Ne. Riječ je o računovodstvenoj i administrativnoj podršci. Za pravna pitanja i zastupanje pred sudom potreban je advokat.',
+        a: 'Ne. Ovlašteno zastupanje stranih poreznih obveznika nije advokatsko zastupanje. Za pravna pitanja i zastupanje pred sudom potreban je advokat.',
       },
       {
         q: 'Možemo li sarađivati ako nismo u Mostaru?',

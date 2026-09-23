@@ -14,7 +14,7 @@ export function organizationSchema() {
     alternateName: ['Agencija Account', 'ACCOUNT'],
     url: `${site.url}/`,
     image: `${site.url}/images/og-account.jpg`,
-    ...(site.logo ? { logo: `${site.url}${site.logo.src}` } : {}),
+    ...(site.logo ? { logo: `${site.url}${site.logo.full}` } : {}),
     telephone: site.phones.map((p) => p.e164),
     email: site.email,
     address: {

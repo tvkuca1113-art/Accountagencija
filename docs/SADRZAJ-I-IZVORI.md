@@ -2,14 +2,14 @@
 
 Ovaj dokument nije dio web stranice i ne prikazuje se posjetiocima. Razdvaja provjerene podatke, tvrdnje postojećeg weba, nove prijedloge sadržaja i stavke koje agencija treba potvrditi prije objave.
 
-Stanje: 23. 9. 2026.
+Stanje: 23. 9. 2026. (ažurirano nakon potvrde agencije i prijema originalnog znaka)
 
 ## Važno ograničenje pri izradi
 
 Mrežna politika razvojnog okruženja blokirala je pristup domenama `agencija-account.com`, `instagram.com`, `facebook.com` i `web.archive.org`. Zbog toga:
 
 - tekstovi postojećih podstranica (`/o-nama`, `/racunovodstvo`, `/konzultantske-usluge`, `/zastupanje-inostranih-poduzeca`, `/ostale-usluge` i njihove `.html` varijante) **nisu preuzeti doslovno** niti popisani iz izvora. Sadržaj je napisan na osnovu podataka iz Superprompta (odjeljak 1) i javne pretrage (naslov početne: „Agencija Account - Računovodstvena agencija | Pouzdana & Efikasna“);
-- originalni logo (`/images/Logo.png`) **nije preuzet** — stranica privremeno prikazuje tekstualni naziv „ACCOUNT“ (vidi `docs/UREDJIVANJE-I-OBRAZAC.md`);
+- originalni logo nije preuzet sa starog weba, ali ga je agencija naknadno dostavila (vidi odjeljak 6);
 - postojeće verifikacijske meta oznake (npr. Google Search Console) nisu poznate;
 - objave na Instagramu nisu otvorene; kartice na stranici opisuju samo teme navedene u Superpromptu.
 
@@ -29,14 +29,15 @@ Prije produkcije: otvoriti postojeći web, popisati sadržaj svih podstranica, u
 | LinkedIn | https://www.linkedin.com/in/aldijana-suta-811a352b4/ | web — **lični** profesionalni profil; na stranici O nama prikazan samo kao profil osobe, nije u strukturiranim podacima kompanije |
 | Registracija | poslovni subjekt u Mostaru od 18. 9. 2015. | javna pretraga (companywall.ba) — informativno, nije prikazano na stranici |
 
-## 2. Tvrdnje postojećeg weba (prikazane, ali ih agencija treba potvrditi)
+## 2. Podaci koje je agencija potvrdila (23. 9. 2026.)
 
-| Tvrdnja | Gdje je na novoj stranici | Napomena |
+| Podatak | Gdje je na novoj stranici | Napomena |
 |---|---|---|
-| 10+ godina iskustva | hero, O agenciji, O nama | tvrdnja agencije; ne povećavati |
-| 300+ klijenata | hero, O agenciji, O nama | nije pretvoreno u „aktivne klijente“ |
-| Zastupanje stranih poreznih obveznika („ovlašteno“) | /zastupanje-inostranih-poduzeca, O nama | riječ „ovlašteno“ je izostavljena dok agencija ne potvrdi tačan opseg; na stranici je jasno da to nije advokatsko zastupanje |
-| FAQ: digitalna dostava e-mailom, redovne prijave, individualna cijena, uvodni razgovor i analiza potreba, periodični izvještaji | početna, podstranice usluga | prepisano jasnije; tačan obuhvat saradnje potvrditi |
+| 10+ godina iskustva | hero, O agenciji, O nama | potvrđeno; ne povećavati |
+| 300+ klijenata | hero, O agenciji, O nama | potvrđeno; nije pretvoreno u „aktivne klijente“ |
+| Ovlašteno zastupanje stranih poreznih obveznika | /zastupanje-inostranih-poduzeca, O nama | potvrđeno; opseg opisan formulacijom s postojećeg weba, bez proširivanja. Na stranici je navedeno da to nije advokatsko zastupanje |
+
+Tvrdnja postojećeg weba koja ostaje u tekstu: FAQ (digitalna dostava e-mailom, redovne prijave, individualna cijena, uvodni razgovor i analiza potreba, periodični izvještaji) — prepisano jasnije na početnoj i podstranicama usluga.
 
 ## 3. Recenzije (inventar — ne prikazuju se)
 
@@ -53,11 +54,10 @@ Postojeći web navodi recenzije koje se pripisuju osobama: **Adis Krvavac, Maja,
 
 ## 5. Čeka potvrdu agencije
 
-- [ ] Originalni logo (`Logo.png` ili SVG) i favicon izveden iz njega.
-- [ ] Tačni plavi tonovi logotipa (trenutno uzorkovani s fotografija: `#0098E8`, `#2070B0`; vidi `src/styles/global.css`).
-- [ ] Primalac upita s forme (početni javni kontakt: aldijana_suta@hotmail.com) i verifikovani pošiljalac na domeni.
-- [ ] 10+ godina i 300+ klijenata.
-- [ ] Opseg „ovlaštenog zastupanja stranih poreznih obveznika“.
+- [x] Originalni znak — dostavljen i postavljen u zaglavlje i podnožje; favicon izveden iz njega.
+- [x] Plavi tonovi — preuzeti iz originalnog znaka (`#00A0EC`, `#187CC4`, `#14B8EC`).
+- [x] 10+ godina, 300+ klijenata i ovlašteno zastupanje stranih poreznih obveznika — potvrđeno.
+- [ ] Primalac upita s forme (početni javni kontakt: aldijana_suta@hotmail.com), verifikovani pošiljalac na domeni i Resend ključ — povezuje se naknadno.
 - [ ] Obračun plaća i druge operativne usluge — dodati tek nakon potvrde.
 - [ ] Destinacija Google Maps linka `https://maps.app.goo.gl/kQYnpVpSFJQg96QZ8` (trenutno se koristi pretraga po adresi).
 - [ ] Radno vrijeme — nije prikazano i nije u strukturiranim podacima.
@@ -81,3 +81,5 @@ Postojeći web navodi recenzije koje se pripisuju osobama: **Adis Krvavac, Maja,
 | 6 | Bilježnica, plave kartice | Poslovni projekti i planiranje; O nama (neutralan detalj) | `account-poslovni-projekti.webp` |
 
 Slike su ilustrativne poslovne scene; stranica ih ne predstavlja kao fotografije stvarnog tima, kancelarije ni pogleda iz prostora agencije (napomena u podnožju).
+
+Originalni znak agencije (dostavljen 23. 9. 2026.): izvornik `source-images/brand/account-znak-original.png` (1039×1025, prozirna pozadina). Web varijante u `public/brand/` imaju samo uklonjen prazan prozirni rub — znak, boje i proporcije nisu mijenjani. Prozirni usjek dolje lijevo dio je izvornog znaka. Favicon (`public/favicon-32.png`, `favicon-48.png`) i `apple-touch-icon.png` izvedeni su iz istog izvornika. Naziv „ACCOUNT“ pored znaka u zaglavlju i podnožju je tekst, ne slika.

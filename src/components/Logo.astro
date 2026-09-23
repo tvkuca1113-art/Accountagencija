@@ -1,6 +1,6 @@
 ---
-// Originalni logo agencije u izvornim proporcijama. Dok datoteka nije dodana (site.logo = null),
-// prikazuje se tekstualni naziv — bez crtanja zamjenskog znaka i bez preuzimanja znaka iz fotografija.
+// Originalni znak agencije u izvornim proporcijama, uz naziv „ACCOUNT“ kao tekst.
+// Znak je dekorativan (prazan alt) jer naziv odmah pored njega nosi značenje linka.
 import { site } from '../data/site.ts';
 
 interface Props {
@@ -8,54 +8,62 @@ interface Props {
   height?: number;
 }
 
-const { variant = 'dark', height = 40 } = Astro.props;
+const { variant = 'dark', height = 44 } = Astro.props;
 const logo = site.logo;
 ---
 
-{
-  logo ? (
-    <img
-      class="logo-img"
-      src={logo.src}
-      width={Math.round((logo.width / logo.height) * height)}
-      height={height}
-      alt={site.name}
-      decoding="async"
-    />
-  ) : (
-    <span class:list={['wordmark', `wordmark--${variant}`]}>
-      <span class="wordmark__name">{site.name}</span>
-      <span class="wordmark__tag">Računovodstvena agencija</span>
-    </span>
-  )
-}
+<span class:list={['logo', `logo--${variant}`]} style={`--logo-h: ${height}px`}>
+  {
+    logo && (
+      <picture class="logo__mark">
+        <source type="image/webp" srcset={logo.srcWebp} />
+        <img src={logo.src} width={Math.round((logo.width / logo.height) * height)} height={height} alt="" decoding="async" />
+      </picture>
+    )
+  }
+  <span class="logo__text">
+    <span class="logo__name">{site.name}</span>
+    <span class="logo__tag">Računovodstvena agencija</span>
+  </span>
+</span>
 
 <style>
-  .logo-img {
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo__mark {
+    display: block;
+    flex: none;
+  }
+  .logo__mark img {
+    display: block;
+    height: var(--logo-h);
     width: auto;
   }
-  .wordmark {
+  .logo__text {
     display: inline-grid;
     line-height: 1;
     gap: 5px;
   }
-  .wordmark__name {
+  .logo__name {
     font-weight: 800;
     font-size: 1.375rem;
     letter-spacing: 0.2em;
     color: var(--c-navy-900);
   }
-  .wordmark__tag {
+  .logo__tag {
     font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--c-blue-600);
   }
-  .wordmark--light .wordmark__name {
+  .logo--light .logo__name {
     color: #fff;
   }
-  .wordmark--light .wordmark__tag {
+  .logo--light .logo__tag {
     color: var(--c-cyan-400);
   }
 </style>

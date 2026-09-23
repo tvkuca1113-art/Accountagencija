@@ -1,5 +1,5 @@
 // Jedinstveni izvor kontakt podataka i osnovnih informacija o agenciji.
-// Status svakog podatka (provjereno / tvrdnja postojećeg weba / čeka potvrdu) vodi se u docs/SADRZAJ-I-IZVORI.md.
+// Status svakog podatka (provjereno / potvrdila agencija / čeka potvrdu) vodi se u docs/SADRZAJ-I-IZVORI.md.
 
 export const site = {
   name: 'ACCOUNT',
@@ -31,15 +31,21 @@ export const site = {
   // Lični profesionalni profil; ne predstavljati kao profil kompanije i ne dodavati u sameAs.
   linkedinPersonal: 'https://www.linkedin.com/in/aldijana-suta-811a352b4/',
 
-  // Tvrdnje postojećeg weba — ne povećavati bez potvrde agencije.
+  // Potvrdila agencija 23. 9. 2026.
   stats: [
     { value: '10+', label: 'godina iskustva' },
     { value: '300+', label: 'klijenata' },
   ],
 
-  // Originalni logo agencije. Postavite datoteku u public/brand/ i upišite putanju i stvarne dimenzije.
-  // Dok je null, zaglavlje i podnožje prikazuju tekstualni naziv, bez crtanja novog znaka.
-  logo: null as null | { src: string; width: number; height: number },
+  // Originalni znak agencije (izvornik: source-images/brand/account-znak-original.png), u izvornim proporcijama.
+  // Uklonjen je samo prazan prozirni rub; sam znak nije mijenjan.
+  logo: {
+    src: '/brand/account-znak-112.png',
+    srcWebp: '/brand/account-znak-112.webp',
+    full: '/brand/account-znak.png',
+    width: 806,
+    height: 1025,
+  } as null | { src: string; srcWebp: string; full: string; width: number; height: number },
 
   // Postojeće verifikacijske meta oznake (npr. Google Search Console) prepisati ovdje: { name, content }.
   verification: [] as { name: string; content: string }[],

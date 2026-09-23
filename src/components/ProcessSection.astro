@@ -1,33 +1,28 @@
 ---
+// Saradnja u tri koraka: svijetla sekcija s kratkim koracima povezanim linijom i tamnim panelom
+// s ilustrativnim mjesečnim pregledom (HTML/CSS, bez teksta u fotografiji).
 import ReportCard from './ReportCard.astro';
 
 const steps = [
-  {
-    title: 'Razgovor o potrebama',
-    text: 'Upoznajemo vaše poslovanje, dosadašnje evidencije i ono što od nas očekujete.',
-  },
-  {
-    title: 'Dogovor o obimu i dostavi dokumentacije',
-    text: 'Definišemo šta preuzimamo, kako dostavljate dokumentaciju (i e-mailom) i kojom dinamikom.',
-  },
-  {
-    title: 'Redovna obrada i komunikacija',
-    text: 'Obrađujemo dokumentaciju, pripremamo prijave i izvještaje te vas pravovremeno obavještavamo.',
-  },
+  { title: 'Razgovor o potrebama', text: 'Upoznajemo vaše poslovanje i očekivanja.' },
+  { title: 'Dogovor o obimu i dostavi dokumentacije', text: 'Šta preuzimamo i kako dostavljate dokumentaciju, i e-mailom.' },
+  { title: 'Redovna obrada i komunikacija', text: 'Knjiženje, prijave i izvještaji, uz redovnu komunikaciju.' },
 ];
 ---
 
-<section class="section section--navy process" aria-labelledby="saradnja-naslov">
+<section class="section process" aria-labelledby="saradnja-naslov">
   <div class="container process__grid">
     <div data-reveal>
       <p class="eyebrow">Saradnja</p>
       <h2 id="saradnja-naslov">Saradnja u tri koraka</h2>
-      <p class="lead">Jasan početak i dogovorena pravila, pa se vi možete baviti poslom.</p>
+      <p class="process__lead">Jasan početak i dogovorena pravila, pa se vi možete baviti poslom.</p>
       <ol class="process__steps">
         {
           steps.map((s, i) => (
             <li>
-              <span class="process__num" aria-hidden="true">{i + 1}</span>
+              <span class="process__num" aria-hidden="true">
+                {i + 1}
+              </span>
               <div>
                 <h3>{s.title}</h3>
                 <p>{s.text}</p>
@@ -37,32 +32,13 @@ const steps = [
         }
       </ol>
     </div>
-    <div class="process__art">
+    <div class="process__panel">
       <ReportCard />
     </div>
   </div>
 </section>
 
 <style>
-  .process {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    background:
-      radial-gradient(50% 70% at 0% 50%, rgb(0 160 236 / 0.18) 0%, transparent 70%),
-      radial-gradient(40% 60% at 100% 0%, rgb(20 184 236 / 0.1) 0%, transparent 70%),
-      var(--c-navy-900);
-  }
-  .process::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    background: repeating-linear-gradient(180deg, transparent 0 43px, rgb(255 255 255 / 0.04) 43px 44px);
-    -webkit-mask-image: radial-gradient(70% 90% at 30% 50%, #000 0%, transparent 80%);
-    mask-image: radial-gradient(70% 90% at 30% 50%, #000 0%, transparent 80%);
-    pointer-events: none;
-  }
   .process__grid {
     display: grid;
     gap: 40px;
@@ -70,42 +46,64 @@ const steps = [
   }
   @media (min-width: 900px) {
     .process__grid {
-      grid-template-columns: 1.05fr 0.95fr;
+      grid-template-columns: 1fr 1fr;
       gap: 72px;
     }
   }
-  .process__art {
-    width: 100%;
+  .process__lead {
+    color: var(--c-ink-muted);
+    max-width: 30rem;
   }
   .process__steps {
+    position: relative;
     list-style: none;
     margin: 32px 0 0;
     padding: 0;
     display: grid;
-    gap: 24px;
+    gap: 28px;
+  }
+  /* Linija koja povezuje korake */
+  .process__steps::before {
+    content: '';
+    position: absolute;
+    left: 21px;
+    top: 22px;
+    bottom: 22px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--c-blue-500), var(--c-blue-200));
   }
   .process__steps li {
+    position: relative;
     display: grid;
     grid-template-columns: 44px 1fr;
-    gap: 16px;
+    gap: 18px;
     align-items: start;
   }
   .process__num {
+    position: relative;
     display: grid;
     place-items: center;
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    border: 1.5px solid rgb(20 184 236 / 0.6);
+    background: var(--c-navy-900);
     color: #fff;
     font-weight: 800;
+    box-shadow: 0 0 0 6px #fff;
   }
   .process__steps h3 {
-    margin-bottom: 4px;
+    margin: 8px 0 2px;
     font-size: 1.125rem;
   }
   .process__steps p {
     margin: 0;
-    color: #b9cbe0;
+    color: var(--c-ink-muted);
+  }
+  .process__panel {
+    padding: clamp(24px, 4vw, 48px);
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(70% 60% at 100% 0%, rgb(0 160 236 / 0.22) 0%, transparent 70%),
+      var(--c-navy-900);
   }
 </style>

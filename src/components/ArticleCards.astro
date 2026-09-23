@@ -4,16 +4,19 @@ import { articles, formatDate } from '../data/articles.ts';
 
 interface Props {
   headingLevel?: 'h2' | 'h3';
+  images?: boolean;
 }
-const { headingLevel = 'h3' } = Astro.props;
+const { headingLevel = 'h3', images = true } = Astro.props;
 const H = headingLevel;
 ---
 
 <ul class="articles">
   {
     articles.map((a) => (
-      <li class="article-card">
-        <ResponsiveImage name={a.image} alt="" sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw" class="article-card__media media" />
+      <li class:list={['article-card', { 'article-card--text': !images }]}>
+        {images && (
+          <ResponsiveImage name={a.image} alt="" sizes="(min-width: 1024px) 380px, (min-width: 640px) 50vw, 100vw" class="article-card__media media" />
+        )}
         <div class="article-card__body">
           <p class="article-card__meta">
             <time datetime={a.published}>{formatDate(a.published)}</time> · {a.readingMinutes} min čitanja
@@ -68,6 +71,13 @@ const H = headingLevel;
   }
   .article-card__body {
     padding: 22px 24px 26px;
+  }
+  .article-card--text {
+    grid-template-rows: 1fr;
+    border-top: 3px solid var(--c-blue-500);
+  }
+  .article-card--text .article-card__body {
+    padding: 26px 26px 28px;
   }
   .article-card__meta {
     margin: 0 0 8px;

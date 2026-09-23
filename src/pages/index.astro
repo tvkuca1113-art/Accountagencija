@@ -9,21 +9,22 @@ import ArticleCards from '../components/ArticleCards.astro';
 import FaqList from '../components/FaqList.astro';
 import { services, audiences } from '../data/services.ts';
 import { generalFaq } from '../data/faq.ts';
+import { reviews, initials } from '../data/reviews.ts';
 import { site, fullAddress } from '../data/site.ts';
 import { organizationSchema } from '../lib/schema.ts';
 
 const [featured, ...rest] = services;
 
-// Traka povjerenja: samo potvrđene tvrdnje agencije i činjenice s postojećeg weba.
+// Zašto nam vjerovati: samo potvrđene tvrdnje agencije i činjenice s postojećeg weba.
 const trust = [
   { icon: 'shield', title: 'Ovlašteno zastupanje', text: 'stranih poreznih obveznika' },
   { icon: 'pin', title: 'Lokalno, u Mostaru', text: 'Lacina bb, Villa Neretva' },
   { icon: 'mail', title: 'Dokumentacija i e-mailom', text: 'digitalna dostava dokumentacije' },
-  { icon: 'handshake', title: 'Individualna ponuda', text: 'prema obimu i složenosti posla' },
+  { icon: 'sliders', title: 'Individualna ponuda', text: 'prema obimu i složenosti posla' },
 ] as const;
 
-// Visine stubića u mini grafikonu kalkulatora (ilustracija, bez podataka).
-const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
+const featuredReviews = reviews.filter((r) => r.text.length > 40);
+const shortReviews = reviews.filter((r) => r.text.length <= 40);
 ---
 
 <Base
@@ -33,29 +34,13 @@ const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
 >
   <HomeHero />
 
-  <!-- Traka povjerenja -->
-  <section class="trust" aria-label="Zašto nam klijenti vjeruju">
-    <div class="container">
-      <ul class="trust__list">
-        {
-          trust.map((t) => (
-            <li>
-              <span class="trust__icon"><Icon name={t.icon} size={22} /></span>
-              <span>
-                <strong>{t.title}</strong>
-                <span>{t.text}</span>
-              </span>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
-  <!-- Kome pomažemo -->
-  <section class="audiences" aria-labelledby="kome-naslov">
-    <div class="container">
-      <h2 id="kome-naslov" class="audiences__title">Kome pomažemo</h2>
+  <!-- 1. Kome pomažemo -->
+  <section class="section section--tight audiences" aria-labelledby="kome-naslov">
+    <div class="container audiences__grid">
+      <div class="audiences__head">
+        <p class="eyebrow">Kome pomažemo</p>
+        <h2 id="kome-naslov">Od prvog koraka do urednog poslovanja</h2>
+      </div>
       <ul class="audiences__list">
         {
           audiences.map((a) => (
@@ -63,7 +48,7 @@ const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
               <a href={`/${a.slug}`}>
                 <span class="audiences__name">{a.title}</span>
                 <span class="audiences__text">{a.text}</span>
-                <Icon name="arrow" size={20} class="audiences__arrow" />
+                <Icon name="arrow" size={18} class="audiences__arrow" />
               </a>
             </li>
           ))
@@ -72,13 +57,12 @@ const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
     </div>
   </section>
 
-  <!-- Usluge -->
-  <section class="section section--tint section--pattern" id="usluge" aria-labelledby="usluge-naslov">
+  <!-- 2. Usluge: jedna izdvojena s fotografijom, ostale u konciznoj listi -->
+  <section class="section surface-cream" id="usluge" aria-labelledby="usluge-naslov">
     <div class="container">
       <div class="section-head" data-reveal>
         <p class="eyebrow">Usluge</p>
         <h2 id="usluge-naslov">Podrška za svaku fazu poslovanja</h2>
-        <p class="lead">Od prvog koraka i registracije do urednih knjiga, izvještaja i planiranja rasta.</p>
       </div>
 
       <article class="svc-featured" data-reveal>
@@ -89,33 +73,26 @@ const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
           class="media svc-featured__media"
         />
         <div class="svc-featured__body">
-          <span class="svc-featured__index" aria-hidden="true">01</span>
           <h3><a href={`/${featured.slug}`}>{featured.title}</a></h3>
-          <p class="svc-featured__benefit">{featured.benefit}</p>
+          <p class="svc-featured__benefit">{featured.intro}</p>
           <ul class="checklist">
             {featured.scope.slice(0, 4).map((item) => <li>{item}</li>)}
           </ul>
-          <a class="link-arrow" href={`/${featured.slug}`}>
-            Više o usluzi<span class="visually-hidden">: {featured.title}</span> <Icon name="arrow" size={18} />
+          <a class="btn btn--small" href={`/${featured.slug}`}>
+            Više o usluzi<span class="visually-hidden">: {featured.title}</span>
           </a>
         </div>
       </article>
 
-      <ul class="svc-grid">
+      <ul class="svc-list" data-reveal>
         {
-          rest.map((s, i) => (
-            <li class="svc-card" data-reveal style={`--reveal-delay: ${(i % 2) * 0.08}s`}>
-              <span class="svc-card__index" aria-hidden="true">{String(i + 2).padStart(2, '0')}</span>
-              <ResponsiveImage name={s.image} alt={s.imageAlt} sizes="(min-width: 1024px) 580px, (min-width: 640px) 50vw, 100vw" class="media svc-card__media" />
-              <div class="svc-card__body">
-                <h3>
-                  <a href={`/${s.slug}`}>{s.title}</a>
-                </h3>
-                <p>{s.benefit}</p>
-                <span class="link-arrow" aria-hidden="true">
-                  Više o usluzi <Icon name="arrow" size={18} />
-                </span>
-              </div>
+          rest.map((s) => (
+            <li>
+              <a href={`/${s.slug}`}>
+                <span class="svc-list__title">{s.title}</span>
+                <span class="svc-list__text">{s.benefit}</span>
+                <Icon name="arrow" size={20} class="svc-list__arrow" />
+              </a>
             </li>
           ))
         }
@@ -123,82 +100,112 @@ const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
     </div>
   </section>
 
+  <!-- 3. Zašto nam vjerovati -->
+  <section class="trust" aria-labelledby="zasto-naslov">
+    <div class="trust__media">
+      <ResponsiveImage
+        name="account-savjetovanje"
+        alt="Dvije osobe za stolom razgovaraju nad jednostavnim finansijskim prikazom, pored tamnoplavog fascikla sa znakom ACCOUNT (ilustrativna scena)"
+        sizes="(min-width: 900px) 52vw, 100vw"
+        class="trust__photo"
+      />
+    </div>
+    <div class="container trust__grid">
+      <div class="trust__body" data-reveal>
+        <p class="eyebrow">Zašto nam vjerovati</p>
+        <h2 id="zasto-naslov">Lokalna stručnost, jasan govor</h2>
+        <p class="trust__lead">
+          ACCOUNT je računovodstvena agencija iz Mostara s više od 10 godina iskustva i više od 300 klijenata. Firmama,
+          obrtima, udruženjima i inostranim preduzećima pomažemo da imaju uredne evidencije i jasan pregled poslovanja.
+        </p>
+        <ul class="trust__list">
+          {
+            trust.map((t) => (
+              <li>
+                <span class="trust__icon"><Icon name={t.icon} size={20} /></span>
+                <span>
+                  <strong>{t.title}</strong>
+                  <span>{t.text}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <a class="link-arrow trust__link" href="/o-nama">Više o nama <Icon name="arrow" size={18} /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Recenzije -->
+  <section class="section surface-cream reviews" aria-labelledby="recenzije-naslov">
+    <div class="container">
+      <div class="section-head" data-reveal>
+        <p class="eyebrow">Recenzije</p>
+        <h2 id="recenzije-naslov">Šta kažu klijenti</h2>
+      </div>
+      <div class="reviews__grid">
+        {
+          featuredReviews.map((r, i) => (
+            <figure class="review" data-reveal style={`--reveal-delay: ${i * 0.08}s`}>
+              <svg class="review__mark" viewBox="0 0 32 24" width="32" height="24" aria-hidden="true" focusable="false">
+                <path d="M0 24V14C0 6 4 1.5 12 0l1.5 3.2C9 4.6 7 7.4 7 11h6v13zm18 0V14c0-8 4-12.5 12-14l1.5 3.2C27 4.6 25 7.4 25 11h6v13z" fill="currentColor" />
+              </svg>
+              <blockquote>
+                <p>{r.text}</p>
+              </blockquote>
+              <figcaption>
+                <span class="review__avatar" aria-hidden="true">
+                  {initials(r.name)}
+                </span>
+                {r.name}
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+      <ul class="reviews__short" data-reveal>
+        {
+          shortReviews.map((r) => (
+            <li>
+              <span class="review__avatar review__avatar--small" aria-hidden="true">
+                {initials(r.name)}
+              </span>
+              <span>
+                „{r.text}“ <span class="reviews__name">— {r.name}</span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="reviews__source">Recenzije objavljene na dosadašnjoj web stranici agencije.</p>
+    </div>
+  </section>
+
+  <!-- 5. Tri koraka saradnje -->
   <ProcessSection />
 
-  <!-- Vodič -->
+  <!-- 6. Alat -->
   <section class="section section--tint" aria-labelledby="vodic-naslov">
     <div class="container guide-wrap">
       <div class="guide-wrap__intro" data-reveal>
         <p class="eyebrow">Vodič</p>
         <h2 id="vodic-naslov">Koja vam usluga treba?</h2>
-        <p class="lead">Odgovorite na tri kratka pitanja i dobit ćete preporuku te spisak informacija za prvi razgovor.</p>
-        <p>Kontakt podaci nisu potrebni da biste vidjeli rezultat.</p>
-        <a class="link-arrow" href="/korisni-alati">Svi korisni alati <Icon name="arrow" size={18} /></a>
+        <p>Tri kratka pitanja do preporuke i liste za prvi razgovor. Kontakt podaci nisu potrebni.</p>
+        <ul class="tool-links">
+          <li>
+            <a class="link-arrow" href="/korisni-alati#kalkulator">Kalkulator pokrića troškova <Icon name="arrow" size={18} /></a>
+          </li>
+          <li>
+            <a class="link-arrow" href="/korisni-alati#konfigurator">Konfigurator upita <Icon name="arrow" size={18} /></a>
+          </li>
+        </ul>
       </div>
       <ServiceGuide id="vodic-pocetna" />
     </div>
   </section>
 
-  <!-- Zašto ACCOUNT -->
-  <section class="section bento-section" aria-labelledby="zasto-naslov">
-    <div class="container">
-      <div class="bento">
-        <article class="bento__card bento__card--about" data-reveal>
-          <p class="eyebrow">Zašto ACCOUNT</p>
-          <h2 id="zasto-naslov">Lokalna stručnost, jasan govor</h2>
-          <p>
-            ACCOUNT je računovodstvena agencija iz Mostara. Firmama, obrtima, udruženjima i inostranim preduzećima pomažemo
-            da imaju uredne evidencije i jasan pregled poslovanja, uz ovlašteno zastupanje stranih poreznih obveznika.
-          </p>
-          <dl class="bento__stats">
-            {
-              site.stats.map((s) => (
-                <div>
-                  <dt>{s.label}</dt>
-                  <dd data-count={parseInt(s.value, 10)} data-suffix={s.value.replace(/^\d+/, '')}>
-                    {s.value}
-                  </dd>
-                </div>
-              ))
-            }
-            <div>
-              <dt>uslužnih oblasti</dt>
-              <dd data-count="5">5</dd>
-            </div>
-          </dl>
-          <a class="link-arrow bento__link-light" href="/o-nama">Više o nama <Icon name="arrow" size={18} /></a>
-        </article>
-
-        <a class="bento__card bento__card--calc" href="/korisni-alati#kalkulator" data-reveal style="--reveal-delay: 0.08s">
-          <span class="bento__tag">Kalkulator</span>
-          <h3>Koliki promet vam treba da pokrijete troškove?</h3>
-          <p>Unesite fiksne i varijabilne troškove i odmah vidite prag pokrića. Izračun ostaje u vašem pregledniku.</p>
-          <span class="mini-chart" aria-hidden="true">
-            <span class="mini-chart__line"><span>prag pokrića</span></span>
-            {miniBars.map((h, i) => <i style={`--h:${h}; --i:${i}`} class:list={{ 'is-above': h > 0.55 }} />)}
-          </span>
-          <span class="link-arrow">Isprobajte kalkulator <Icon name="arrow" size={18} /></span>
-        </a>
-
-        <a class="bento__card bento__card--config" href="/korisni-alati#konfigurator" data-reveal style="--reveal-delay: 0.16s">
-          <span class="bento__icon"><Icon name="sliders" size={24} /></span>
-          <h3>Pripremite upit</h3>
-          <p>Označite vrstu i obim poslovanja, a sažetak pošaljite uz upit.</p>
-          <span class="link-arrow">Konfigurator upita <Icon name="arrow" size={18} /></span>
-        </a>
-
-        <a class="bento__card bento__card--call" href={site.phones[0].href} data-track="klik_telefon" data-reveal style="--reveal-delay: 0.24s">
-          <span class="bento__icon"><Icon name="phone" size={24} /></span>
-          <h3>Radije razgovor?</h3>
-          <span class="bento__phone">{site.phones[0].display}</span>
-          <span class="bento__sub">ili fiksni {site.phones[1].display}</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Savjeti -->
-  <section class="section section--tint" aria-labelledby="savjeti-naslov">
+  <!-- 7. Savjeti -->
+  <section class="section" aria-labelledby="savjeti-naslov">
     <div class="container">
       <div class="section-head section-head--row" data-reveal>
         <div>
@@ -207,27 +214,29 @@ const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
         </div>
         <a class="link-arrow" href="/savjeti">Svi savjeti <Icon name="arrow" size={18} /></a>
       </div>
-      <ArticleCards />
+      <ArticleCards images={false} />
     </div>
   </section>
 
-  <!-- FAQ i kontakt -->
-  <section class="section" aria-labelledby="faq-naslov">
+  <!-- 8. Kontakt -->
+  <section class="section section--tint" aria-labelledby="faq-naslov">
     <div class="container faq-contact">
       <div data-reveal>
         <p class="eyebrow">Česta pitanja</p>
         <h2 id="faq-naslov">Prije prvog razgovora</h2>
-        <FaqList items={generalFaq.slice(0, 4)} />
+        <FaqList items={generalFaq.slice(0, 3)} />
       </div>
       <aside class="contact-card" aria-labelledby="kontakt-kartica-naslov" data-reveal>
-        <h2 id="kontakt-kartica-naslov">Kontaktirajte nas</h2>
+        <h2 id="kontakt-kartica-naslov">Razgovarajmo o vašem poslovanju</h2>
         <p>Pošaljite upit ili nas pozovite. Ponudu pripremamo prema obimu i potrebama vašeg poslovanja.</p>
         <ul class="contact-card__list">
           {
             site.phones.map((p) => (
               <li>
                 <Icon name="phone" size={18} />
-                <a href={p.href} data-track="klik_telefon">{p.display}</a>
+                <a href={p.href} data-track="klik_telefon">
+                  {p.display}
+                </a>
                 <span class="contact-card__label">{p.label}</span>
               </li>
             ))
@@ -243,148 +252,68 @@ const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
             </a>
           </li>
         </ul>
-        <a class="btn" href="/kontakt#upit">Zatražite ponudu <Icon name="arrow" size={18} /></a>
+        <a class="btn btn--bright" href="/kontakt#upit">Zatražite ponudu <Icon name="arrow" size={18} /></a>
       </aside>
     </div>
   </section>
 </Base>
 
 <style>
-  /* Traka povjerenja: na desktopu panel koji pluta preko donjeg ruba heroja */
-  .trust {
-    position: relative;
-    z-index: 3;
-    padding-top: 20px;
-  }
-  .trust__list {
-    list-style: none;
-    margin: 0;
-    padding: 18px;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 16px 14px;
-    border-radius: var(--radius-lg);
-    background: #fff;
-    border: 1px solid var(--c-line);
-    box-shadow: 0 20px 50px -24px rgb(10 24 46 / 0.35);
-  }
-  .trust__list li {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    font-size: 0.875rem;
-    line-height: 1.35;
-    color: var(--c-ink-muted);
-  }
-  .trust__list strong {
-    display: block;
-    color: var(--c-navy-900);
-    font-size: 0.9375rem;
-  }
-  .trust__icon {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    background: var(--c-blue-100);
-    color: var(--c-blue-600);
-  }
-  @media (max-width: 479px) {
-    .trust__list {
-      grid-template-columns: 1fr;
-    }
-  }
-  @media (min-width: 900px) {
-    .trust {
-      margin-top: -64px;
-      padding-top: 0;
-    }
-    .trust__list {
-      padding: 24px 28px;
-      gap: 20px 24px;
-      border: 0;
-      box-shadow: 0 24px 60px -20px rgb(10 24 46 / 0.35), 0 2px 8px rgb(10 24 46 / 0.06);
-    }
-  }
-  @media (min-width: 1180px) {
-    .trust__list {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-    .trust__list li + li {
-      padding-left: 24px;
-      border-left: 1px solid var(--c-line);
-    }
-  }
-
   /* Kome pomažemo */
-  .audiences {
-    padding-block: clamp(40px, 5vw, 72px) 8px;
+  .audiences__grid {
+    display: grid;
+    gap: 24px;
   }
-  .audiences__title {
+  @media (min-width: 1024px) {
+    .audiences__grid {
+      grid-template-columns: 0.8fr 2.2fr;
+      gap: 48px;
+      align-items: center;
+    }
+  }
+  .audiences__head h2 {
+    margin: 0;
     font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
-    margin-bottom: 20px;
   }
   .audiences__list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    gap: 10px;
+    border-top: 1px solid var(--c-line);
   }
-  @media (min-width: 480px) {
+  @media (min-width: 640px) {
     .audiences__list {
       grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-  @media (max-width: 639px) {
-    .audiences__list a {
-      gap: 2px;
-      padding: 14px 44px 14px 16px;
-    }
-    .audiences__list :global(.audiences__arrow) {
-      top: 50%;
-      margin-top: -10px;
-    }
-  }
-  @media (min-width: 1024px) {
-    .audiences__list {
-      grid-template-columns: repeat(4, 1fr);
+      column-gap: 32px;
     }
   }
   .audiences__list a {
     position: relative;
     display: grid;
-    gap: 4px;
+    gap: 2px;
     height: 100%;
-    padding: 20px 52px 20px 20px;
-    border-radius: var(--radius);
-    border: 1px solid var(--c-line);
+    padding: 16px 40px 16px 0;
+    border-bottom: 1px solid var(--c-line);
     text-decoration: none;
     color: var(--c-ink);
-    transition:
-      border-color 0.18s ease,
-      background-color 0.18s ease;
-  }
-  .audiences__list a:hover {
-    border-color: var(--c-blue-600);
-    background: var(--c-bg);
   }
   .audiences__name {
     font-weight: 750;
     color: var(--c-navy-900);
-    font-size: 1.0625rem;
   }
   .audiences__text {
     font-size: 0.9375rem;
     color: var(--c-ink-muted);
-    line-height: 1.5;
+  }
+  .audiences__list a:hover .audiences__name {
+    color: var(--c-blue-600);
   }
   .audiences__list :global(.audiences__arrow) {
     position: absolute;
-    right: 18px;
-    top: 22px;
+    right: 4px;
+    top: 50%;
+    margin-top: -9px;
     color: var(--c-blue-600);
     transition: transform 0.18s ease;
   }
@@ -397,13 +326,11 @@ const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
     display: grid;
     background: #fff;
     border-radius: var(--radius-lg);
-    border: 1px solid var(--c-line);
     overflow: hidden;
-    margin-bottom: 24px;
   }
   @media (min-width: 1024px) {
     .svc-featured {
-      grid-template-columns: 1.1fr 1fr;
+      grid-template-columns: 1.05fr 1fr;
     }
   }
   :global(.media.svc-featured__media) {
@@ -411,118 +338,270 @@ const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
     border-radius: 0;
   }
   .svc-featured__body {
-    padding: clamp(24px, 3.5vw, 48px);
+    padding: clamp(24px, 3.5vw, 52px);
     align-self: center;
   }
   .svc-featured h3 {
     font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
   }
-  .svc-featured h3 a,
-  .svc-card h3 a {
+  .svc-featured h3 a {
     color: var(--c-navy-900);
     text-decoration: none;
   }
-  .svc-featured h3 a:hover,
-  .svc-card h3 a:hover {
+  .svc-featured h3 a:hover {
     color: var(--c-blue-600);
   }
   .svc-featured__benefit {
-    font-size: 1.125rem;
     color: var(--c-ink-muted);
+    max-width: 34rem;
   }
   .svc-featured .checklist {
-    margin: 24px 0 28px;
+    margin: 22px 0 28px;
   }
-  .svc-grid {
+
+  .svc-list {
     list-style: none;
-    margin: 0;
+    margin: 28px 0 0;
     padding: 0;
     display: grid;
-    gap: 24px;
+    border-top: 1px solid var(--c-cream-line);
   }
-  @media (min-width: 640px) {
-    .svc-grid {
-      grid-template-columns: repeat(2, 1fr);
+  @media (min-width: 768px) {
+    .svc-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 40px;
     }
   }
-  .svc-card__index,
-  .svc-featured__index {
-    font-size: 0.8125rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
-    color: var(--c-blue-600);
-  }
-  .svc-featured__index {
-    display: block;
-    margin-bottom: 12px;
-  }
-  .svc-card__index {
-    position: absolute;
-    z-index: 1;
-    top: 16px;
-    left: 16px;
-    padding: 6px 10px;
-    border-radius: 999px;
-    background: rgb(255 255 255 / 0.92);
-    box-shadow: var(--shadow-sm);
-  }
-  /* Blago uvećanje fotografije pri prelasku mišem */
-  .svc-card :global(img),
-  .svc-featured :global(img) {
-    transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
-  }
-  .svc-card:hover :global(img),
-  .svc-featured:hover :global(img) {
-    transform: scale(1.04);
-  }
-  .svc-card {
+  .svc-list a {
     position: relative;
     display: grid;
-    grid-template-rows: auto 1fr;
-    background: #fff;
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--c-line);
-    overflow: hidden;
-    transition:
-      box-shadow 0.2s ease,
-      transform 0.2s ease;
+    gap: 4px;
+    height: 100%;
+    padding: 22px 48px 22px 0;
+    border-bottom: 1px solid var(--c-cream-line);
+    text-decoration: none;
+    color: var(--c-ink);
   }
-  .svc-card:hover {
-    box-shadow: var(--shadow);
-    transform: translateY(-2px);
+  .svc-list__title {
+    font-size: 1.1875rem;
+    font-weight: 750;
+    color: var(--c-navy-900);
   }
-  :global(.media.svc-card__media) {
-    aspect-ratio: 4 / 3;
-    border-radius: 0;
-  }
-  @media (min-width: 1024px) {
-    :global(.media.svc-card__media) {
-      aspect-ratio: 16 / 10;
-    }
-  }
-  .svc-card__body {
-    padding: 24px 26px 28px;
-    display: flex;
-    flex-direction: column;
-  }
-  .svc-card__body p {
+  .svc-list__text {
     color: var(--c-ink-muted);
+    font-size: 0.975rem;
   }
-  .svc-card__body .link-arrow {
-    margin-top: auto;
+  .svc-list a:hover .svc-list__title {
     color: var(--c-blue-600);
   }
-  .svc-card h3 a::after {
-    content: '';
+  .svc-list :global(.svc-list__arrow) {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    margin-top: -10px;
+    color: var(--c-blue-600);
+    transition: transform 0.18s ease;
+  }
+  .svc-list a:hover :global(.svc-list__arrow) {
+    transform: translateX(4px);
+  }
+
+  /* Zašto nam vjerovati: tamna sekcija; fotografija s vinjetom stapa se s pozadinom */
+  .trust {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: var(--c-navy-950);
+    color: #c9d4e3;
+  }
+  .trust__media {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    max-height: 460px;
+    width: 100%;
+  }
+  .trust__media :global(.trust__photo) {
     position: absolute;
     inset: 0;
+    display: block;
+    -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
   }
-  .svc-card h3 a:focus-visible {
-    outline: none;
+  .trust__media :global(.trust__photo img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 40% 45%;
   }
-  .svc-card:has(a:focus-visible) {
-    outline: 3px solid var(--c-focus);
-    outline-offset: 3px;
+  .trust__grid {
+    position: relative;
+    z-index: 1;
+    padding-block: 8px 72px;
+  }
+  @media (min-width: 900px) {
+    .trust__media {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 52%;
+      max-height: none;
+      aspect-ratio: auto;
+    }
+    .trust__media :global(.trust__photo) {
+      -webkit-mask-image: linear-gradient(90deg, #000 55%, transparent 100%);
+      mask-image: linear-gradient(90deg, #000 55%, transparent 100%);
+    }
+    .trust__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-block: clamp(80px, 8vw, 120px);
+    }
+    .trust__body {
+      grid-column: 2;
+    }
+  }
+  .trust h2 {
+    color: #fff;
+  }
+  .trust .eyebrow {
+    color: var(--c-cyan-400);
+  }
+  .trust .eyebrow::before {
+    background: var(--c-cyan-400);
+  }
+  .trust__lead {
+    max-width: 34rem;
+    color: #c9d4e3;
+    font-size: 1.0625rem;
+  }
+  .trust__list {
+    list-style: none;
+    margin: 28px 0;
+    padding: 0;
+    display: grid;
+    gap: 18px 24px;
+  }
+  @media (min-width: 560px) {
+    .trust__list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .trust__list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: #a9bad0;
+  }
+  .trust__list strong {
+    display: block;
+    color: #fff;
+    font-weight: 700;
+  }
+  .trust__icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: 1px solid rgb(255 255 255 / 0.16);
+    color: var(--c-cyan-400);
+  }
+  .trust__link {
+    color: #fff;
+  }
+  .trust__link:hover {
+    color: var(--c-cyan-400);
+  }
+  .trust :global(:focus-visible) {
+    outline-color: #fff;
+  }
+
+  /* Recenzije: urednički prikaz citata */
+  .reviews__grid {
+    display: grid;
+    gap: 20px;
+  }
+  @media (min-width: 900px) {
+    .reviews__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+  }
+  .review {
+    position: relative;
+    margin: 0;
+    padding: clamp(24px, 3vw, 40px);
+    border-radius: var(--radius-lg);
+    background: #fff;
+    border: 1px solid var(--c-cream-line);
+  }
+  .review__mark {
+    display: block;
+    margin-bottom: 16px;
+    color: var(--c-blue-500);
+  }
+  .review blockquote {
+    position: relative;
+    margin: 0 0 22px;
+  }
+  .review blockquote p {
+    margin: 0;
+    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+    line-height: 1.6;
+    color: var(--c-navy-900);
+    max-width: 34rem;
+  }
+  .review figcaption {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 750;
+    color: var(--c-navy-900);
+  }
+  .review__avatar {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: var(--c-navy-900);
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 800;
+    letter-spacing: 0.02em;
+  }
+  .review__avatar--small {
+    width: 32px;
+    height: 32px;
+    font-size: 0.75rem;
+    background: var(--c-blue-600);
+  }
+  .reviews__short {
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+  }
+  .reviews__short li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    color: var(--c-navy-900);
+  }
+  .reviews__name {
+    font-weight: 500;
+    color: var(--c-ink-muted);
+  }
+  .reviews__source {
+    margin: 22px 0 0;
+    font-size: 0.875rem;
+    color: var(--c-ink-muted);
   }
 
   /* Vodič */
@@ -536,227 +615,17 @@ const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
       grid-template-columns: 0.8fr 1.2fr;
       gap: 56px;
     }
-    .guide-wrap__intro {
-      position: sticky;
-      top: calc(var(--header-h) + 32px);
-    }
   }
-
-  /* Zašto ACCOUNT: bento mreža */
-  .bento {
-    display: grid;
-    gap: 16px;
-  }
-  @media (min-width: 768px) {
-    .bento {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-    .bento__card--about {
-      grid-column: 1 / -1;
-    }
-  }
-  @media (min-width: 1024px) {
-    .bento {
-      grid-template-columns: 1.25fr 1fr 1fr;
-      grid-template-rows: auto auto;
-    }
-    .bento__card--about {
-      grid-column: 1;
-      grid-row: 1 / span 2;
-    }
-    .bento__card--calc {
-      grid-column: 2 / span 2;
-    }
-  }
-  .bento__card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    padding: clamp(24px, 3vw, 36px);
-    border-radius: var(--radius-lg);
-    background: var(--c-bg);
-    border: 1px solid var(--c-line);
-    color: var(--c-ink);
-    text-decoration: none;
-    overflow: hidden;
-    transition:
-      transform 0.25s ease,
-      box-shadow 0.25s ease,
-      border-color 0.25s ease;
-  }
-  a.bento__card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow);
-    border-color: var(--c-blue-200);
-    color: var(--c-ink);
-  }
-  .bento__card h3 {
-    margin: 0;
-    font-size: clamp(1.1875rem, 1.05rem + 0.5vw, 1.5rem);
-  }
-  .bento__card p {
-    margin: 0;
+  .guide-wrap__intro p {
     color: var(--c-ink-muted);
+    max-width: 30rem;
   }
-  .bento__card .link-arrow {
-    margin-top: auto;
-    padding-top: 8px;
-    color: var(--c-blue-600);
-  }
-
-  .bento__card--about {
-    justify-content: center;
-    background:
-      radial-gradient(70% 60% at 100% 0%, rgb(0 160 236 / 0.28) 0%, transparent 70%),
-      var(--c-navy-900);
-    border: 0;
-    color: #c9d8ea;
-  }
-  .bento__card--about .eyebrow {
-    color: var(--c-cyan-400);
-    margin-bottom: 4px;
-  }
-  .bento__card--about h2 {
-    color: #fff;
-    margin: 0 0 6px;
-  }
-  .bento__card--about p {
-    color: #c9d8ea;
-  }
-  .bento__stats {
+  .tool-links {
+    list-style: none;
+    margin: 20px 0 0;
+    padding: 0;
     display: grid;
-    grid-template-columns: repeat(3, auto);
-    justify-content: start;
-    gap: 8px clamp(20px, 4vw, 36px);
-    margin: 18px 0 10px;
-  }
-  .bento__stats div {
-    display: flex;
-    flex-direction: column;
-  }
-  .bento__stats dd {
-    order: -1;
-  }
-  .bento__stats dd {
-    margin: 0;
-    font-size: clamp(2rem, 1.6rem + 1.6vw, 3rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    line-height: 1;
-    color: #fff;
-    font-variant-numeric: tabular-nums;
-  }
-  .bento__stats dt {
-    margin-top: 6px;
-    font-size: 0.875rem;
-    color: #a9bdd6;
-  }
-  .bento__card--about .bento__link-light {
-    margin-top: 8px;
-    color: #fff;
-  }
-  .bento__link-light:hover {
-    color: var(--c-cyan-400);
-  }
-
-  .bento__tag {
-    align-self: flex-start;
-    padding: 4px 12px;
-    border-radius: 999px;
-    background: var(--c-blue-100);
-    color: var(--c-blue-700);
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-  }
-  .bento__icon {
-    display: grid;
-    place-items: center;
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-    background: #fff;
-    color: var(--c-blue-600);
-    box-shadow: var(--shadow-sm);
-  }
-
-  /* Mini grafikon s pragom pokrića */
-  .mini-chart {
-    position: relative;
-    display: flex;
-    align-items: flex-end;
     gap: 8px;
-    height: 110px;
-    margin-top: 10px;
-    padding: 10px 12px 0;
-    border-radius: 14px;
-    background: #fff;
-    border: 1px solid var(--c-line);
-  }
-  .mini-chart i {
-    flex: 1;
-    height: calc(var(--h) * 100%);
-    border-radius: 5px 5px 0 0;
-    background: #c3d2e4;
-    transform-origin: bottom;
-  }
-  .mini-chart i.is-above {
-    background: linear-gradient(180deg, #33b6f2, var(--c-blue-500));
-  }
-  .mini-chart__line {
-    position: absolute;
-    left: 12px;
-    right: 12px;
-    bottom: 55%;
-    border-top: 2px dashed var(--c-navy-700);
-    z-index: 1;
-  }
-  .mini-chart__line span {
-    position: absolute;
-    left: 0;
-    top: -24px;
-    padding: 2px 8px;
-    border-radius: 6px;
-    background: var(--c-navy-900);
-    color: #fff;
-    font-size: 0.6875rem;
-    font-weight: 700;
-  }
-  :global(.reveal-on) .bento__card--calc:not(.is-revealed) .mini-chart i {
-    transform: scaleY(0);
-  }
-  .bento__card--calc .mini-chart i {
-    transition: transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
-    transition-delay: calc(0.3s + var(--i) * 0.07s);
-  }
-
-  .bento__card--call {
-    background: linear-gradient(135deg, var(--c-blue-600), var(--c-blue-700));
-    border: 0;
-    color: #fff;
-  }
-  a.bento__card--call:hover {
-    color: #fff;
-    border-color: transparent;
-  }
-  .bento__card--call h3 {
-    color: #fff;
-  }
-  .bento__card--call .bento__icon {
-    background: rgb(255 255 255 / 0.16);
-    color: #fff;
-    box-shadow: none;
-  }
-  .bento__phone {
-    margin-top: auto;
-    font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
-    font-weight: 800;
-    letter-spacing: -0.01em;
-  }
-  .bento__sub {
-    font-size: 0.875rem;
-    color: #eef6fd;
   }
 
   /* Savjeti */
@@ -775,23 +644,24 @@ const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
   /* FAQ i kontakt */
   .faq-contact {
     display: grid;
-    gap: 48px;
+    gap: 40px;
     align-items: start;
   }
   @media (min-width: 1024px) {
     .faq-contact {
-      grid-template-columns: 1.4fr 1fr;
+      grid-template-columns: 1.3fr 1fr;
       gap: 72px;
     }
   }
   .contact-card {
-    padding: clamp(24px, 3vw, 36px);
+    padding: clamp(24px, 3vw, 40px);
     border-radius: var(--radius-lg);
-    background: var(--c-bg);
-    border: 1px solid var(--c-line);
+    background: var(--c-navy-900);
+    color: #c9d4e3;
   }
   .contact-card h2 {
     font-size: 1.5rem;
+    color: #fff;
   }
   .contact-card__list {
     list-style: none;
@@ -807,18 +677,20 @@ const miniBars = [0.35, 0.5, 0.42, 0.68, 0.6, 0.82, 0.74];
     align-items: start;
     overflow-wrap: anywhere;
   }
-  .contact-card__list svg {
+  .contact-card__list :global(svg) {
     margin-top: 4px;
-    color: var(--c-blue-600);
-    flex: none;
+    color: var(--c-cyan-400);
   }
   .contact-card__list a {
     font-weight: 650;
-    color: var(--c-navy-900);
+    color: #fff;
   }
   .contact-card__label {
     grid-column: 2;
     font-size: 0.85rem;
-    color: var(--c-ink-muted);
+    color: #9fb0c6;
+  }
+  .contact-card :global(:focus-visible) {
+    outline-color: #fff;
   }
 </style>

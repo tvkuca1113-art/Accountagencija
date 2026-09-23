@@ -15,7 +15,7 @@ const newPage = async (opts = {}) => {
 // Kalkulator
 {
   const page = await newPage();
-  await page.goto(BASE + '/korisni-alati#kalkulator');
+  await page.goto(BASE + '/korisni-alati#kalkulator', { waitUntil: 'networkidle' });
   const value = () => page.locator('[data-calc-breakeven]').innerText();
   check('kalkulator: prazno → placeholder', await page.locator('[data-calc-placeholder]').isVisible());
   await page.fill('#calc-f', '2.000'); await page.fill('#calc-v', '40'); await page.fill('#calc-d', '0');

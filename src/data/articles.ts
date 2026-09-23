@@ -27,7 +27,7 @@ export const articles: Article[] = [
     updated: '2026-09-23',
     readingMinutes: 4,
     image: 'account-knjigovodstvo',
-    imageAlt: 'Kalkulator i finansijski izvještaj sa zaglavljem ACCOUNT na radnom stolu',
+    imageAlt: 'Ruka vodi evidencije pored kalkulatora i računa (ilustrativna scena)',
     related: [
       { href: '/korisni-alati#kalkulator', label: 'Izračunajte prag pokrića troškova' },
       { href: '/racunovodstvo', label: 'Računovodstvo i knjigovodstvo' },
@@ -72,7 +72,7 @@ export const articles: Article[] = [
     updated: '2026-09-23',
     readingMinutes: 4,
     image: 'account-savjetovanje',
-    imageAlt: 'Dvije osobe za stolom, pred njima tamnoplavi fascikl ACCOUNT i dokumenti',
+    imageAlt: 'Dvije osobe za stolom razgovaraju nad finansijskim prikazom (ilustrativna scena)',
     related: [
       { href: '/korisni-alati#konfigurator', label: 'Pripremite upit kroz konfigurator' },
       { href: '/kontakt', label: 'Zakažite razgovor' },
@@ -124,7 +124,7 @@ export const articles: Article[] = [
     updated: '2026-09-23',
     readingMinutes: 5,
     image: 'account-poslovni-projekti',
-    imageAlt: 'Otvorena bilježnica sa skicama plana i plave kartice na drvenom stolu',
+    imageAlt: 'Planiranje uz otvorenu bilježnicu i plave kartice (ilustrativna scena)',
     related: [
       { href: '/korisni-alati#kalkulator', label: 'Kalkulator pokrića troškova' },
       { href: '/konzultantske-usluge', label: 'Poslovno i porezno savjetovanje' },

@@ -15,14 +15,18 @@ interface Props {
 }
 
 const variants: Record<string, { widths: number[]; width: number; height: number }> = {
-  'account-hero': { widths: [640, 960, 1280, 1506], width: 1506, height: 941 },
-  'account-hero-mobile': { widths: [480, 753], width: 753, height: 941 },
+  'account-hero': { widths: [640, 960, 1280, 1672], width: 1672, height: 941 },
+  'account-hero-mobile': { widths: [480, 800, 1254], width: 1254, height: 941 },
+  'mostar-stari-most': { widths: [480, 800, 1200], width: 1200, height: 800 },
   card: { widths: [480, 800, 1200], width: 1200, height: 900 },
 };
 
-// Žarišta za rezanje u uže okvire (16:10, 16:9): logo i ključni motiv ostaju vidljivi.
+// Žarišta za rezanje u uže okvire (16:10, 16:9): fascikl sa znakom i ključni motiv ostaju vidljivi.
 const focal: Partial<Record<ImageName, string>> = {
-  'account-poslovni-projekti': '50% 0%', // notes s logotipom je uz gornji rub
+  'account-knjigovodstvo': '50% 72%',
+  'account-inostrana-preduzeca': '50% 62%',
+  'account-registracija': '50% 68%',
+  'account-poslovni-projekti': '50% 22%',
 };
 
 const { name, alt, sizes, priority = false, class: className, mobileArtDirection = false, objectPosition = focal[name] } = Astro.props;

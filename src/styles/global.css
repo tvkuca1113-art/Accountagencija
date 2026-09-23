@@ -34,7 +34,9 @@
   --c-blue-200: #bcdcf5;
   --c-blue-100: #e4f1fb;
   --c-cyan-400: #14b8ec; /* akcent iz znaka, u maloj količini */
-  --c-bg: #f3f7fb;
+  --c-bg: #f3f6f9;
+  --c-cream: #f6f2eb; /* prirodna krem površina */
+  --c-cream-line: #e6ddcf;
   --c-surface: #ffffff;
   --c-ink: #0f2340;
   --c-ink-muted: #475a74;
@@ -206,6 +208,9 @@ a:hover {
 }
 .section--tint {
   background: var(--c-bg);
+}
+.surface-cream {
+  background: var(--c-cream);
 }
 .section--navy {
   background: var(--c-navy-900);

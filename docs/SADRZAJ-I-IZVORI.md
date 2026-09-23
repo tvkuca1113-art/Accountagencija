@@ -39,9 +39,18 @@ Prije produkcije: otvoriti postojeći web, popisati sadržaj svih podstranica, u
 
 Tvrdnja postojećeg weba koja ostaje u tekstu: FAQ (digitalna dostava e-mailom, redovne prijave, individualna cijena, uvodni razgovor i analiza potreba, periodični izvještaji) — prepisano jasnije na početnoj i podstranicama usluga.
 
-## 3. Recenzije (inventar — ne prikazuju se)
+## 3. Recenzije (prikazane na početnoj)
 
-Postojeći web navodi recenzije koje se pripisuju osobama: **Adis Krvavac, Maja, Alem Šunja, Almir Eglenović**. Tekstovi recenzija nisu preuzeti (blokiran pristup). Na novoj stranici se ne prikazuju dok ne postoji provjerljiv izvor (npr. Google profil) i dozvola za korištenje. Ne dodavati ocjenu 5,0, zvjezdice, datume, logotipe klijenata ni `aggregateRating`.
+Recenzije s dosadašnjeg weba prikazane su s istim imenima i tekstom, bez zvjezdica, ocjena, datuma ili oznake Googlea (`src/data/reviews.ts`). Tekst je preuzet iz indeksa pretraživača jer stranici agencija-account.com nije bilo moguće pristupiti iz razvojnog okruženja — **prije produkcije uporediti sa živom stranicom**.
+
+| Ime | Tekst |
+|---|---|
+| Adis Krvavac | Stvarno su odlični! Profesionalni, brzi i uvijek na raspolaganju kada treba pomoć ili savjet. Zaista su pravi izbor za svakoga ko traži kvalitetnu i pouzdanu računovodstvenu podršku. Preporučujem ih od srca! |
+| Maja | Uvijek su na raspolaganju i stvarno znaju svoj posao. Bez obzira na složenost, sve završe precizno i tačno, a komunikacija s njima je uvijek jasna i ugodna. Definitivno ih preporučujem svima koji žele pouzdan tim na svojoj strani! |
+| Alem Šunja | Preporučujem. |
+| Almir Eglenović | Preporučujem. |
+
+Umjesto fotografija osoba prikazuju se inicijali.
 
 ## 4. Novi sadržaj (prijedlozi napisani za redizajn)
 
@@ -67,19 +76,21 @@ Postojeći web navodi recenzije koje se pripisuju osobama: **Adis Krvavac, Maja,
 - [ ] Verifikacijske meta oznake sa starog weba (`site.verification` u `src/data/site.ts`).
 - [ ] Tekst politike privatnosti (po potrebi uz pravnog savjetnika).
 
-## 6. Slike
+## 6. Slike (druga serija, dostavljena 23. 9. 2026.)
 
-Šest priloženih završnih slika s logotipom ACCOUNT (izvornici u `source-images/`, optimizirane varijante u `public/images/`):
+Izvornici druge serije su u `source-images/v2-izvornici/` (nepromijenjeni). Generisani znak na fasciklama nije bio vjeran originalu, pa je skriptom `scripts/zamijeni-logo.py` zamijenjen originalnim znakom: generisani znak je uklonjen (rekonstrukcija osvjetljenja i teksture kože iz okoline), a originalni znak iz `source-images/brand/account-znak-original.png` preslikan je u perspektivu fascikla i prilagođen osvjetljenju. Oblik i boje znaka nisu mijenjani. Obrađene slike su u `source-images/account-*.png`, web varijante (AVIF/WebP, više širina) u `public/images/`.
 
-| # | Motiv | Upotreba | Datoteka |
-|---|---|---|---|
-| 1 | Radni sto, pogled na Stari most, fascikl s logotipom | hero početne | `account-hero.webp` (+ mobilni kadar 4:5) |
-| 2 | Kalkulator, dokumenti, logo na zaglavlju | Računovodstvo i knjigovodstvo | `account-knjigovodstvo.webp` |
-| 3 | Savjetovanje za stolom, bez vidljivih lica | Poslovno i porezno savjetovanje | `account-savjetovanje.webp` |
-| 4 | Globus, laptop, poslovni dosje | Zastupanje inostranih preduzeća | `account-inostrana-preduzeca.webp` |
-| 5 | Ključevi i fascikl | Registracija firmi, obrta i udruženja | `account-registracija.webp` |
-| 6 | Bilježnica, plave kartice | Poslovni projekti i planiranje; O nama (neutralan detalj) | `account-poslovni-projekti.webp` |
+| # | Motiv | Upotreba |
+|---|---|---|
+| 1 | Osoba otvara plavu fasciklu; tamni prostor lijevo | hero početne (desktop cijela scena, mobitel kadar 4:3) |
+| 2 | Evidencije uz kalkulator i račune | izdvojena usluga na početnoj, /racunovodstvo |
+| 3 | Razgovor nad jednostavnim finansijskim prikazom | sekcija „Zašto nam vjerovati“ na početnoj, /konzultantske-usluge |
+| 4 | Poslovni razgovor; Mostar samo na maloj uokvirenoj fotografiji | /zastupanje-inostranih-poduzeca |
+| 5 | Ključ i pripremljena dokumentacija | /registracija-firmi-obrta-udruzenja |
+| 6 | Planiranje kroz bilježnicu i kartice | /poslovni-projekti |
 
-Slike su ilustrativne poslovne scene; stranica ih ne predstavlja kao fotografije stvarnog tima, kancelarije ni pogleda iz prostora agencije (napomena u podnožju).
+Početna koristi tri fotografije (1, 2, 3). Slika 3 ima prozirnu vinjetu; spojena je s tamnoplavom pozadinom stranice.
 
-Originalni znak agencije (dostavljen 23. 9. 2026.): izvornik `source-images/brand/account-znak-original.png` (1039×1025, prozirna pozadina). Web varijante u `public/brand/` imaju samo uklonjen prazan prozirni rub — znak, boje i proporcije nisu mijenjani. Prozirni usjek dolje lijevo dio je izvornog znaka. Favicon (`public/favicon-32.png`, `favicon-48.png`) i `apple-touch-icon.png` izvedeni su iz istog izvornika. Naziv „ACCOUNT“ pored znaka u zaglavlju i podnožju je tekst, ne slika.
+Stvarna fotografija Starog mosta (Alen Kajimović, CC0 1.0, https://commons.wikimedia.org/wiki/File:Old_Bridge_Mostar_(125653963).jpeg) je na stranici O nama, s potpisom; izvornik u `source-images/mostar/`.
+
+Sve poslovne fotografije su ilustrativne scene; stranica ih ne predstavlja kao stvarno osoblje ili prostor agencije (alt opisi i napomena u podnožju). Brojke i tekst na „Mjesečnom pregledu“ izrađeni su u HTML/CSS-u, ne u fotografiji.

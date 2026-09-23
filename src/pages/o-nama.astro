@@ -35,13 +35,16 @@ const principles = [
           evidencije, jasan pregled poslovanja i podršku kada donose važne odluke.
         </p>
       </div>
-      <ResponsiveImage
-        name="account-poslovni-projekti"
-        alt="Otvorena bilježnica sa skicama, plave kartice i olovka na drvenom radnom stolu"
-        sizes="(min-width: 900px) 520px, 100vw"
-        priority
-        class="media about-head__media"
-      />
+      <figure class="about-head__figure">
+        <ResponsiveImage
+          name="mostar-stari-most"
+          alt="Stari most i rijeka Neretva u Mostaru, s brdom Hum u pozadini"
+          sizes="(min-width: 900px) 520px, 100vw"
+          priority
+          class="media about-head__media"
+        />
+        <figcaption>Stari most, Mostar. Fotografija: Alen Kajimović, CC0 1.0.</figcaption>
+      </figure>
     </div>
   </section>
 
@@ -142,6 +145,14 @@ const principles = [
       grid-template-columns: 1.1fr 1fr;
       gap: 64px;
     }
+  }
+  .about-head__figure {
+    margin: 0;
+  }
+  .about-head__figure figcaption {
+    margin-top: 10px;
+    font-size: 0.8125rem;
+    color: var(--c-ink-muted);
   }
   :global(.media.about-head__media) {
     aspect-ratio: 4 / 3;

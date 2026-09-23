@@ -3,6 +3,7 @@
 // Obračun plaća i slične operativne usluge dodati tek kad ih agencija potvrdi.
 
 export type ImageName =
+  | 'mostar-stari-most'
   | 'account-hero'
   | 'account-knjigovodstvo'
   | 'account-savjetovanje'
@@ -43,7 +44,7 @@ export const services: Service[] = [
     benefit: 'Uredne evidencije i razumljiviji pregled poslovanja.',
     image: 'account-knjigovodstvo',
     imageAlt:
-      'Kalkulator, olovka i finansijski izvještaj sa zaglavljem ACCOUNT u tamnoplavom fasciklu, pored složenih računa na drvenom stolu',
+      'Ruka vodi evidencije u bilježnici pored kalkulatora, računa i tamnoplavog fascikla sa znakom ACCOUNT (ilustrativna scena)',
     intro:
       'Vodimo poslovne knjige i evidencije, pripremamo finansijske izvještaje i brinemo o redovnim prijavama, tako da u svakom trenutku znate gdje vaše poslovanje stoji.',
     forWhom: [
@@ -100,7 +101,7 @@ export const services: Service[] = [
     benefit: 'Podrška u razumijevanju finansija i planiranju narednih odluka.',
     image: 'account-savjetovanje',
     imageAlt:
-      'Dvije osobe tokom razgovora za drvenim stolom, pred njima tamnoplavi fascikl s logotipom ACCOUNT, bilježnica i tabela',
+      'Dvije osobe za stolom razgovaraju nad jednostavnim finansijskim prikazom, pored tamnoplavog fascikla sa znakom ACCOUNT (ilustrativna scena)',
     intro:
       'Pomažemo vam da razumijete brojke iza svog poslovanja i da prije važne odluke sagledate finansijske i porezne posljedice.',
     forWhom: [
@@ -150,7 +151,7 @@ export const services: Service[] = [
     benefit: 'Lokalna podrška za administrativne i računovodstvene potrebe poslovanja u BiH.',
     image: 'account-inostrana-preduzeca',
     imageAlt:
-      'Globus, nalivpero i tamnoplavi kožni fascikl s logotipom ACCOUNT na radnom stolu, u pozadini laptop s video-sastankom',
+      'Poslovni razgovor za stolom: predaja dokumenta pored tamnoplavog fascikla sa znakom ACCOUNT, u pozadini uokvirena fotografija Mostara (ilustrativna scena)',
     intro:
       'Pružamo ovlašteno zastupanje stranih poreznih obveznika i lokalnu podršku za administrativne i računovodstvene potrebe poslovanja u Bosni i Hercegovini.',
     forWhom: [
@@ -198,7 +199,7 @@ export const services: Service[] = [
     benefit: 'Pomoć u pripremi dokumentacije i koracima pokretanja poslovanja.',
     image: 'account-registracija',
     imageAlt:
-      'Ključevi s kožnim privjeskom na tamnoplavom fasciklu s logotipom ACCOUNT, pored dokumenata i olovke u svijetlom poslovnom prostoru',
+      'Ključ na uredno pripremljenoj dokumentaciji pored tamnoplavog fascikla sa znakom ACCOUNT (ilustrativna scena)',
     intro:
       'Pokretanje poslovanja lakše je kad znate redoslijed koraka. Pomažemo u pripremi dokumentacije i vodimo vas kroz registraciju firme, obrta ili udruženja.',
     forWhom: [
@@ -248,7 +249,7 @@ export const services: Service[] = [
     benefit: 'Razrada ideje, budžeta i poslovnog plana.',
     image: 'account-poslovni-projekti',
     imageAlt:
-      'Otvorena bilježnica sa skicama plana i grafikona, plave kartice, tehnička olovka i notes s logotipom ACCOUNT na drvenom stolu',
+      'Planiranje uz otvorenu bilježnicu, plave kartice i uzorke materijala, pored tamnoplavog fascikla sa znakom ACCOUNT (ilustrativna scena)',
     intro:
       'Pomažemo vam da ideju pretočite u jasan poslovni plan s budžetom i brojkama koje možete obrazložiti.',
     forWhom: [

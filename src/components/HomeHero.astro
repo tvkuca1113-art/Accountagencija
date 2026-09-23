@@ -1,25 +1,13 @@
 ---
-// Hero početne: tamna pozadina u bojama znaka, fotografija koja „izranja“ iz pozadine,
-// suptilne animacije (sjaj, linije poslovne knjige, plutajuće kartice usluga) i blagi paralaks.
-// Naslov i poziv na akciju su prvi u kodu i na mobitelu uvijek iznad fotografije.
-// Sve animacije se isključuju uz prefers-reduced-motion; bez JavaScripta prikazuje se završno stanje.
+// Hero početne: tekst na tamnoj pozadini u boji zida sa fotografije, fotografija desno se prirodno stapa s njom
+// (kratak prijelaz na lijevoj ivici umjesto tamnog sloja preko cijele slike). Brojke su čist tekstualni dokaz
+// ispod poziva na akciju. Na mobitelu su naslov i dugmad iznad fotografije, a kadar 4:3 zadržava ruke i fascikl.
 import Icon from './Icon.astro';
 import ResponsiveImage from './ResponsiveImage.astro';
 import { site } from '../data/site.ts';
-
-const stats = site.stats.map((s) => {
-  const m = s.value.match(/^(\d+)(.*)$/);
-  return { ...s, number: m ? Number(m[1]) : null, suffix: m ? m[2] : '' };
-});
 ---
 
 <section class="hero" aria-labelledby="hero-naslov">
-  <div class="hero__fx" aria-hidden="true">
-    <span class="hero__glow hero__glow--a"></span>
-    <span class="hero__glow hero__glow--b"></span>
-    <span class="hero__ledger"></span>
-  </div>
-
   <div class="container hero__content">
     <div class="hero__text">
       <p class="eyebrow hero__eyebrow">Računovodstvena agencija · Mostar</p>
@@ -31,116 +19,48 @@ const stats = site.stats.map((s) => {
         <a class="btn btn--bright" href="/kontakt#upit">Zatražite ponudu <Icon name="arrow" size={18} /></a>
         <a class="btn btn--glass" href="#usluge">Pogledajte usluge</a>
       </div>
-      <p class="hero__note">
-        <Icon name="doc" size={18} />
-        Dokumentaciju možete dostavljati i e-mailom.
-      </p>
+      <ul class="hero__proof">
+        {
+          site.stats.map((s) => (
+            <li>
+              <strong>{s.value}</strong> {s.label}
+            </li>
+          ))
+        }
+        <li class="hero__proof-note">
+          <Icon name="doc" size={17} />
+          Dokumentaciju možete dostavljati i e-mailom.
+        </li>
+      </ul>
     </div>
   </div>
 
   <div class="hero__media">
     <ResponsiveImage
       name="account-hero"
-      alt="Radni sto s laptopom i tamnoplavim fasciklom s logotipom ACCOUNT, uz prozor s pogledom na Stari most u Mostaru"
-      sizes="(min-width: 900px) 62vw, 100vw"
+      alt="Osoba otvara tamnoplavu fasciklu sa znakom ACCOUNT na drvenom radnom stolu (ilustrativna scena)"
+      sizes="(min-width: 900px) 68vw, 100vw"
       priority
       mobileArtDirection
       class="hero__photo"
     />
-    <div class="hero__chips" aria-hidden="true">
-      <span class="hero__chip hero__chip--a">
-        <span class="hero__chip-icon hero__chip-icon--ok">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
-        </span>
-        <span><strong>Redovne porezne prijave</strong><small>Evidencije i prijave na jednom mjestu</small></span>
-      </span>
-      <span class="hero__chip hero__chip--b">
-        <span class="hero__spark"><i style="--h:.45"></i><i style="--h:.7"></i><i style="--h:.55"></i><i style="--h:.9"></i></span>
-        <span><strong>Periodični izvještaji</strong><small>Jasan pregled prihoda i troškova</small></span>
-      </span>
-    </div>
-    <dl class="hero__stats">
-      {
-        stats.map((s) => (
-          <div>
-            <dt>{s.label}</dt>
-            <dd data-count={s.number ?? undefined} data-suffix={s.suffix}>
-              {s.value}
-            </dd>
-          </div>
-        ))
-      }
-    </dl>
   </div>
 </section>
 
 <style>
   .hero {
+    --hero-bg: #0d131d; /* boja zida na fotografiji — spoj bez vidljive ivice */
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    background:
-      radial-gradient(120% 90% at 0% 0%, #13305a 0%, transparent 55%),
-      linear-gradient(180deg, var(--c-navy-900) 0%, var(--c-navy-950) 100%);
-    color: #c9d8ea;
+    background: var(--hero-bg);
+    color: #c9d4e3;
   }
 
-  /* Pozadinski efekti */
-  .hero__fx {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-  }
-  .hero__glow {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(20px);
-  }
-  .hero__glow--a {
-    width: 560px;
-    height: 560px;
-    left: -180px;
-    top: -220px;
-    background: radial-gradient(circle, rgb(0 160 236 / 0.38) 0%, rgb(0 160 236 / 0) 68%);
-    animation: glow-drift 16s ease-in-out infinite alternate;
-  }
-  .hero__glow--b {
-    width: 460px;
-    height: 460px;
-    left: 30%;
-    bottom: -260px;
-    background: radial-gradient(circle, rgb(20 184 236 / 0.22) 0%, rgb(20 184 236 / 0) 70%);
-    animation: glow-drift 20s ease-in-out -6s infinite alternate-reverse;
-  }
-  /* Linije poslovne knjige s vertikalnom marginom, blijede prema rubovima */
-  .hero__ledger {
-    position: absolute;
-    inset: 0;
-    background:
-      linear-gradient(90deg, transparent calc(var(--gutter) + 6px), rgb(20 184 236 / 0.16) calc(var(--gutter) + 6px), rgb(20 184 236 / 0.16) calc(var(--gutter) + 7px), transparent calc(var(--gutter) + 7px)),
-      repeating-linear-gradient(180deg, transparent 0 43px, rgb(255 255 255 / 0.05) 43px 44px);
-    -webkit-mask-image: radial-gradient(90% 80% at 15% 35%, #000 0%, transparent 75%);
-    mask-image: radial-gradient(90% 80% at 15% 35%, #000 0%, transparent 75%);
-    animation: ledger-in 1.4s ease-out both;
-  }
-
-  @keyframes glow-drift {
-    to {
-      transform: translate3d(60px, 40px, 0);
-    }
-  }
-  @keyframes ledger-in {
-    from {
-      opacity: 0;
-    }
-  }
-
-  /* Sadržaj */
   .hero__content {
     position: relative;
     z-index: 2;
-    padding-block: 28px 0;
+    padding-block: 36px 28px;
   }
   .hero__eyebrow {
     color: var(--c-cyan-400);
@@ -153,11 +73,11 @@ const stats = site.stats.map((s) => {
     max-width: 13ch;
   }
   .hero__lead {
-    max-width: 36rem;
-    margin-bottom: 24px;
+    max-width: 34rem;
+    margin-bottom: 28px;
     font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
     line-height: 1.6;
-    color: #c9d8ea;
+    color: #c9d4e3;
   }
   .hero__actions {
     display: flex;
@@ -174,246 +94,93 @@ const stats = site.stats.map((s) => {
       display: none;
     }
   }
-  .hero__note {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin: 18px 0 0;
-    font-size: var(--fs-small);
-    color: #a9bdd6;
-  }
-  .hero__note :global(svg) {
-    color: var(--c-cyan-400);
-  }
   .hero :global(:focus-visible) {
     outline-color: #fff;
+  }
+
+  /* Brojke kao čist tekstualni dokaz ispod poziva na akciju */
+  .hero__proof {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 24px;
+    margin: 28px 0 0;
+    padding: 18px 0 0;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+    max-width: 34rem;
+    font-size: 0.9375rem;
+    color: #a9b7c9;
+  }
+  .hero__proof strong {
+    margin-right: 4px;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #fff;
+  }
+  .hero__proof-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-basis: 100%;
+  }
+  .hero__proof-note :global(svg) {
+    color: var(--c-cyan-400);
   }
 
   /* Fotografija */
   .hero__media {
     position: relative;
     z-index: 1;
-    margin-top: -24px;
-    aspect-ratio: 4 / 5;
-    max-height: 620px;
+    aspect-ratio: 4 / 3;
     width: 100%;
+    max-height: 620px;
   }
   .hero__media :global(.hero__photo) {
     position: absolute;
     inset: 0;
     display: block;
-    overflow: hidden;
-    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
-    mask-image: linear-gradient(180deg, transparent 0%, #000 22%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%);
+    mask-image: linear-gradient(180deg, transparent 0%, #000 14%);
   }
   .hero__media :global(.hero__photo img) {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: 60% 50%;
-    animation: hero-zoom 14s cubic-bezier(0.2, 0.6, 0.2, 1) both;
   }
   @media (min-width: 768px) and (max-width: 899px) {
     .hero__media {
-      aspect-ratio: 16 / 10;
-    }
-  }
-  @keyframes hero-zoom {
-    from {
-      transform: scale(1.08);
-    }
-    to {
-      transform: scale(1);
+      aspect-ratio: 16 / 9;
     }
   }
 
-  /* Plutajuće kartice usluga preko fotografije */
-  .hero__chips {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-  }
-  .hero__chip {
-    position: absolute;
-    left: var(--gutter);
-    top: 24%;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px 10px 10px;
-    border-radius: 14px;
-    background: rgb(255 255 255 / 0.92);
-    box-shadow: 0 18px 40px -16px rgb(5 15 30 / 0.55);
-    color: var(--c-navy-900);
-    font-size: 0.8125rem;
-    line-height: 1.3;
-    animation:
-      chip-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) 0.7s both,
-      chip-float 6s ease-in-out 1.6s infinite alternate;
-  }
-  .hero__chip strong {
-    display: block;
-    font-weight: 750;
-  }
-  .hero__chip small {
-    display: block;
-    color: var(--c-ink-muted);
-    font-size: 0.75rem;
-  }
-  .hero__chip--b {
-    display: none;
-    animation-delay: 1s, 2.2s;
-  }
-  .hero__chip-icon {
-    display: grid;
-    place-items: center;
-    flex: none;
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-  }
-  .hero__chip-icon--ok {
-    background: #17784a;
-    color: #fff;
-  }
-  .hero__spark {
-    display: flex;
-    align-items: flex-end;
-    gap: 3px;
-    flex: none;
-    width: 30px;
-    height: 30px;
-    padding: 6px;
-    border-radius: 8px;
-    background: var(--c-blue-100);
-  }
-  .hero__spark i {
-    flex: 1;
-    height: calc(var(--h) * 100%);
-    border-radius: 2px;
-    background: var(--c-blue-500);
-  }
-  @keyframes chip-in {
-    from {
-      opacity: 0;
-      transform: translateY(14px) scale(0.96);
-    }
-  }
-  @keyframes chip-float {
-    to {
-      translate: 0 -6px;
-    }
-  }
-
-  /* Brojke kao staklene oznake preko fotografije */
-  .hero__stats {
-    position: absolute;
-    left: var(--gutter);
-    bottom: 20px;
-    z-index: 2;
-    display: flex;
-    gap: 24px;
-    margin: 0;
-    padding: 14px 20px;
-    border-radius: var(--radius);
-    background: rgb(10 24 46 / 0.55);
-    border: 1px solid rgb(255 255 255 / 0.16);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-  .hero__stats div {
-    display: flex;
-    flex-direction: column-reverse;
-  }
-  .hero__stats dd {
-    margin: 0;
-    font-size: 1.625rem;
-    font-weight: 800;
-    color: #fff;
-    line-height: 1.1;
-    font-variant-numeric: tabular-nums;
-  }
-  .hero__stats dt {
-    font-size: 0.8125rem;
-    color: #b9cbe0;
-  }
-
-  /* Desktop: tekst lijevo na tamnoj pozadini, fotografija preko desnih ~60 % */
+  /* Desktop: tekst lijevo na boji zida, fotografija desno */
   @media (min-width: 900px) {
     .hero {
       display: flex;
       align-items: center;
-      min-height: clamp(600px, 76vh, 740px);
+      min-height: clamp(600px, 78vh, 760px);
     }
     .hero__content {
-      padding-block: 88px 128px;
+      padding-block: 96px;
     }
     .hero__text {
-      max-width: 34rem;
+      max-width: 33rem;
     }
     .hero__media {
       position: absolute;
       inset: 0 0 0 auto;
-      width: 62%;
+      width: 68%;
       max-height: none;
       aspect-ratio: auto;
-      margin: 0;
     }
     .hero__media :global(.hero__photo) {
-      inset: -6% 0;
-      -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.4) 26%, #000 55%);
-      mask-image: linear-gradient(90deg, transparent 0%, rgb(0 0 0 / 0.4) 26%, #000 55%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 26%);
+      mask-image: linear-gradient(90deg, transparent 0%, #000 26%);
     }
-    .hero__media::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(0deg, rgb(10 24 46 / 0.85) 0%, rgb(10 24 46 / 0) 20%);
-      pointer-events: none;
-    }
-    /* Desno poravnanje: fascikl s logotipom (donji desni ugao scene) ostaje u kadru */
     .hero__media :global(.hero__photo img) {
-      object-position: 100% 55%;
-    }
-    .hero__stats {
-      left: 22%;
-      bottom: 104px;
-    }
-    .hero__chip--a {
-      left: 14%;
-      right: auto;
-      top: 20%;
-    }
-    .hero__chip--b {
-      display: flex;
-      left: 30%;
-      top: 50%;
-    }
-  }
-
-  /* Blagi paralaks fotografije pri skrolanju (samo gdje preglednik podržava scroll-timeline) */
-  @supports (animation-timeline: scroll()) {
-    @media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
-      .hero__media :global(.hero__photo) {
-        animation: hero-parallax linear both;
-        animation-timeline: scroll(root);
-        animation-range: 0 100vh;
-      }
-    }
-  }
-  @keyframes hero-parallax {
-    to {
-      transform: translateY(8%);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .hero__glow,
-    .hero__ledger,
-    .hero__chip,
-    .hero__media :global(.hero__photo img) {
-      animation: none !important;
+      object-position: 62% 50%;
     }
   }
 </style>

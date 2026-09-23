@@ -1,6 +1,6 @@
 ---
 // Animirani „Mjesečni pregled“: ilustracija saradnje u obliku kartice izvještaja.
-// Stupci grafikona rastu, a tri koraka saradnje se redom štikliraju; na kraju iskače potvrda.
+// Stupci grafikona rastu, a tri koraka saradnje se redom štikliraju.
 // Kartica je ilustrativna (oznaka „Primjer“, bez iznosa) i dekorativna za čitače ekrana,
 // jer su isti koraci napisani u tekstu pored nje. Zadano (bez JS-a, uz prefers-reduced-motion)
 // prikazuje se završno stanje; animacija se pokreće jednom, kad kartica uđe u vidno polje.
@@ -56,12 +56,6 @@ const steps = ['Dokumentacija primljena', 'Knjiženje i prijave', 'Izvještaj po
     <div class="report__progress"><span></span></div>
   </div>
 
-  <div class="report__toast">
-    <span class="report__toast-icon">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
-    </span>
-    <span><strong>Obaveze za mjesec evidentirane</strong><small>Sljedeći pregled za mjesec dana</small></span>
-  </div>
 </div>
 
 <script>
@@ -93,7 +87,6 @@ const steps = ['Dokumentacija primljena', 'Knjiženje i prijave', 'Izvještaj po
     width: 100%;
     max-width: 440px;
     margin-inline: auto;
-    padding-bottom: 28px;
   }
   .report {
     position: relative;
@@ -101,15 +94,7 @@ const steps = ['Dokumentacija primljena', 'Knjiženje i prijave', 'Izvještaj po
     border-radius: 20px;
     background: #fff;
     color: var(--c-ink);
-    box-shadow:
-      0 40px 80px -30px rgb(0 0 0 / 0.6),
-      0 0 0 1px rgb(255 255 255 / 0.08);
-  }
-  @media (min-width: 900px) {
-    .report {
-      transform: perspective(1400px) rotateY(10deg) rotateX(4deg);
-      transform-origin: left center;
-    }
+    box-shadow: 0 24px 48px -28px rgb(0 0 0 / 0.55);
   }
   .report__head {
     display: flex;
@@ -173,14 +158,14 @@ const steps = ['Dokumentacija primljena', 'Knjiženje i prijave', 'Izvještaj po
     grid-template-columns: repeat(6, 1fr);
     margin-top: 6px;
     text-align: center;
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     color: var(--c-ink-muted);
   }
   .report__legend {
     display: flex;
     gap: 14px;
-    margin-top: 8px;
-    font-size: 0.75rem;
+    margin-top: 10px;
+    font-size: 0.8125rem;
     color: var(--c-ink-muted);
   }
   .report__legend span {
@@ -206,8 +191,8 @@ const steps = ['Dokumentacija primljena', 'Knjiženje i prijave', 'Izvještaj po
     margin: 16px 0 0;
     padding: 0;
     display: grid;
-    gap: 10px;
-    font-size: 0.9rem;
+    gap: 12px;
+    font-size: 0.975rem;
     font-weight: 650;
     color: var(--c-navy-900);
   }
@@ -247,45 +232,6 @@ const steps = ['Dokumentacija primljena', 'Knjiženje i prijave', 'Izvještaj po
     transform-origin: left;
   }
 
-  /* Potvrda koja iskače preko kartice */
-  .report__toast {
-    position: absolute;
-    right: -8px;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    border-radius: 14px;
-    background: var(--c-navy-800);
-    border: 1px solid rgb(255 255 255 / 0.14);
-    color: #fff;
-    box-shadow: 0 20px 40px -18px rgb(0 0 0 / 0.7);
-    font-size: 0.8125rem;
-    line-height: 1.3;
-  }
-  .report__toast strong {
-    display: block;
-    font-weight: 700;
-  }
-  .report__toast small {
-    color: #a9bdd6;
-    font-size: 0.75rem;
-  }
-  .report__toast-icon {
-    display: grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #17784a;
-  }
-  @media (min-width: 900px) {
-    .report__toast {
-      right: -28px;
-    }
-  }
-
   /* Početno stanje prije animacije (samo kad je animacija dozvoljena) */
   .is-pending .report {
     opacity: 0;
@@ -307,10 +253,6 @@ const steps = ['Dokumentacija primljena', 'Knjiženje i prijave', 'Izvještaj po
   }
   .is-pending .report__progress span {
     transform: scaleX(0);
-  }
-  .is-pending .report__toast {
-    opacity: 0;
-    transform: translateY(12px) scale(0.96);
   }
 
   /* Tok animacije */
@@ -343,10 +285,5 @@ const steps = ['Dokumentacija primljena', 'Knjiženje i prijave', 'Izvještaj po
   }
   .is-playing .report__progress span {
     transition: transform 1.4s cubic-bezier(0.4, 0, 0.2, 1) 1.05s;
-  }
-  .is-playing .report__toast {
-    transition:
-      opacity 0.4s ease 2.6s,
-      transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3) 2.6s;
   }
 </style>

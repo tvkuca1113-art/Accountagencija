@@ -3,16 +3,17 @@
 // (otvorena tastatura), da ne prekriva formu ni obavijesti.
 import Icon from './Icon.astro';
 import { primaryPhone } from '../data/site.ts';
+const isHome = Astro.url.pathname === '/';
 ---
 
-<div class="mobile-bar" data-mobile-bar>
-  <a class="mobile-bar__btn mobile-bar__btn--call" href={primaryPhone.href} data-track="klik_telefon">
+<div class:list={['mobile-bar', { 'mobile-bar--home': isHome, 'is-hidden': isHome }]} data-mobile-bar>
+  <a class="mobile-bar__btn mobile-bar__btn--call" href={primaryPhone.href} data-track="klik_telefon" aria-label={`Pozovite ${primaryPhone.display}`}>
     <Icon name="phone" size={20} />
-    Pozovite
+    <span class="mobile-bar__call-text">Pozovite</span>
   </a>
   <a class="mobile-bar__btn mobile-bar__btn--inquiry" href="/kontakt#upit">
     <Icon name="send" size={20} />
-    Pošaljite upit
+    {isHome ? 'Zatražite ponudu' : 'Pošaljite upit'}
   </a>
 </div>
 
@@ -22,7 +23,16 @@ import { primaryPhone } from '../data/site.ts';
     document.body.classList.add('has-mobile-bar');
     let fieldFocused = false;
     let formVisible = false;
-    const update = () => bar.classList.toggle('is-hidden', fieldFocused || formVisible);
+    let heroCtaVisible = bar.classList.contains('mobile-bar--home');
+    const update = () => bar.classList.toggle('is-hidden', fieldFocused || formVisible || heroCtaVisible);
+    const heroCta = document.querySelector('[data-hero-cta]');
+    if (heroCta && 'IntersectionObserver' in window) {
+      const ctaObserver = new IntersectionObserver(([entry]) => {
+        heroCtaVisible = entry.isIntersecting || entry.boundingClientRect.bottom >= 0;
+        update();
+      });
+      ctaObserver.observe(heroCta);
+    }
 
     document.addEventListener('focusin', (e) => {
       fieldFocused = (e.target as HTMLElement).matches('input, textarea, select');
@@ -99,5 +109,15 @@ import { primaryPhone } from '../data/site.ts';
   }
   .mobile-bar__btn--inquiry:hover {
     color: #fff;
+  }
+  .mobile-bar--home {
+    grid-template-columns: 48px 1fr;
+    gap: 10px;
+  }
+  .mobile-bar--home .mobile-bar__btn--call {
+    border-radius: 50%;
+  }
+  .mobile-bar--home .mobile-bar__call-text {
+    display: none;
   }
 </style>

@@ -33,7 +33,7 @@ export const articles: Article[] = [
       { href: '/racunovodstvo', label: 'Računovodstvo i knjigovodstvo' },
     ],
     body: `
-<p>Kad na račun stigne veća uplata, lako je zaključiti da posao ide odlično. Ali prihod pokazuje samo koliko je novca ušlo u poslovanje. Koliko od toga zaista ostaje, vidi se tek kad od prihoda oduzmete troškove.</p>
+<p>Kad na račun stigne veća uplata, lako je zaključiti da posao ide odlično. Ipak, uplata nije isto što i prihod, a prihod nije isto što i dobit. Koliko poslovanje zaista zarađuje, vidi se tek kada se prihodi uporede s pripadajućim troškovima.</p>
 
 <h2>Prihod je tek početak priče</h2>
 <p>Prihod je iznos koji ste ostvarili prodajom proizvoda ili usluga. Dobit je ono što ostane kad se od prihoda oduzmu svi troškovi koji su bili potrebni da taj prihod nastane. Dvije firme s istim prihodom mogu imati potpuno različit rezultat, zavisno od toga koliko ih posao košta.</p>
@@ -75,7 +75,7 @@ export const articles: Article[] = [
     imageAlt: 'Dvije osobe za stolom razgovaraju nad finansijskim prikazom (ilustrativna scena)',
     related: [
       { href: '/korisni-alati#konfigurator', label: 'Pripremite upit kroz konfigurator' },
-      { href: '/kontakt', label: 'Zakažite razgovor' },
+      { href: '/kontakt', label: 'Pošaljite upit za razgovor' },
     ],
     body: `
 <p>Prvi razgovor s računovođom služi da se upoznate s poslovanjem i dogovorite obim saradnje. Što više osnovnih informacija imate pri ruci, to brže dobijate konkretnu ponudu i jasan plan.</p>

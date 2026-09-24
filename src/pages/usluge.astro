@@ -38,6 +38,7 @@ const crumbs = [
             <li class:list={['svc-row', { 'svc-row--flip': i % 2 === 1 }]}>
               <ResponsiveImage name={s.image} alt={s.imageAlt} sizes="(min-width: 900px) 540px, 100vw" class="media svc-row__media" />
               <div class="svc-row__body">
+                <span class="svc-row__number" aria-hidden="true">{String(i + 1).padStart(2, '0')} / 05</span>
                 <h2>
                   <a href={`/${s.slug}`}>{s.title}</a>
                 </h2>
@@ -66,7 +67,7 @@ const crumbs = [
 <style>
   .page-head {
     padding-block: clamp(24px, 3vw, 48px) clamp(24px, 3vw, 40px);
-    background: var(--c-bg);
+    background: #f4f7fa;
   }
   .svc-list {
     list-style: none;
@@ -91,6 +92,14 @@ const crumbs = [
   }
   :global(.media.svc-row__media) {
     aspect-ratio: 4 / 3;
+  }
+  .svc-row__number {
+    display: inline-block;
+    margin-bottom: 14px;
+    color: var(--c-blue-600);
+    font-size: 0.85rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
   }
   .svc-row h2 {
     font-size: clamp(1.625rem, 1.35rem + 1vw, 2.25rem);

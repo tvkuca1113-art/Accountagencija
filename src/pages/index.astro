@@ -2,18 +2,15 @@
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import HomeHero from '../components/HomeHero.astro';
-import ResponsiveImage from '../components/ResponsiveImage.astro';
 import ProcessSection from '../components/ProcessSection.astro';
 import ServiceGuide from '../components/ServiceGuide.astro';
 import ArticleCards from '../components/ArticleCards.astro';
 import FaqList from '../components/FaqList.astro';
-import { services, audiences } from '../data/services.ts';
+import { services } from '../data/services.ts';
 import { generalFaq } from '../data/faq.ts';
 import { reviews, initials } from '../data/reviews.ts';
 import { site, fullAddress } from '../data/site.ts';
 import { organizationSchema } from '../lib/schema.ts';
-
-const [featured, ...rest] = services;
 
 // Zašto nam vjerovati: samo potvrđene tvrdnje agencije i činjenice s postojećeg weba.
 const trust = [
@@ -34,86 +31,41 @@ const shortReviews = reviews.filter((r) => r.text.length <= 40);
 >
   <HomeHero />
 
-  <!-- 1. Kome pomažemo -->
-  <section class="section section--tight audiences" aria-labelledby="kome-naslov">
-    <div class="container audiences__grid">
-      <div class="audiences__head">
-        <p class="eyebrow">Kome pomažemo</p>
-        <h2 id="kome-naslov">Od prvog koraka do urednog poslovanja</h2>
+  <section class="section services-overview" id="usluge" aria-labelledby="usluge-naslov">
+    <div class="container services-overview__grid">
+      <div class="services-overview__intro" data-reveal>
+        <p class="eyebrow">Kako vam pomažemo</p>
+        <h2 id="usluge-naslov">Šta vam je potrebno?</h2>
+        <p>Od urednih poslovnih knjiga do savjeta za naredni korak. Izaberite oblast koja odgovara vašem poslovanju.</p>
+        <a class="link-arrow" href="/usluge">Pregled svih usluga <Icon name="arrow" size={18} /></a>
       </div>
-      <ul class="audiences__list">
+      <ol class="services-overview__list" data-reveal>
         {
-          audiences.map((a) => (
-            <li>
-              <a href={`/${a.slug}`}>
-                <span class="audiences__name">{a.title}</span>
-                <span class="audiences__text">{a.text}</span>
-                <Icon name="arrow" size={18} class="audiences__arrow" />
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
-
-  <!-- 2. Usluge: jedna izdvojena s fotografijom, ostale u konciznoj listi -->
-  <section class="section surface-cream" id="usluge" aria-labelledby="usluge-naslov">
-    <div class="container">
-      <div class="section-head" data-reveal>
-        <p class="eyebrow">Usluge</p>
-        <h2 id="usluge-naslov">Podrška za svaku fazu poslovanja</h2>
-      </div>
-
-      <article class="svc-featured" data-reveal>
-        <ResponsiveImage
-          name={featured.image}
-          alt={featured.imageAlt}
-          sizes="(min-width: 1024px) 600px, 100vw"
-          class="media svc-featured__media"
-        />
-        <div class="svc-featured__body">
-          <h3><a href={`/${featured.slug}`}>{featured.title}</a></h3>
-          <p class="svc-featured__benefit">{featured.intro}</p>
-          <ul class="checklist">
-            {featured.scope.slice(0, 4).map((item) => <li>{item}</li>)}
-          </ul>
-          <a class="btn btn--small" href={`/${featured.slug}`}>
-            Više o usluzi<span class="visually-hidden">: {featured.title}</span>
-          </a>
-        </div>
-      </article>
-
-      <ul class="svc-list" data-reveal>
-        {
-          rest.map((s) => (
+          services.map((s, i) => (
             <li>
               <a href={`/${s.slug}`}>
-                <span class="svc-list__title">{s.title}</span>
-                <span class="svc-list__text">{s.benefit}</span>
-                <Icon name="arrow" size={20} class="svc-list__arrow" />
+                <span class="services-overview__number" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                <span class="services-overview__detail">
+                  <strong>{s.title}</strong>
+                  <span>{s.benefit}</span>
+                </span>
+                <Icon name="arrow" size={22} class="services-overview__arrow" />
               </a>
             </li>
           ))
         }
-      </ul>
+      </ol>
     </div>
   </section>
 
   <!-- 3. Zašto nam vjerovati -->
   <section class="trust" aria-labelledby="zasto-naslov">
-    <div class="trust__media">
-      <ResponsiveImage
-        name="account-savjetovanje"
-        alt="Dvije osobe za stolom razgovaraju nad jednostavnim finansijskim prikazom, pored tamnoplavog fascikla sa znakom ACCOUNT (ilustrativna scena)"
-        sizes="(min-width: 900px) 52vw, 100vw"
-        class="trust__photo"
-      />
-    </div>
     <div class="container trust__grid">
-      <div class="trust__body" data-reveal>
+      <div class="trust__heading" data-reveal>
         <p class="eyebrow">Zašto nam vjerovati</p>
-        <h2 id="zasto-naslov">Lokalna stručnost, jasan govor</h2>
+        <h2 id="zasto-naslov">Lokalna stručnost. Jasan govor.</h2>
+      </div>
+      <div class="trust__body" data-reveal>
         <p class="trust__lead">
           ACCOUNT je računovodstvena agencija iz Mostara s više od 10 godina iskustva i više od 300 klijenata. Firmama,
           obrtima, udruženjima i inostranim preduzećima pomažemo da imaju uredne evidencije i jasan pregled poslovanja.
@@ -259,263 +211,100 @@ const shortReviews = reviews.filter((r) => r.text.length <= 40);
 </Base>
 
 <style>
-  /* Kome pomažemo */
-  .audiences__grid {
-    display: grid;
-    gap: 24px;
+  /* Usluge: pet jasnih putanja bez jednakih kartica. */
+  .services-overview { background: #fff; }
+  .services-overview__grid { display: grid; gap: 28px; }
+  .services-overview__intro h2 {
+    font-size: clamp(2.25rem, 3.1vw, 3.5rem);
+    letter-spacing: -0.045em;
+    line-height: 1.08;
   }
-  @media (min-width: 1024px) {
-    .audiences__grid {
-      grid-template-columns: 0.8fr 2.2fr;
-      gap: 48px;
-      align-items: center;
-    }
+  .services-overview__intro p:not(.eyebrow) {
+    max-width: 28rem;
+    color: var(--c-ink-muted);
   }
-  .audiences__head h2 {
-    margin: 0;
-    font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
-  }
-  .audiences__list {
+  .services-overview__list {
     list-style: none;
     margin: 0;
     padding: 0;
-    display: grid;
     border-top: 1px solid var(--c-line);
   }
-  @media (min-width: 640px) {
-    .audiences__list {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      column-gap: 32px;
-    }
-  }
-  .audiences__list a {
-    position: relative;
+  .services-overview__list a {
     display: grid;
-    gap: 2px;
-    height: 100%;
-    padding: 16px 40px 16px 0;
+    grid-template-columns: 42px minmax(0, 1fr) 24px;
+    align-items: center;
+    gap: 16px;
+    min-height: 94px;
+    padding: 18px 0;
     border-bottom: 1px solid var(--c-line);
-    text-decoration: none;
-    color: var(--c-ink);
-  }
-  .audiences__name {
-    font-weight: 750;
-    color: var(--c-navy-900);
-  }
-  .audiences__text {
-    font-size: 0.9375rem;
-    color: var(--c-ink-muted);
-  }
-  .audiences__list a:hover .audiences__name {
-    color: var(--c-blue-600);
-  }
-  .audiences__list :global(.audiences__arrow) {
-    position: absolute;
-    right: 4px;
-    top: 50%;
-    margin-top: -9px;
-    color: var(--c-blue-600);
-    transition: transform 0.18s ease;
-  }
-  .audiences__list a:hover :global(.audiences__arrow) {
-    transform: translateX(3px);
-  }
-
-  /* Usluge */
-  .svc-featured {
-    display: grid;
-    background: #fff;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-  @media (min-width: 1024px) {
-    .svc-featured {
-      grid-template-columns: 1.05fr 1fr;
-    }
-  }
-  :global(.media.svc-featured__media) {
-    aspect-ratio: 4 / 3;
-    border-radius: 0;
-  }
-  .svc-featured__body {
-    padding: clamp(24px, 3.5vw, 52px);
-    align-self: center;
-  }
-  .svc-featured h3 {
-    font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
-  }
-  .svc-featured h3 a {
     color: var(--c-navy-900);
     text-decoration: none;
   }
-  .svc-featured h3 a:hover {
+  .services-overview__list a:hover strong { color: var(--c-blue-700); }
+  .services-overview__number {
+    align-self: start;
+    padding-top: 1px;
     color: var(--c-blue-600);
+    font-weight: 800;
+    font-size: 1.35rem;
+    line-height: 1.2;
   }
-  .svc-featured__benefit {
+  .services-overview__detail { display: grid; gap: 5px; }
+  .services-overview__detail strong {
+    font-size: clamp(1.0625rem, 1.4vw, 1.375rem);
+    line-height: 1.25;
+  }
+  .services-overview__detail > span {
+    font-size: .9375rem;
+    line-height: 1.45;
     color: var(--c-ink-muted);
-    max-width: 34rem;
   }
-  .svc-featured .checklist {
-    margin: 22px 0 28px;
+  .services-overview__list :global(.services-overview__arrow) {
+    color: var(--c-blue-600);
+    transition: transform .2s ease;
+  }
+  .services-overview__list a:hover :global(.services-overview__arrow) { transform: translateX(4px); }
+  @media (min-width: 960px) {
+    .services-overview__grid { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 7vw; }
+    .services-overview__intro { position: sticky; top: calc(var(--header-h) + 40px); align-self: start; }
   }
 
-  .svc-list {
-    list-style: none;
-    margin: 28px 0 0;
-    padding: 0;
-    display: grid;
-    border-top: 1px solid var(--c-cream-line);
-  }
-  @media (min-width: 768px) {
-    .svc-list {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      column-gap: 40px;
-    }
-  }
-  .svc-list a {
-    position: relative;
-    display: grid;
-    gap: 4px;
-    height: 100%;
-    padding: 22px 48px 22px 0;
-    border-bottom: 1px solid var(--c-cream-line);
-    text-decoration: none;
-    color: var(--c-ink);
-  }
-  .svc-list__title {
-    font-size: 1.1875rem;
-    font-weight: 750;
-    color: var(--c-navy-900);
-  }
-  .svc-list__text {
-    color: var(--c-ink-muted);
-    font-size: 0.975rem;
-  }
-  .svc-list a:hover .svc-list__title {
-    color: var(--c-blue-600);
-  }
-  .svc-list :global(.svc-list__arrow) {
-    position: absolute;
-    right: 4px;
-    top: 50%;
-    margin-top: -10px;
-    color: var(--c-blue-600);
-    transition: transform 0.18s ease;
-  }
-  .svc-list a:hover :global(.svc-list__arrow) {
-    transform: translateX(4px);
-  }
-
-  /* Zašto nam vjerovati: tamna sekcija; fotografija s vinjetom stapa se s pozadinom */
+  /* Povjerenje nosi tipografija i provjerene činjenice. */
   .trust {
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
     background: var(--c-navy-950);
     color: #c9d4e3;
   }
-  .trust__media {
-    position: relative;
-    aspect-ratio: 4 / 3;
-    max-height: 460px;
-    width: 100%;
-  }
-  .trust__media :global(.trust__photo) {
-    position: absolute;
-    inset: 0;
-    display: block;
-    -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
-    mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
-  }
-  .trust__media :global(.trust__photo img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 40% 45%;
-  }
-  .trust__grid {
-    position: relative;
-    z-index: 1;
-    padding-block: 8px 72px;
-  }
-  @media (min-width: 900px) {
-    .trust__media {
-      position: absolute;
-      inset: 0 auto 0 0;
-      width: 52%;
-      max-height: none;
-      aspect-ratio: auto;
-    }
-    .trust__media :global(.trust__photo) {
-      -webkit-mask-image: linear-gradient(90deg, #000 55%, transparent 100%);
-      mask-image: linear-gradient(90deg, #000 55%, transparent 100%);
-    }
-    .trust__grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      padding-block: clamp(80px, 8vw, 120px);
-    }
-    .trust__body {
-      grid-column: 2;
-    }
-  }
-  .trust h2 {
-    color: #fff;
-  }
-  .trust .eyebrow {
-    color: var(--c-cyan-400);
-  }
-  .trust .eyebrow::before {
-    background: var(--c-cyan-400);
-  }
-  .trust__lead {
-    max-width: 34rem;
-    color: #c9d4e3;
-    font-size: 1.0625rem;
-  }
-  .trust__list {
-    list-style: none;
-    margin: 28px 0;
-    padding: 0;
-    display: grid;
-    gap: 18px 24px;
-  }
-  @media (min-width: 560px) {
-    .trust__list {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
+  .trust__grid { display: grid; gap: 18px; padding-block: clamp(65px, 7vw, 112px); }
+  .trust h2 { color: #fff; font-size: clamp(2.25rem, 3.6vw, 4rem); letter-spacing: -.045em; }
+  .trust .eyebrow { color: #49c7fa; }
+  .trust .eyebrow::before { background: #49c7fa; }
+  .trust__lead { max-width: 37rem; color: #dee7f2; font-size: 1.0625rem; }
+  .trust__list { display: grid; gap: 0; list-style: none; padding: 0; margin: 28px 0; }
   .trust__list li {
     display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    font-size: 0.9375rem;
+    gap: 14px;
+    align-items: center;
+    padding: 18px 0;
+    border-top: 1px solid rgb(255 255 255 / .18);
+    font-size: .9375rem;
     line-height: 1.4;
-    color: #a9bad0;
+    color: #c0d0e2;
   }
-  .trust__list strong {
-    display: block;
-    color: #fff;
-    font-weight: 700;
-  }
+  .trust__list li:last-child { border-bottom: 1px solid rgb(255 255 255 / .18); }
+  .trust__list strong { display: block; color: #fff; font-weight: 700; }
   .trust__icon {
     display: grid;
     place-items: center;
     flex: none;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    border: 1px solid rgb(255 255 255 / 0.16);
-    color: var(--c-cyan-400);
+    width: 40px;
+    height: 40px;
+    color: #49c7fa;
   }
-  .trust__link {
-    color: #fff;
-  }
-  .trust__link:hover {
-    color: var(--c-cyan-400);
-  }
-  .trust :global(:focus-visible) {
-    outline-color: #fff;
+  .trust__link { color: #fff; }
+  .trust__link:hover { color: #49c7fa; }
+  .trust :global(:focus-visible) { outline-color: #fff; }
+  @media (min-width: 900px) {
+    .trust__grid { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 8vw; }
   }
 
   /* Recenzije: urednički prikaz citata */

@@ -14,17 +14,16 @@ import { site } from '../data/site.ts';
       </div>
       <p class="hero__note">Za firme, obrte i preduzetnike — od prvog koraka.</p>
     </div>
-    <div class="hero__visual">
+    <figure class="hero__visual">
       <picture>
-        <source type="image/avif" srcset="/images/account-rad-480.avif 480w, /images/account-rad-800.avif 800w, /images/account-rad-1122.avif 1122w" sizes="(min-width: 768px) 46vw, 100vw" />
-        <img src="/images/account-rad-800.webp" srcset="/images/account-rad-480.webp 480w, /images/account-rad-800.webp 800w, /images/account-rad-1122.webp 1122w" sizes="(min-width: 768px) 46vw, 100vw" width="1122" height="1402" alt="Ilustrativni prikaz pregleda finansijske dokumentacije" fetchpriority="high" decoding="async" />
+        <source type="image/avif" srcset="/images/account-identitet-480.avif 480w, /images/account-identitet-800.avif 800w, /images/account-identitet-1448.avif 1448w" sizes="(min-width: 1200px) 530px, (min-width: 768px) 46vw, calc(100vw - 40px)" />
+        <img src="/images/account-identitet-800.webp" srcset="/images/account-identitet-480.webp 480w, /images/account-identitet-800.webp 800w, /images/account-identitet-1448.webp 1448w" sizes="(min-width: 1200px) 530px, (min-width: 768px) 46vw, calc(100vw - 40px)" width="1448" height="1086" alt="ACCOUNT znak oblikovan od precizno složenih papirnih slojeva i plavih ploha" fetchpriority="high" decoding="async" />
       </picture>
-      <div class="hero__signature" aria-hidden="true">
-        <img src={site.logo!.src} alt="" width="35" height="44" />
-        <span>ACCOUNT<small>Svaka stavka na svom mjestu.</small></span>
-      </div>
-      <span class="hero__edition" aria-hidden="true">JASNE BROJKE. JASNIJI KORACI.</span>
-    </div>
+      <figcaption class="hero__caption">
+        <span class="hero__brand">ACCOUNT<span>RAČUNOVODSTVENA AGENCIJA</span></span>
+        <span class="hero__promise">Svaka stavka<br />na svom mjestu.</span>
+      </figcaption>
+    </figure>
   </div>
   <div class="container">
     <div class="hero__trust">
@@ -49,14 +48,13 @@ import { site } from '../data/site.ts';
 .hero__link{display:inline-flex;align-items:center;gap:7px;color:#17324b;font-size:.8125rem;font-weight:700;text-decoration:none;padding-block:12px}
 .hero__link:hover{text-decoration:underline}
 .hero__note{font-size:.75rem;color:#667887;margin:14px 0 0}
-.hero__visual{position:relative;min-width:0;margin:0;aspect-ratio:1.48;border-radius:9px;isolation:isolate}
-.hero__visual picture{display:block;width:100%;height:100%;overflow:hidden;border-radius:9px}
-.hero__visual picture img{width:100%;height:100%;object-fit:cover;object-position:50% 39%}
-.hero__signature{position:absolute;bottom:16px;left:16px;right:16px;display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.96);padding:13px 15px;max-width:305px;border-radius:4px;box-shadow:0 10px 35px rgb(10 30 50 / .10)}
-.hero__signature>img{width:26px;height:auto;flex:none}
-.hero__signature>span{font-weight:800;font-size:.875rem;letter-spacing:.16em;line-height:1.4}
-.hero__signature small{display:block;font-size:.65rem;font-weight:500;letter-spacing:0;color:#516473;margin-top:2px}
-.hero__edition{display:none}
+.hero__visual{position:relative;min-width:0;margin:0;overflow:hidden;border-radius:8px;background:#e8f0f6;border:1px solid #dce6ee;isolation:isolate}
+.hero__visual picture{display:block;overflow:hidden;aspect-ratio:4 / 3}
+.hero__visual picture img{display:block;width:100%;height:100%;object-fit:contain}
+.hero__caption{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px 20px;background:#eef4f8;border-top:1px solid #d5e1ea}
+.hero__brand{font-size:.875rem;font-weight:800;letter-spacing:.19em;color:#10263c;line-height:1.3}
+.hero__brand>span{display:block;font-size:.4375rem;letter-spacing:.085em;font-weight:650;color:#4b6579;margin-top:4px}
+.hero__promise{font-family:Georgia,'Times New Roman',serif;font-size:.95rem;line-height:1.3;color:#284c68;text-align:right}
 .hero__trust{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:20px;padding:24px 0 28px;margin-top:24px;border-top:1px solid #d7e0e7}
 .hero__trust>p{display:none;font-size:.85rem;line-height:1.55;margin:0;color:#5b6d7c}
 .hero__trust>p strong{color:#153047;font-weight:700}
@@ -69,12 +67,11 @@ import { site } from '../data/site.ts';
 .hero h1{font-size:clamp(2.75rem,5.4vw,4.65rem);margin-bottom:26px}
 .hero__location{font-size:.67rem;margin-bottom:26px}
 .hero__lead{font-size:1rem}
-.hero__visual{aspect-ratio:1 / 1.08}
-.hero__visual picture img{object-position:center}
-.hero__signature{left:-23px;right:auto;bottom:35px;padding:16px 21px;min-width:285px}
-.hero__signature>img{width:32px}
-.hero__signature>span{font-size:1rem}
-.hero__signature small{font-size:.7rem}
+.hero__visual{margin-block:16px}
+.hero__caption{padding:22px 24px}
+.hero__brand{font-size:1.0625rem}
+.hero__brand>span{font-size:.5rem}
+.hero__promise{font-size:1.15rem}
 .hero__trust{grid-template-columns:1fr 1fr 1fr;gap:32px;padding-block:26px;margin-top:40px}
 .hero__trust>p{display:block}
 .hero__stat strong{font-size:2.8rem}
@@ -89,7 +86,6 @@ import { site } from '../data/site.ts';
 .hero__location{font-size:.75rem}
 .hero__trust{grid-template-columns:1.1fr 1fr 1fr 1.1fr}
 .hero__about{display:flex}
-.hero__edition{display:block;position:absolute;right:18px;top:20px;writing-mode:vertical-rl;font-size:.57rem;letter-spacing:.13em;color:#fff;text-shadow:0 1px 6px #17324b}
 }
 @media(max-width:370px){.hero__actions{gap:17px}.hero__cta{padding-inline:16px;gap:12px}.hero__note{font-size:.7rem}}
 </style>

@@ -9,6 +9,8 @@ const OUT = 'public/images';
 
 // crop: dio izvorne slike koji se zadržava (u pikselima izvornika).
 const jobs = [
+  // Namjenski ACCOUNT vizual, razvijen iz originalnog znaka agencije.
+  { name: 'account-identitet', from: 'hero-v4/account-identitet', ext: 'jpg', widths: [480, 800, 1448], quality: { webp: 85, avif: 60 } },
   // Ilustrativna fotografija rada, originalni znak prikazan je odvojeno u HTML-u.
   { name: 'account-rad', from: 'hero-v3/account-rad', ext: 'jpg', widths: [480, 800, 1122], quality: { webp: 80, avif: 55 } },
   // Stvarna fotografija Starog mosta (Alen Kajimović, CC0 1.0) — O nama.
@@ -41,8 +43,8 @@ for (const job of jobs) {
 }
 
 // OG slika za društvene mreže (1200×630), JPEG radi kompatibilnosti.
-await sharp(path.join(SRC, 'hero-v3/account-rad.jpg'))
-  .resize({ width: 1200, height: 630, fit: 'cover', position: 'centre' })
+await sharp(path.join(SRC, 'hero-v4/account-identitet.jpg'))
+  .resize({ width: 1200, height: 630, fit: 'contain', background: '#edf3f8' })
   .jpeg({ quality: 80, mozjpeg: true })
   .toFile(path.join(OUT, 'og-account.jpg'));
 console.log(`og-account.jpg: ${await kb(path.join(OUT, 'og-account.jpg'))} KB`);

@@ -3,30 +3,28 @@ import Icon from './Icon.astro';
 import { site } from '../data/site.ts';
 ---
 <section class="hero" aria-labelledby="hero-naslov" data-home-hero>
-  <div class="container hero__grid">
+  <picture class="hero__backdrop" aria-hidden="true">
+    <source media="(min-width: 900px)" type="image/avif" srcset="/images/account-prostor-desktop-1280.avif 1280w, /images/account-prostor-desktop-1920.avif 1920w" sizes="100vw" />
+    <source media="(min-width: 900px)" type="image/webp" srcset="/images/account-prostor-desktop-1280.webp 1280w, /images/account-prostor-desktop-1920.webp 1920w" sizes="100vw" />
+    <source type="image/avif" srcset="/images/account-prostor-mobile-480.avif 480w, /images/account-prostor-mobile-940.avif 940w" sizes="100vw" />
+    <img src="/images/account-prostor-mobile-940.webp" srcset="/images/account-prostor-mobile-480.webp 480w, /images/account-prostor-mobile-940.webp 940w" sizes="100vw" width="940" height="1672" alt="" fetchpriority="high" decoding="async" />
+  </picture>
+  <div class="hero__veil" aria-hidden="true"></div>
+  <div class="container hero__stage">
     <div class="hero__copy">
       <p class="hero__location"><span></span> RAČUNOVODSTVO · MOSTAR</p>
       <h1 id="hero-naslov">Manje brige.<br /><em>Više prostora</em><br />za vaš posao.</h1>
-      <p class="hero__lead">Vi gradite posao. Mi vodimo knjige, pripremamo porezne prijave i pomažemo vam da odlučujete sigurnije.</p>
+      <p class="hero__lead">Vodimo poslovne knjige i porezne prijave, uz podršku za sigurnije poslovne odluke.</p>
       <div class="hero__actions">
         <a class="hero__cta" href="/kontakt#upit" data-hero-cta>Zatražite ponudu <Icon name="arrow" size={20} /></a>
         <a class="hero__link" href="#usluge">Naše usluge <Icon name="arrow" size={18} /></a>
       </div>
       <p class="hero__note">Za firme, obrte i preduzetnike — od prvog koraka.</p>
     </div>
-    <figure class="hero__visual">
-      <picture>
-        <source type="image/avif" srcset="/images/account-identitet-480.avif 480w, /images/account-identitet-800.avif 800w, /images/account-identitet-1448.avif 1448w" sizes="(min-width: 1200px) 530px, (min-width: 768px) 46vw, calc(100vw - 40px)" />
-        <img src="/images/account-identitet-800.webp" srcset="/images/account-identitet-480.webp 480w, /images/account-identitet-800.webp 800w, /images/account-identitet-1448.webp 1448w" sizes="(min-width: 1200px) 530px, (min-width: 768px) 46vw, calc(100vw - 40px)" width="1448" height="1086" alt="ACCOUNT znak oblikovan od precizno složenih papirnih slojeva i plavih ploha" fetchpriority="high" decoding="async" />
-      </picture>
-      <figcaption class="hero__caption">
-        <span class="hero__brand">ACCOUNT<span>RAČUNOVODSTVENA AGENCIJA</span></span>
-        <span class="hero__promise">Svaka stavka<br />na svom mjestu.</span>
-      </figcaption>
-    </figure>
+    <p class="hero__signature" aria-hidden="true">Svaka stavka<br /><em>na svom mjestu.</em></p>
   </div>
-  <div class="container">
-    <div class="hero__trust">
+  <div class="hero__trust-wrap">
+    <div class="container hero__trust">
       <p>Tu smo za vaš<br /><strong>sljedeći korak.</strong></p>
       {site.stats.map(s => <div class="hero__stat"><strong>{s.value}</strong><span>{s.label}</span></div>)}
       <a href="/o-nama" class="hero__about">Upoznajte ACCOUNT <Icon name="arrow" size={20}/></a>
@@ -34,58 +32,61 @@ import { site } from '../data/site.ts';
   </div>
 </section>
 <style>
-.hero{background:#f7f9fb;overflow:hidden;padding-top:clamp(24px,3.8vw,58px);color:var(--c-navy-950)}
-.hero__grid{display:grid;gap:28px;align-items:center}
-.hero__copy{padding-bottom:4px}
-.hero__location{display:flex;align-items:center;gap:10px;font-size:.6875rem;letter-spacing:.16em;font-weight:800;color:#426079;margin:0 0 20px}
-.hero__location span{width:7px;height:7px;background:#008ed3;border-radius:50%}
-.hero h1{font-size:clamp(2.35rem,10.1vw,3.1rem);line-height:1.07;letter-spacing:-.055em;font-weight:650;margin:0 0 20px;text-wrap:initial;color:#10263c}
-.hero h1 em{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.055em;color:#176caf}
-.hero__lead{font-size:.975rem;line-height:1.65;color:#4d5e6e;max-width:29rem;margin:0 0 23px}
+.hero{position:relative;isolation:isolate;overflow:hidden;background:#e5eef7;color:#10263c}
+.hero__backdrop,.hero__veil{position:absolute;inset:0;z-index:-2;pointer-events:none}
+.hero__backdrop{display:block}
+.hero__backdrop img{display:block;width:100%;height:100%;object-fit:cover;object-position:62% center}
+.hero__veil{z-index:-1;background:linear-gradient(180deg,rgba(246,250,253,.64) 0%,rgba(246,250,253,.58) 39%,rgba(246,250,253,.12) 56%,transparent 69%,rgba(246,250,253,.35) 100%)}
+.hero__stage{position:relative;min-height:max(650px,calc(100svh - 158px));padding-top:30px;padding-bottom:280px}
+.hero__copy{position:relative;max-width:36rem}
+.hero__location{display:flex;align-items:center;gap:9px;font-size:.6875rem;letter-spacing:.14em;font-weight:800;color:#35566e;margin:0 0 20px}
+.hero__location span{width:6px;height:6px;background:#008ed3;border-radius:50%}
+.hero h1{font-size:clamp(2.3rem,10.1vw,3.15rem);line-height:1.06;letter-spacing:-.055em;font-weight:650;margin:0 0 19px;text-wrap:initial;color:#10263c}
+.hero h1 em{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.055em;color:#145f99}
+.hero__lead{font-size:.975rem;line-height:1.65;color:#334f65;max-width:27rem;margin:0 0 23px;text-wrap:pretty}
 .hero__actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
-.hero__cta{display:inline-flex;align-items:center;justify-content:space-between;gap:20px;background:#1269ad;color:#fff;text-decoration:none;font-weight:750;font-size:.875rem;padding:15px 20px;border-radius:6px;min-height:50px;transition:background .18s}
-.hero__cta:hover{background:#0a4d83;color:#fff}
-.hero__link{display:inline-flex;align-items:center;gap:7px;color:#17324b;font-size:.8125rem;font-weight:700;text-decoration:none;padding-block:12px}
+.hero__cta{display:inline-flex;align-items:center;justify-content:space-between;gap:20px;background:#1269ad;color:#fff;text-decoration:none;font-weight:750;font-size:.875rem;padding:15px 20px;border-radius:5px;min-height:50px;box-shadow:0 5px 20px #174c7014;transition:background .18s,transform .18s}
+.hero__cta:hover{background:#0a4d83;color:#fff;transform:translateY(-2px)}
+.hero__link{display:inline-flex;align-items:center;gap:7px;color:#17324b;font-size:.8125rem;font-weight:750;text-decoration:none;padding-block:12px}
 .hero__link:hover{text-decoration:underline}
-.hero__note{font-size:.75rem;color:#667887;margin:14px 0 0}
-.hero__visual{position:relative;min-width:0;margin:0;overflow:hidden;border-radius:8px;background:#e8f0f6;border:1px solid #dce6ee;isolation:isolate}
-.hero__visual picture{display:block;overflow:hidden;aspect-ratio:4 / 3}
-.hero__visual picture img{display:block;width:100%;height:100%;object-fit:contain}
-.hero__caption{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:17px 20px;background:#eef4f8;border-top:1px solid #d5e1ea}
-.hero__brand{font-size:.875rem;font-weight:800;letter-spacing:.19em;color:#10263c;line-height:1.3}
-.hero__brand>span{display:block;font-size:.4375rem;letter-spacing:.085em;font-weight:650;color:#4b6579;margin-top:4px}
-.hero__promise{font-family:Georgia,'Times New Roman',serif;font-size:.95rem;line-height:1.3;color:#284c68;text-align:right}
-.hero__trust{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:20px;padding:24px 0 28px;margin-top:24px;border-top:1px solid #d7e0e7}
-.hero__trust>p{display:none;font-size:.85rem;line-height:1.55;margin:0;color:#5b6d7c}
+.hero__note{display:none;font-size:.75rem;color:#3f5a6e;margin:19px 0 0}
+.hero__signature{position:absolute;left:var(--gutter);bottom:31px;margin:0;font-size:.7rem;font-weight:650;line-height:1.5;color:#35566e}
+.hero__signature em{font-family:Georgia,'Times New Roman',serif;font-size:1rem;font-weight:400}
+.hero__trust-wrap{position:relative;background:rgba(247,250,252,.83);border-top:1px solid rgba(105,135,157,.25)}
+.hero__trust{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:20px;padding-block:22px}
+.hero__trust>p{display:none;font-size:.85rem;line-height:1.55;margin:0;color:#405f75}
 .hero__trust>p strong{color:#153047;font-weight:700}
 .hero__stat{display:flex;align-items:center;gap:10px}
 .hero__stat strong{font-size:2rem;letter-spacing:-.06em;font-weight:700;line-height:1}
-.hero__stat span{max-width:7rem;font-size:.72rem;line-height:1.4;color:#536879}
+.hero__stat span{max-width:7rem;font-size:.72rem;line-height:1.4;color:#405f75}
 .hero__about{display:none;align-items:center;justify-content:flex-end;gap:14px;font-size:.8125rem;color:#17324b;font-weight:700;text-decoration:none}
-@media(min-width:768px){
-.hero__grid{grid-template-columns:1.04fr 1fr;gap:40px}
-.hero h1{font-size:clamp(2.75rem,5.4vw,4.65rem);margin-bottom:26px}
-.hero__location{font-size:.67rem;margin-bottom:26px}
-.hero__lead{font-size:1rem}
-.hero__visual{margin-block:16px}
-.hero__caption{padding:22px 24px}
-.hero__brand{font-size:1.0625rem}
-.hero__brand>span{font-size:.5rem}
-.hero__promise{font-size:1.15rem}
-.hero__trust{grid-template-columns:1fr 1fr 1fr;gap:32px;padding-block:26px;margin-top:40px}
-.hero__trust>p{display:block}
-.hero__stat strong{font-size:2.8rem}
-.hero__stat span{font-size:.85rem}
+@media(min-width:600px) and (max-width:899px){
+.hero__stage{min-height:880px;padding-top:48px;padding-bottom:390px}
+.hero__copy{max-width:32rem}
+.hero h1{font-size:3.65rem}
+.hero__backdrop img{object-position:center 62%}
+.hero__signature{font-size:.85rem}
 }
-@media(min-width:1100px){
-.hero__grid{gap:75px}
-.hero__copy{padding-top:4px}
-.hero__lead{font-size:1.0625rem;max-width:27rem;margin-bottom:28px}
-.hero__cta{font-size:.9375rem;padding:17px 24px}
+@media(min-width:900px){
+.hero__backdrop img{object-position:72% center}
+.hero__veil{background:linear-gradient(90deg,rgba(248,251,253,.7) 0%,rgba(248,251,253,.57) 33%,rgba(248,251,253,.1) 57%,transparent 72%)}
+.hero__stage{min-height:max(590px,calc(100svh - 212px));display:flex;align-items:center;padding-top:55px;padding-bottom:64px}
+.hero__copy{width:50%;max-width:39rem}
+.hero h1{font-size:clamp(3.15rem,5.5vw,5rem);margin-bottom:25px}
+.hero__location{font-size:.73rem;margin-bottom:27px}
+.hero__lead{font-size:1.0625rem;max-width:26rem;margin-bottom:27px}
+.hero__cta{font-size:.9375rem;padding:17px 23px}
 .hero__link{font-size:.875rem}
-.hero__location{font-size:.75rem}
-.hero__trust{grid-template-columns:1.1fr 1fr 1fr 1.1fr}
+.hero__note{display:block}
+.hero__signature{left:auto;right:var(--gutter);bottom:22px;text-align:right;font-size:.68rem}
+.hero__signature em{font-size:1.1rem}
+.hero__trust{grid-template-columns:1.1fr 1fr 1fr 1.1fr;gap:32px;min-height:100px;padding-block:25px}
+.hero__trust>p{display:block}
+.hero__stat strong{font-size:2.65rem}
+.hero__stat span{font-size:.8125rem}
 .hero__about{display:flex}
 }
-@media(max-width:370px){.hero__actions{gap:17px}.hero__cta{padding-inline:16px;gap:12px}.hero__note{font-size:.7rem}}
+@media(min-width:1600px){.hero__stage{min-height:740px}.hero__backdrop img{object-position:center}}
+@media(max-width:370px){.hero__actions{gap:17px}.hero__cta{padding-inline:16px;gap:12px}}
+@media(prefers-reduced-motion:reduce){.hero__cta{transition:none}.hero__cta:hover{transform:none}}
 </style>

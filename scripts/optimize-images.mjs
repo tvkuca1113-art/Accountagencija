@@ -9,6 +9,9 @@ const OUT = 'public/images';
 
 // crop: dio izvorne slike koji se zadržava (u pikselima izvornika).
 const jobs = [
+  // Dvije kompozicije iste scene za pozadinu cijelog početnog ekrana.
+  { name: 'account-prostor-desktop', from: 'hero-v5/account-prostor-desktop', ext: 'jpg', widths: [1280, 1920], quality: { webp: 85, avif: 60 } },
+  { name: 'account-prostor-mobile', from: 'hero-v5/account-prostor-mobile', ext: 'jpg', widths: [480, 940], quality: { webp: 85, avif: 60 } },
   // Namjenski ACCOUNT vizual, razvijen iz originalnog znaka agencije.
   { name: 'account-identitet', from: 'hero-v4/account-identitet', ext: 'jpg', widths: [480, 800, 1448], quality: { webp: 85, avif: 60 } },
   // Ilustrativna fotografija rada, originalni znak prikazan je odvojeno u HTML-u.

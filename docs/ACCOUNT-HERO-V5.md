@@ -14,6 +14,15 @@ Ograničen je pokret dugmeta i poštuje se prefers-reduced-motion. Pozadina se n
 - [Pentagram / GSA](https://www.pentagram.com/work/gsa): vlastiti simbol proširen u vizuelno okruženje brenda.
 - [Devket / Future Shore](https://www.devket.com/work/future-shore): opis pune širine početnog vizuala uz pregledne usluge. Ovo je istražena studija, ne tvrdnja o univerzalnom poretku najboljih agencija.
 
+## Provjera objave
+
+- `npm run check`: 0 grešaka, 0 upozorenja, 0 napomena.
+- `npm run build`: uspješno; `git diff --check`: bez problema.
+- Vercel objava `c06caa5` uspješna.
+- Pregledan desktop prikaz i responzivni prikazi na 360, 390, 768 i 1024 px. Manje širine pregledane su kroz iframe; nije provjeren fizički iPhone.
+- Dugme „Zatražite ponudu” vodi na `/kontakt#upit`, provjereno klikom na objavljenoj stranici.
+- Snimci stvarne objave: `docs/snimci-v5/pocetna-desktop.jpg` i `docs/snimci-v5/pocetna-mobitel.jpg`.
+
 ## Izvorne slike
 
 `source-images/hero-v5/account-prostor-desktop.jpg` i `source-images/hero-v5/account-prostor-mobile.jpg`. Generisane ugrađenim alatom za slike kao prilagodbe prethodnog odobrenog motiva; nisu fotografije stvarnog predmeta ili kancelarije.

@@ -2,7 +2,6 @@
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import ResponsiveImage from '../../components/ResponsiveImage.astro';
 import CtaBand from '../../components/CtaBand.astro';
 import { articles, formatDate, type Article } from '../../data/articles.ts';
 import { articleSchema, breadcrumbSchema } from '../../lib/schema.ts';
@@ -24,7 +23,6 @@ const more = articles.filter((a) => a.slug !== article.slug);
   title={`${article.title} | Savjeti ACCOUNT`}
   description={article.description}
   ogType="article"
-  ogImage={`/images/${article.image}-1200.webp`}
   jsonLd={[articleSchema(article), breadcrumbSchema(crumbs)]}
 >
   <article>
@@ -48,7 +46,6 @@ const more = articles.filter((a) => a.slug !== article.slug);
     </header>
 
     <div class="container article-layout">
-      <ResponsiveImage name={article.image} alt={article.imageAlt} sizes="(min-width: 800px) 720px, 100vw" priority class="media article-media" />
       <div class="prose article-body" set:html={article.body} />
 
       <aside class="article-related" aria-labelledby="povezano-naslov">
@@ -103,11 +100,8 @@ const more = articles.filter((a) => a.slug !== article.slug);
     font-size: 0.9rem;
     color: var(--c-ink-muted);
   }
-  :global(.media.article-media) {
-    aspect-ratio: 16 / 9;
-    margin-block: 40px;
-  }
   .article-body {
+    margin-top: clamp(32px, 4vw, 56px);
     font-size: 1.0625rem;
   }
   .article-body :global(h2) {

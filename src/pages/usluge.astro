@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import ResponsiveImage from '../components/ResponsiveImage.astro';
+import ServiceMotif from '../components/ServiceMotif.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import ProcessSection from '../components/ProcessSection.astro';
 import CtaBand from '../components/CtaBand.astro';
@@ -36,7 +36,12 @@ const crumbs = [
         {
           services.map((s, i) => (
             <li class:list={['svc-row', { 'svc-row--flip': i % 2 === 1 }]}>
-              <ResponsiveImage name={s.image} alt={s.imageAlt} sizes="(min-width: 900px) 540px, 100vw" class="media svc-row__media" />
+              <div class="svc-row__motif">
+                <span class="svc-row__num" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <ServiceMotif slug={s.slug} />
+              </div>
               <div class="svc-row__body">
                 <h2>
                   <a href={`/${s.slug}`}>{s.title}</a>
@@ -85,12 +90,24 @@ const crumbs = [
       grid-template-columns: 1fr 1fr;
       gap: 64px;
     }
-    .svc-row--flip :global(.media.svc-row__media) {
+    .svc-row--flip .svc-row__motif {
       order: 2;
     }
   }
-  :global(.media.svc-row__media) {
-    aspect-ratio: 4 / 3;
+  .svc-row__motif {
+    position: relative;
+    padding: clamp(28px, 4vw, 48px);
+    border-radius: var(--radius-lg);
+    background: var(--c-stone);
+  }
+  .svc-row__num {
+    position: absolute;
+    left: clamp(20px, 3vw, 32px);
+    top: clamp(16px, 2.5vw, 24px);
+    font-size: 1.5rem;
+    font-weight: 300;
+    color: var(--c-blue-600);
+    letter-spacing: -0.02em;
   }
   .svc-row h2 {
     font-size: clamp(1.625rem, 1.35rem + 1vw, 2.25rem);

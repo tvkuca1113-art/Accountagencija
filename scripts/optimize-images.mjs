@@ -8,20 +8,12 @@ const SRC = 'source-images';
 const OUT = 'public/images';
 
 // crop: dio izvorne slike koji se zadržava (u pikselima izvornika).
-// Izvornici su obrađeni skriptom scripts/zamijeni-logo.py (originalni znak umjesto generisanog).
 const jobs = [
-  // Hero 1672×941: na desktopu cijela scena (tamni zid lijevo je prostor za naslov),
-  // na mobitelu 4:3 kadar s rukama i fasciklom.
-  { name: 'account-hero', widths: [640, 960, 1280, 1672], quality: { webp: 80, avif: 60 } },
-  { name: 'account-hero-mobile', from: 'account-hero', crop: { left: 418, top: 0, width: 1254, height: 941 }, widths: [480, 800, 1254], quality: { webp: 80, avif: 60 } },
-  // Kartice i uvodi podstranica, 4:3 — bez rezanja.
-  ...[
-    'account-knjigovodstvo',
-    'account-savjetovanje',
-    'account-inostrana-preduzeca',
-    'account-registracija',
-    'account-poslovni-projekti',
-  ].map((name) => ({ name, widths: [480, 800, 1200], quality: { webp: 78, avif: 58 } })),
+  // Naslovna konceptualna fotografija (hercegovački kamen i tamnoplavi papir), 1672×941.
+  // Desktop: cijela scena, tamni zid lijevo je prostor za tipografiju.
+  { name: 'account-hero-kamen', from: 'hero-koncept/ACCOUNT-hero-koncept-bez-mosta', widths: [640, 960, 1280, 1672], quality: { webp: 80, avif: 60 } },
+  // Mobitel i tablet: kadar 4:3 s prelazom zid–kamen i papirom.
+  { name: 'account-hero-kamen-mobile', from: 'hero-koncept/ACCOUNT-hero-koncept-bez-mosta', crop: { left: 700, top: 150, width: 972, height: 729 }, widths: [480, 800, 972], quality: { webp: 80, avif: 60 } },
   // Stvarna fotografija Starog mosta (Alen Kajimović, CC0 1.0) — O nama.
   { name: 'mostar-stari-most', from: 'mostar/mostar-originalna-fotografija', ext: 'jpeg', widths: [480, 800, 1200], quality: { webp: 78, avif: 58 } },
 ];
@@ -52,8 +44,8 @@ for (const job of jobs) {
 }
 
 // OG slika za društvene mreže (1200×630), JPEG radi kompatibilnosti.
-await sharp(path.join(SRC, 'account-hero.png'))
-  .resize({ width: 1200, height: 630, fit: 'cover', position: 'right' })
-  .jpeg({ quality: 78, mozjpeg: true })
+await sharp(path.join(SRC, 'hero-koncept/ACCOUNT-hero-koncept-bez-mosta.png'))
+  .resize({ width: 1200, height: 630, fit: 'cover', position: 'centre' })
+  .jpeg({ quality: 80, mozjpeg: true })
   .toFile(path.join(OUT, 'og-account.jpg'));
 console.log(`og-account.jpg: ${await kb(path.join(OUT, 'og-account.jpg'))} KB`);

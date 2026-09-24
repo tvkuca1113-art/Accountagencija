@@ -14,9 +14,15 @@ const crumbs = [
 ];
 
 const principles = [
-  { title: 'Preciznost', text: 'Uredne evidencije i provjerene brojke osnova su svake dobre odluke.' },
-  { title: 'Jasan govor', text: 'Objašnjavamo razumljivo, bez nepotrebnog stručnog žargona.' },
-  { title: 'Dostupnost', text: 'Znate kome se javljate i kako do nas: telefonom, e-mailom ili uživo u Mostaru.' },
+  {
+    title: 'Dogovor prije početka',
+    text: 'Obim posla, način i rokove dostave dokumentacije te dinamiku izvještavanja dogovaramo na početku saradnje.',
+  },
+  { title: 'Dokumentacija i e-mailom', text: 'Dokumentaciju možete dostavljati digitalno, e-mailom, u dogovorenom formatu.' },
+  {
+    title: 'Direktan kontakt',
+    text: `Javljate se direktno agenciji: telefonom na ${site.phones[0].display} ili ${site.phones[1].display}, e-mailom ili uživo u Mostaru.`,
+  },
 ];
 ---
 
@@ -90,9 +96,9 @@ const principles = [
     </div>
   </section>
 
-  <section class="section section--tint" aria-labelledby="principi-naslov">
+  <section class="section surface-stone" aria-labelledby="principi-naslov">
     <div class="container">
-      <h2 id="principi-naslov">Do čega nam je stalo</h2>
+      <h2 id="principi-naslov">Kako izgleda saradnja</h2>
       <ul class="principles">
         {
           principles.map((p) => (

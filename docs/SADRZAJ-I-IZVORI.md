@@ -76,21 +76,11 @@ Umjesto fotografija osoba prikazuju se inicijali.
 - [ ] Verifikacijske meta oznake sa starog weba (`site.verification` u `src/data/site.ts`).
 - [ ] Tekst politike privatnosti (po potrebi uz pravnog savjetnika).
 
-## 6. Slike (druga serija, dostavljena 23. 9. 2026.)
+## 6. Slike (treća runda, 24. 9. 2026.)
 
-Izvornici druge serije su u `source-images/v2-izvornici/` (nepromijenjeni). Generisani znak na fasciklama nije bio vjeran originalu, pa je skriptom `scripts/zamijeni-logo.py` zamijenjen originalnim znakom: generisani znak je uklonjen (rekonstrukcija osvjetljenja i teksture kože iz okoline), a originalni znak iz `source-images/brand/account-znak-original.png` preslikan je u perspektivu fascikla i prilagođen osvjetljenju. Oblik i boje znaka nisu mijenjani. Obrađene slike su u `source-images/account-*.png`, web varijante (AVIF/WebP, više širina) u `public/images/`.
+- **Početna:** `ACCOUNT-hero-koncept-bez-mosta.png` — stilizovana konceptualna fotografija hercegovačkog kamena i tamnoplavog papira. Nije dokumentarna fotografija prostora agencije (napomena u podnožju). Logo nije ucrtan u fotografiju; originalni znak je zaseban element u zaglavlju i podnožju.
+- **Stranice usluga i pregled usluga:** umjesto inscenirane scene svaka usluga ima vlastiti ravni motiv izveden iz znaka (`src/components/ServiceMotif.astro`): poslovna knjiga, dva trokuta (savjet), globus s oznakom (inostrana preduzeća), stepenice (registracija), plan s putanjom (projekti).
+- **Savjeti:** bez fotografija, urednička lista.
+- **O nama:** stvarna fotografija Starog mosta (Alen Kajimović, CC0 1.0, https://commons.wikimedia.org/wiki/File:Old_Bridge_Mostar_(125653963).jpeg), s potpisom; izvornik u `source-images/mostar/`.
 
-| # | Motiv | Upotreba |
-|---|---|---|
-| 1 | Osoba otvara plavu fasciklu; tamni prostor lijevo | hero početne (desktop cijela scena, mobitel kadar 4:3) |
-| 2 | Evidencije uz kalkulator i račune | izdvojena usluga na početnoj, /racunovodstvo |
-| 3 | Razgovor nad jednostavnim finansijskim prikazom | sekcija „Zašto nam vjerovati“ na početnoj, /konzultantske-usluge |
-| 4 | Poslovni razgovor; Mostar samo na maloj uokvirenoj fotografiji | /zastupanje-inostranih-poduzeca |
-| 5 | Ključ i pripremljena dokumentacija | /registracija-firmi-obrta-udruzenja |
-| 6 | Planiranje kroz bilježnicu i kartice | /poslovni-projekti |
-
-Početna koristi tri fotografije (1, 2, 3). Slika 3 ima prozirnu vinjetu; spojena je s tamnoplavom pozadinom stranice.
-
-Stvarna fotografija Starog mosta (Alen Kajimović, CC0 1.0, https://commons.wikimedia.org/wiki/File:Old_Bridge_Mostar_(125653963).jpeg) je na stranici O nama, s potpisom; izvornik u `source-images/mostar/`.
-
-Sve poslovne fotografije su ilustrativne scene; stranica ih ne predstavlja kao stvarno osoblje ili prostor agencije (alt opisi i napomena u podnožju). Brojke i tekst na „Mjesečnom pregledu“ izrađeni su u HTML/CSS-u, ne u fotografiji.
+Druga serija (šest inscenirana stola s fasciklama, dostavljena 23. 9. 2026.) zamijenjena je prema uputi „ACCOUNT-Claude-Code-redizajn-prompt“ (izbjeći ponavljane inscenirane stolove, fascikle i kalkulatore). Izvornici i obrađene verzije s originalnim znakom ostaju u `source-images/v2-izvornici/` i `source-images/account-*.png`.

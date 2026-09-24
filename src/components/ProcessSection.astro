@@ -1,86 +1,70 @@
 ---
-// Saradnja u tri koraka: svijetla sekcija s kratkim koracima povezanim linijom i tamnim panelom
-// s ilustrativnim mjesečnim pregledom (HTML/CSS, bez teksta u fotografiji).
-import ReportCard from './ReportCard.astro';
-
+// Saradnja u tri koraka: kratki koraci na jednoj liniji (desktop) ili vertikalno (mobitel).
 const steps = [
-  { title: 'Razgovor o potrebama', text: 'Upoznajemo vaše poslovanje i očekivanja.' },
-  { title: 'Dogovor o obimu i dostavi dokumentacije', text: 'Šta preuzimamo i kako dostavljate dokumentaciju, i e-mailom.' },
-  { title: 'Redovna obrada i komunikacija', text: 'Knjiženje, prijave i izvještaji, uz redovnu komunikaciju.' },
+  { title: 'Razgovor o potrebama', text: 'Upoznajemo vaše poslovanje, dosadašnje evidencije i ono što očekujete.' },
+  { title: 'Dogovor o obimu i dostavi', text: 'Dogovaramo šta preuzimamo, rokove i način dostave dokumentacije, i e-mailom.' },
+  { title: 'Redovna obrada i komunikacija', text: 'Knjiženje, prijave i periodični izvještaji, uz redovnu komunikaciju.' },
 ];
 ---
 
-<section class="section process" aria-labelledby="saradnja-naslov">
-  <div class="container process__grid">
-    <div data-reveal>
+<section class="section surface-stone process" aria-labelledby="saradnja-naslov">
+  <div class="container">
+    <div class="process__head" data-reveal>
       <p class="eyebrow">Saradnja</p>
       <h2 id="saradnja-naslov">Saradnja u tri koraka</h2>
-      <p class="process__lead">Jasan početak i dogovorena pravila, pa se vi možete baviti poslom.</p>
-      <ol class="process__steps">
-        {
-          steps.map((s, i) => (
-            <li>
-              <span class="process__num" aria-hidden="true">
-                {i + 1}
-              </span>
-              <div>
-                <h3>{s.title}</h3>
-                <p>{s.text}</p>
-              </div>
-            </li>
-          ))
-        }
-      </ol>
+      <p>Jasan početak i dogovorena pravila, pa se vi možete baviti poslom.</p>
     </div>
-    <div class="process__panel">
-      <ReportCard />
-    </div>
+    <ol class="process__steps" data-reveal>
+      {
+        steps.map((s, i) => (
+          <li>
+            <span class="process__num" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
   </div>
 </section>
 
 <style>
-  .process__grid {
-    display: grid;
-    gap: 40px;
-    align-items: center;
+  .process__head {
+    max-width: 40rem;
+    margin-bottom: clamp(32px, 4vw, 56px);
   }
-  @media (min-width: 900px) {
-    .process__grid {
-      grid-template-columns: 1fr 1fr;
-      gap: 72px;
-    }
-  }
-  .process__lead {
+  .process__head p:last-child {
+    margin: 0;
     color: var(--c-ink-muted);
-    max-width: 30rem;
   }
   .process__steps {
     position: relative;
     list-style: none;
-    margin: 32px 0 0;
+    margin: 0;
     padding: 0;
     display: grid;
-    gap: 28px;
-  }
-  /* Linija koja povezuje korake */
-  .process__steps::before {
-    content: '';
-    position: absolute;
-    left: 21px;
-    top: 22px;
-    bottom: 22px;
-    width: 2px;
-    background: linear-gradient(180deg, var(--c-blue-500), var(--c-blue-200));
+    gap: 32px;
   }
   .process__steps li {
     position: relative;
-    display: grid;
-    grid-template-columns: 44px 1fr;
-    gap: 18px;
-    align-items: start;
+    padding-left: 64px;
+  }
+  /* Vertikalna linija između koraka (mobitel) */
+  .process__steps li:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 21px;
+    top: 48px;
+    bottom: -28px;
+    width: 2px;
+    background: var(--c-stone-line);
   }
   .process__num {
-    position: relative;
+    position: absolute;
+    left: 0;
+    top: 0;
     display: grid;
     place-items: center;
     width: 44px;
@@ -88,22 +72,46 @@ const steps = [
     border-radius: 50%;
     background: var(--c-navy-900);
     color: #fff;
+    font-size: 0.875rem;
     font-weight: 800;
-    box-shadow: 0 0 0 6px #fff;
+    letter-spacing: 0.04em;
   }
   .process__steps h3 {
-    margin: 8px 0 2px;
-    font-size: 1.125rem;
+    margin: 8px 0 6px;
+    font-size: 1.1875rem;
   }
   .process__steps p {
     margin: 0;
+    max-width: 22rem;
     color: var(--c-ink-muted);
   }
-  .process__panel {
-    padding: clamp(24px, 4vw, 48px);
-    border-radius: var(--radius-lg);
-    background:
-      radial-gradient(70% 60% at 100% 0%, rgb(0 160 236 / 0.22) 0%, transparent 70%),
-      var(--c-navy-900);
+  @media (min-width: 900px) {
+    .process__steps {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+    .process__steps li {
+      padding: 68px 0 0;
+    }
+    /* Horizontalna linija na kojoj stoje brojevi */
+    .process__steps li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: -40px;
+      top: 21px;
+      height: 2px;
+      background: var(--c-stone-line);
+    }
+    .process__steps li:last-child::before {
+      right: 0;
+    }
+    .process__steps li:not(:last-child)::after {
+      display: none;
+    }
+    .process__num {
+      z-index: 1;
+      box-shadow: 0 0 0 8px var(--c-stone);
+    }
   }
 </style>

@@ -1,4 +1,5 @@
-/* ACCOUNT — dizajnerski sistem.
+/* ACCOUNT — dizajnerski sistem: tamnoplava i plava iz izvornog znaka, tople kamene neutralne površine,
+   urednička tipografija i ravni detalji izvedeni iz znaka (trokut s tamnijom lijevom i svjetlijom desnom polovinom).
    Plavi tonovi preuzeti su iz originalnog znaka: #00A0EC (svijetla ploha), #187CC4 (tamna ploha), #14B8EC (akcent).
    Za tekst i dugmad koristi se nešto tamnija nijansa (#1D6DB3) radi kontrasta s bijelom ≥ 4,5:1. */
 
@@ -34,13 +35,16 @@
   --c-blue-200: #bcdcf5;
   --c-blue-100: #e4f1fb;
   --c-cyan-400: #14b8ec; /* akcent iz znaka, u maloj količini */
-  --c-bg: #f3f6f9;
-  --c-cream: #f6f2eb; /* prirodna krem površina */
+  --c-ink-950: #0e1420; /* tamni zid s naslovne fotografije */
+  --c-stone: #f3eee6; /* topla kamena površina */
+  --c-stone-line: #ddd3c3;
+  --c-bg: #f3eee6;
+  --c-cream: #f6f2eb;
   --c-cream-line: #e6ddcf;
   --c-surface: #ffffff;
   --c-ink: #0f2340;
   --c-ink-muted: #475a74;
-  --c-line: #d9e3ee;
+  --c-line: #e1dbd0;
   --c-success: #17784a;
   --c-danger: #b42318;
   --c-focus: #0b72c9;
@@ -48,8 +52,8 @@
   --font-sans: 'Manrope Variable', 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
   --fs-body: 1.0625rem; /* 17 px */
   --fs-small: 0.9375rem;
-  --fs-h1: clamp(2.25rem, 1.55rem + 2.6vw, 4.25rem); /* 36 → 68 px */
-  --fs-h2: clamp(1.75rem, 1.4rem + 1.3vw, 2.625rem);
+  --fs-h1: clamp(2.25rem, 1.55rem + 2.6vw, 4rem); /* 36 → 64 px */
+  --fs-h2: clamp(1.875rem, 1.45rem + 1.6vw, 3rem); /* 30 → 48 px */
   --fs-h3: clamp(1.1875rem, 1.1rem + 0.35vw, 1.375rem);
 
   --radius-lg: 20px;
@@ -123,11 +127,13 @@ h4 {
 
 h1 {
   font-size: var(--fs-h1);
-  letter-spacing: -0.03em;
-  line-height: 1.06;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
 }
 h2 {
   font-size: var(--fs-h2);
+  letter-spacing: -0.03em;
+  line-height: 1.08;
 }
 h3 {
   font-size: var(--fs-h3);
@@ -212,6 +218,9 @@ a:hover {
 .surface-cream {
   background: var(--c-cream);
 }
+.surface-stone {
+  background: var(--c-stone);
+}
 .section--navy {
   background: var(--c-navy-900);
   color: #d9e6f5;
@@ -235,12 +244,14 @@ a:hover {
   text-transform: uppercase;
   color: var(--c-blue-600);
 }
+/* Mali trokut izveden iz znaka: tamnija lijeva i svjetlija desna polovina */
 .eyebrow::before {
   content: '';
-  width: 22px;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--c-blue-500);
+  flex: none;
+  width: 13px;
+  height: 12px;
+  background: linear-gradient(90deg, var(--c-blue-logo) 50%, var(--c-blue-500) 50%);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 @media (max-width: 400px) {
   .eyebrow {
@@ -352,11 +363,9 @@ a:hover {
   --btn-fg: var(--c-navy-950);
 }
 .btn--glass {
-  --btn-bg: rgb(255 255 255 / 0.06);
+  --btn-bg: transparent;
   --btn-fg: #fff;
-  --btn-border: rgb(255 255 255 / 0.32);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
+  --btn-border: rgb(255 255 255 / 0.4);
 }
 .btn--glass:hover {
   --btn-bg: rgb(255 255 255 / 0.14);
@@ -442,24 +451,12 @@ a:hover {
   box-shadow: var(--shadow-sm);
 }
 
-/* Zaglavlje podstranice (s tačkastim uzorkom i blagim sjajem u bojama znaka) */
+/* Zaglavlje podstranice: kamena površina i tanka linija */
 .page-head {
   position: relative;
-  isolation: isolate;
-  padding-block: clamp(24px, 3vw, 48px) clamp(32px, 4vw, 56px);
-  background: var(--c-bg);
-}
-.page-head::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(45% 80% at 100% 0%, rgb(0 160 236 / 0.14) 0%, transparent 70%),
-    radial-gradient(rgb(15 35 64 / 0.08) 1px, transparent 1.2px) 0 0 / 22px 22px;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 45%);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 45%);
-  pointer-events: none;
+  padding-block: clamp(24px, 3vw, 48px) clamp(36px, 4vw, 64px);
+  background: var(--c-stone);
+  border-bottom: 1px solid var(--c-stone-line);
 }
 
 /* Obrasci */
@@ -639,30 +636,11 @@ a:hover {
   outline-offset: 2px;
 }
 
-/* Suptilan uzorak pozadine: tačkasta mreža i blagi sjaj u bojama znaka */
-.section--pattern {
-  position: relative;
-  isolation: isolate;
-}
-.section--pattern::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background:
-    radial-gradient(40% 50% at 100% 0%, rgb(0 160 236 / 0.1) 0%, transparent 70%),
-    radial-gradient(35% 45% at 0% 100%, rgb(24 124 196 / 0.08) 0%, transparent 70%),
-    radial-gradient(rgb(15 35 64 / 0.09) 1px, transparent 1.2px) 0 0 / 22px 22px;
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 70%, transparent 100%);
-  mask-image: linear-gradient(180deg, #000 0%, #000 70%, transparent 100%);
-  pointer-events: none;
-}
-
 /* Pojavljivanje sadržaja pri skrolanju. Klasu .reveal-on dodaje skripta tek kad su animacije dozvoljene,
    pa je bez JavaScripta i uz prefers-reduced-motion sav sadržaj odmah vidljiv. */
 .reveal-on [data-reveal] {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(20px);
   transition:
     opacity 0.7s ease,
     transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);

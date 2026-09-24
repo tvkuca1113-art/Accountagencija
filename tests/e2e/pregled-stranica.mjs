@@ -2,7 +2,7 @@
 import { chromium } from 'playwright';
 const BASE = process.env.BASE_URL ?? 'http://127.0.0.1:4321';
 const paths = ['/', '/usluge', '/racunovodstvo', '/konzultantske-usluge', '/zastupanje-inostranih-poduzeca', '/registracija-firmi-obrta-udruzenja', '/poslovni-projekti', '/o-nama', '/kontakt', '/korisni-alati', '/savjeti', '/savjeti/prihod-i-dobit-nisu-isto', '/politika-privatnosti', '/kontakt/poslano', '/nepostojeca-stranica'];
-const widths = [360, 390, 768, 1024, 1440];
+const widths = [360, 390, 768, 1024, 1280, 1440];
 const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 const problems = [];
 for (const w of widths) {

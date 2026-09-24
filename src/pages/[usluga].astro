@@ -3,7 +3,7 @@
 // i novim URL-ovima za razdvojene „Ostale usluge“ (/registracija-firmi-obrta-udruzenja, /poslovni-projekti).
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import ResponsiveImage from '../components/ResponsiveImage.astro';
+import ServiceMotif from '../components/ServiceMotif.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
 import FaqList from '../components/FaqList.astro';
 import ContactForm from '../components/ContactForm.astro';
@@ -27,7 +27,6 @@ const others = services.filter((s) => s.slug !== service.slug);
 <Base
   title={service.metaTitle}
   description={service.metaDescription}
-  ogImage={`/images/${service.image}-1200.webp`}
   jsonLd={[serviceSchema(service), breadcrumbSchema(crumbs)]}
 >
   <section class="svc-hero page-head">
@@ -45,13 +44,9 @@ const others = services.filter((s) => s.slug !== service.slug);
             </a>
           </div>
         </div>
-        <ResponsiveImage
-          name={service.image}
-          alt={service.imageAlt}
-          sizes="(min-width: 1240px) 580px, (min-width: 900px) 48vw, 100vw"
-          priority
-          class="media svc-hero__media"
-        />
+        <div class="svc-hero__motif">
+          <ServiceMotif slug={service.slug} />
+        </div>
       </div>
     </div>
   </section>
@@ -144,7 +139,6 @@ const others = services.filter((s) => s.slug !== service.slug);
 <style>
   .svc-hero {
     padding-block: clamp(24px, 3vw, 48px) clamp(48px, 5vw, 88px);
-    background: linear-gradient(180deg, var(--c-bg) 0%, #fff 100%);
   }
   .svc-hero__grid {
     display: grid;
@@ -166,9 +160,11 @@ const others = services.filter((s) => s.slug !== service.slug);
     gap: 12px;
     margin-top: 28px;
   }
-  :global(.media.svc-hero__media) {
-    aspect-ratio: 4 / 3;
-    box-shadow: var(--shadow);
+  .svc-hero__motif {
+    padding: clamp(20px, 3vw, 40px);
+    border-radius: var(--radius-lg);
+    background: #fff;
+    border: 1px solid var(--c-stone-line);
   }
   .two-col {
     display: grid;

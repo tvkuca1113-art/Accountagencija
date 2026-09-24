@@ -37,15 +37,12 @@ Ako članak navodi porezne stope, rokove ili propise, provjeriti ih kod nadležn
 - Favicon: `public/favicon-32.png`, `favicon-48.png` i `apple-touch-icon.png` (bijela pozadina), izvedeni iz istog izvornika.
 - Ako agencija dostavi vektorsku verziju (SVG) ili zvaničnu kombinaciju znaka i naziva, zamijeniti datoteke i dimenzije u `site.ts`.
 
-## Slike
+## Slike i motivi
 
-Izvornici su u `source-images/`. Nakon zamjene izvornika pokrenuti:
-
-```bash
-npm run images
-```
-
-Skripta `scripts/optimize-images.mjs` pravi AVIF i WebP varijante u više širina, mobilni kadar heroja 4:5 i OG sliku 1200×630. Kadrovi su birani tako da logo i ključni motiv ostanu u slici. Žarište za uže okvire podešava se u `src/components/ResponsiveImage.astro` (`focal`). Alt opise mijenjati u `src/data/services.ts` i na stranicama.
+- **Naslovna fotografija:** `source-images/hero-koncept/ACCOUNT-hero-koncept-bez-mosta.png`, konceptualna fotografija hercegovačkog kamena i tamnoplavog papira (bez logotipa u fotografiji). Nakon zamjene izvornika pokrenuti `npm run images`: skripta `scripts/optimize-images.mjs` pravi AVIF/WebP varijante (desktop cijela scena, mobitel kadar 4:3) i OG sliku 1200×630.
+- **Motivi usluga:** `src/components/ServiceMotif.astro`, ravne SVG kompozicije izvedene iz znaka (trokut s tamnijom lijevom i svjetlijom desnom polovinom). Nova usluga dobija motiv dodavanjem grane za njen `slug`.
+- **O nama:** stvarna fotografija Starog mosta (Alen Kajimović, CC0 1.0), s potpisom.
+- Inscenirane fotografije iz druge serije (`source-images/v2-izvornici/`, obrađene u `source-images/account-*.png`) više se ne prikazuju; ostaju u repozitoriju, a web varijante se mogu vratiti iz git historije.
 
 ## Kontakt forma — povezivanje slanja
 

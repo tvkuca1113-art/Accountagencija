@@ -1,5 +1,3 @@
-import type { ImageName } from './services.ts';
-
 // Kratki praktični članci zasnovani na temama s Instagrama agencije (septembar 2026).
 // Tekst je originalan. Ako se u članak dodaju porezne stope, rokovi ili propisi, provjeriti ih
 // kod nadležnih službenih izvora u BiH i ažurirati polje `updated`.
@@ -11,8 +9,6 @@ export interface Article {
   published: string; // ISO datum
   updated: string;
   readingMinutes: number;
-  image: ImageName;
-  imageAlt: string;
   related: { href: string; label: string }[];
   body: string; // pouzdani HTML koji piše urednik stranice
 }
@@ -26,8 +22,6 @@ export const articles: Article[] = [
     published: '2026-09-23',
     updated: '2026-09-23',
     readingMinutes: 4,
-    image: 'account-knjigovodstvo',
-    imageAlt: 'Ruka vodi evidencije pored kalkulatora i računa (ilustrativna scena)',
     related: [
       { href: '/korisni-alati#kalkulator', label: 'Izračunajte prag pokrića troškova' },
       { href: '/racunovodstvo', label: 'Računovodstvo i knjigovodstvo' },
@@ -71,8 +65,6 @@ export const articles: Article[] = [
     published: '2026-09-23',
     updated: '2026-09-23',
     readingMinutes: 4,
-    image: 'account-savjetovanje',
-    imageAlt: 'Dvije osobe za stolom razgovaraju nad finansijskim prikazom (ilustrativna scena)',
     related: [
       { href: '/korisni-alati#konfigurator', label: 'Pripremite upit kroz konfigurator' },
       { href: '/kontakt', label: 'Zakažite razgovor' },
@@ -123,8 +115,6 @@ export const articles: Article[] = [
     published: '2026-09-23',
     updated: '2026-09-23',
     readingMinutes: 5,
-    image: 'account-poslovni-projekti',
-    imageAlt: 'Planiranje uz otvorenu bilježnicu i plave kartice (ilustrativna scena)',
     related: [
       { href: '/korisni-alati#kalkulator', label: 'Kalkulator pokrića troškova' },
       { href: '/konzultantske-usluge', label: 'Poslovno i porezno savjetovanje' },

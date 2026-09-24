@@ -148,18 +148,13 @@ const isCurrent = (href: string) =>
     z-index: 50;
     border-bottom: 1px solid var(--c-line);
   }
-  /* Pozadina i zamućenje su na pseudo-elementu: backdrop-filter na samom zaglavlju pretvorio bi ga u okvir
-     za position: fixed potomke, pa se mobilni meni ne bi raširio preko ekrana. */
+  /* Puna bijela pozadina na pseudo-elementu. Zaglavlje namjerno nema backdrop-filter/transform:
+     to bi ga pretvorilo u okvir za position: fixed potomke, pa se mobilni meni ne bi raširio preko ekrana. */
   .header::before {
     content: '';
     position: absolute;
     inset: 0;
     z-index: -1;
-    background: rgb(255 255 255 / 0.94);
-    backdrop-filter: saturate(1.4) blur(10px);
-    -webkit-backdrop-filter: saturate(1.4) blur(10px);
-  }
-  :global(.nav-open) .header::before {
     background: #fff;
   }
   .header__inner {

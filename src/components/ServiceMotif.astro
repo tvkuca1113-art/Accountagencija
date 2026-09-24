@@ -1,0 +1,170 @@
+---
+// Ravni geometrijski motivi za usluge, izvedeni iz originalnog znaka ACCOUNT:
+// trokut s uglom vrha kao na znaku, podijeljen na tamniju lijevu (#187CC4) i svjetliju desnu (#00A0EC) polovinu.
+// Svaka usluga ima vlastitu kompoziciju; motivi su dekorativni (aria-hidden), značenje nosi tekst pored njih.
+interface Props {
+  slug: string;
+  class?: string;
+}
+const { slug, class: className } = Astro.props;
+
+// Omjer visine i širine trokuta prema znaku (vrh 39,35 ; krila na 72 od 78,7 širine).
+const RATIO = 72 / 78.7;
+const tri = (cx: number, base: number, w: number) => {
+  const h = w * RATIO;
+  return {
+    left: `${cx - w / 2},${base} ${cx},${base - h} ${cx},${base}`,
+    right: `${cx},${base - h} ${cx + w / 2},${base} ${cx},${base}`,
+    outline: `${cx - w / 2},${base} ${cx},${base - h} ${cx + w / 2},${base}`,
+    apex: [cx, base - h] as const,
+  };
+};
+
+const ledgerRows = [60, 95, 130, 165, 200];
+const entries = [
+  [72, 170, 34],
+  [107, 120, 52],
+  [142, 200, 26],
+  [177, 150, 44],
+];
+const dots: [number, number][] = [];
+for (let y = 60; y <= 240; y += 45) for (let x = 60; x <= 340; x += 46.66) dots.push([x, y]);
+
+const t1 = tri(318, 252, 34);
+const big = tri(150, 232, 150);
+const small = tri(268, 232, 104);
+const pin = tri(246, 128, 42);
+const top = tri(295, 120, 58);
+const goal = tri(318, 112, 50);
+---
+
+<svg class:list={['motif', className]} viewBox="0 0 400 300" role="presentation" aria-hidden="true" focusable="false">
+  {
+    slug === 'racunovodstvo' && (
+      <g>
+        {ledgerRows.map((y) => <line x1="40" x2="360" y1={y} y2={y} class="m-line" />)}
+        <line x1="70" x2="70" y1="40" y2="262" class="m-accent" />
+        {entries.map(([y, w, a]) => (
+          <>
+            <rect x="88" y={y - 4} width={w} height="8" rx="2" class="m-ink" />
+            <rect x={340 - a} y={y - 4} width={a} height="8" rx="2" class="m-dark" />
+          </>
+        ))}
+        <line x1="270" x2="360" y1="214" y2="214" class="m-ink-line" />
+        <line x1="270" x2="360" y1="220" y2="220" class="m-ink-line" />
+        <polygon points={t1.left} class="m-dark" />
+        <polygon points={t1.right} class="m-light" />
+      </g>
+    )
+  }
+  {
+    slug === 'konzultantske-usluge' && (
+      <g>
+        <line x1="40" x2="360" y1="232" y2="232" class="m-ink-line" />
+        <polygon points={big.left} class="m-dark" />
+        <polygon points={big.right} class="m-light" />
+        <polygon points={small.outline} class="m-outline" />
+        <path d={`M${big.apex[0]} ${big.apex[1]} Q 214 20 ${small.apex[0]} ${small.apex[1]}`} class="m-dash" />
+        <circle cx={small.apex[0]} cy={small.apex[1]} r="5" class="m-ink" />
+      </g>
+    )
+  }
+  {
+    slug === 'zastupanje-inostranih-poduzeca' && (
+      <g>
+        <circle cx="200" cy="150" r="100" class="m-outline" />
+        <ellipse cx="200" cy="150" rx="42" ry="100" class="m-line" />
+        <line x1="100" x2="300" y1="150" y2="150" class="m-line" />
+        <line x1="113" x2="287" y1="100" y2="100" class="m-line" />
+        <line x1="113" x2="287" y1="200" y2="200" class="m-line" />
+        <polygon points={pin.left} class="m-dark" />
+        <polygon points={pin.right} class="m-light" />
+        <line x1="246" x2="246" y1="128" y2="150" class="m-ink-line" />
+        <circle cx="246" cy="150" r="4" class="m-ink" />
+      </g>
+    )
+  }
+  {
+    slug === 'registracija-firmi-obrta-udruzenja' && (
+      <g>
+        <line x1="40" x2="360" y1="240" y2="240" class="m-ink-line" />
+        <path d="M70 240 V200 H160 V160 H250 V120 H340 V240 Z" class="m-stone" />
+        <path d="M70 240 V200 H160 V160 H250 V120 H340" class="m-outline" />
+        <polygon points={top.left} class="m-dark" />
+        <polygon points={top.right} class="m-light" />
+        <path d="M100 190 L 190 150 L 272 110" class="m-dash" />
+      </g>
+    )
+  }
+  {
+    slug === 'poslovni-projekti' && (
+      <g>
+        {dots.map(([x, y]) => (
+          <circle cx={x} cy={y} r="2.2" class="m-dot" />
+        ))}
+        <path d="M60 240 L153 195 L200 210 L300 118" class="m-dash m-dash--ink" />
+        <circle cx="153" cy="195" r="6" class="m-node" />
+        <circle cx="200" cy="210" r="6" class="m-node" />
+        <polygon points={goal.left} class="m-dark" />
+        <polygon points={goal.right} class="m-light" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .motif {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .m-line {
+    fill: none;
+    stroke: #cdbfa8;
+    stroke-width: 1.5;
+  }
+  .m-accent {
+    stroke: var(--c-blue-500);
+    stroke-width: 2;
+  }
+  .m-ink {
+    fill: var(--c-navy-900);
+  }
+  .m-ink-line {
+    stroke: var(--c-navy-900);
+    stroke-width: 2;
+  }
+  .m-dark {
+    fill: var(--c-blue-logo);
+  }
+  .m-light {
+    fill: var(--c-blue-500);
+  }
+  .m-outline {
+    fill: none;
+    stroke: var(--c-navy-900);
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+  .m-stone {
+    fill: #e7dfd1;
+  }
+  .m-dash {
+    fill: none;
+    stroke: var(--c-blue-500);
+    stroke-width: 2;
+    stroke-dasharray: 6 7;
+    stroke-linecap: round;
+  }
+  .m-dash--ink {
+    stroke: var(--c-navy-900);
+  }
+  .m-dot {
+    fill: #cdbfa8;
+  }
+  .m-node {
+    fill: #fff;
+    stroke: var(--c-navy-900);
+    stroke-width: 2;
+  }
+</style>

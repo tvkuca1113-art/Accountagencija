@@ -2,6 +2,8 @@
 
 Stanje: 23. 9. 2026. Provjere su izvršene lokalno, u razvojnom okruženju; pregledna verzija je objavljena na Vercelu (vercel.app adresa), ne na produkcijskoj domeni.
 
+**Četvrta runda (redizajn prema uputi „ACCOUNT-Claude-Code-redizajn-prompt“, 24. 9. 2026.):** detaljan izvještaj, snimci prije/poslije i rezultati provjera u `docs/REDIZAJN-IZVJESTAJ.md`.
+
 **Treća runda (slike v2 i uputstvo naručioca, `docs/UPUTSTVO-SLIKE-V2.md`):** šest novih ilustrativnih slika; generisani znak na fasciklama zamijenjen originalnim (`scripts/zamijeni-logo.py`, provjereno na uvećanim isječcima i u prikaznoj veličini). Novi hero bez tamnog sloja preko cijele fotografije (spoj s bojom zida), brojke kao čist tekst ispod poziva na akciju. Početna po redoslijedu: kome pomažemo → usluge (jedna izdvojena s fotografijom, ostale u listi) → zašto nam vjerovati → recenzije s dosadašnjeg weba → tri koraka saradnje (svijetla sekcija, kraći koraci, linija između koraka) → vodič → savjeti (bez fotografija) → kontakt. Na početnoj tri fotografije. Mjesečni pregled bez iskačuće potvrde i s većim oznakama. Stvarna CC0 fotografija Starog mosta na stranici O nama. Krem površine uz tamnoplavu i plavu paletu.
 
 Lighthouse nakon treće runde: početna 99 / 100 / 100, LCP 2,0 s, CLS 0; /zastupanje-inostranih-poduzeca 99 / 100 / 100, LCP 1,8 s. Testovi: 22/22 jedinični, 56/56 u pregledniku, 15 stranica × 5 širina bez problema.

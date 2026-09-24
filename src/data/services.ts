@@ -2,15 +2,6 @@
 // podijeljena je na registracije i poslovne projekte (razrada postojeće ponude, ne nova usluga).
 // Obračun plaća i slične operativne usluge dodati tek kad ih agencija potvrdi.
 
-export type ImageName =
-  | 'mostar-stari-most'
-  | 'account-hero'
-  | 'account-knjigovodstvo'
-  | 'account-savjetovanje'
-  | 'account-inostrana-preduzeca'
-  | 'account-registracija'
-  | 'account-poslovni-projekti';
-
 export interface Faq {
   q: string;
   a: string;
@@ -23,8 +14,6 @@ export interface Service {
   metaTitle: string;
   metaDescription: string;
   benefit: string;
-  image: ImageName;
-  imageAlt: string;
   intro: string;
   forWhom: string[];
   scope: string[];
@@ -42,13 +31,10 @@ export const services: Service[] = [
     metaDescription:
       'Vođenje poslovnih knjiga, finansijski izvještaji i redovne porezne prijave za firme i obrte. Dokumentaciju možete dostavljati e-mailom. Zatražite ponudu.',
     benefit: 'Uredne evidencije i razumljiviji pregled poslovanja.',
-    image: 'account-knjigovodstvo',
-    imageAlt:
-      'Ruka vodi evidencije u bilježnici pored kalkulatora, računa i tamnoplavog fascikla sa znakom ACCOUNT (ilustrativna scena)',
     intro:
-      'Vodimo poslovne knjige i evidencije, pripremamo finansijske izvještaje i brinemo o redovnim prijavama, tako da u svakom trenutku znate gdje vaše poslovanje stoji.',
+      'Vodimo poslovne knjige i evidencije, pripremamo finansijske izvještaje i brinemo o redovnim prijavama, tako da imate jasan pregled svog poslovanja.',
     forWhom: [
-      'Firme koje žele pouzdanu vanjsku računovodstvenu podršku.',
+      'Firme kojima treba vanjsko vođenje knjiga, izvještaja i prijava.',
       'Obrti i preduzetnici koji trebaju uredno vođene knjige i prijave.',
       'Udruženja kojima trebaju evidencije i izvještaji.',
       'Oni koji mijenjaju računovođu i žele jasan prijelaz.',
@@ -99,9 +85,6 @@ export const services: Service[] = [
     metaDescription:
       'Savjetovanje o finansijama, porezima i narednim poslovnim odlukama. Razgovarajte s agencijom ACCOUNT iz Mostara i zatražite ponudu.',
     benefit: 'Podrška u razumijevanju finansija i planiranju narednih odluka.',
-    image: 'account-savjetovanje',
-    imageAlt:
-      'Dvije osobe za stolom razgovaraju nad jednostavnim finansijskim prikazom, pored tamnoplavog fascikla sa znakom ACCOUNT (ilustrativna scena)',
     intro:
       'Pomažemo vam da razumijete brojke iza svog poslovanja i da prije važne odluke sagledate finansijske i porezne posljedice.',
     forWhom: [
@@ -149,9 +132,6 @@ export const services: Service[] = [
     metaDescription:
       'Ovlašteno zastupanje stranih poreznih obveznika i lokalna podrška za administrativne i računovodstvene potrebe inostranih preduzeća u BiH.',
     benefit: 'Lokalna podrška za administrativne i računovodstvene potrebe poslovanja u BiH.',
-    image: 'account-inostrana-preduzeca',
-    imageAlt:
-      'Poslovni razgovor za stolom: predaja dokumenta pored tamnoplavog fascikla sa znakom ACCOUNT, u pozadini uokvirena fotografija Mostara (ilustrativna scena)',
     intro:
       'Pružamo ovlašteno zastupanje stranih poreznih obveznika i lokalnu podršku za administrativne i računovodstvene potrebe poslovanja u Bosni i Hercegovini.',
     forWhom: [
@@ -197,9 +177,6 @@ export const services: Service[] = [
     metaDescription:
       'Pomoć u pripremi dokumentacije i koracima pokretanja firme, obrta ili udruženja u Mostaru. Razgovarajte s agencijom ACCOUNT.',
     benefit: 'Pomoć u pripremi dokumentacije i koracima pokretanja poslovanja.',
-    image: 'account-registracija',
-    imageAlt:
-      'Ključ na uredno pripremljenoj dokumentaciji pored tamnoplavog fascikla sa znakom ACCOUNT (ilustrativna scena)',
     intro:
       'Pokretanje poslovanja lakše je kad znate redoslijed koraka. Pomažemo u pripremi dokumentacije i vodimo vas kroz registraciju firme, obrta ili udruženja.',
     forWhom: [
@@ -247,9 +224,6 @@ export const services: Service[] = [
     metaDescription:
       'Razrada poslovne ideje, budžeta i poslovnog plana uz podršku agencije ACCOUNT iz Mostara. Zatražite ponudu za pripremu projekta.',
     benefit: 'Razrada ideje, budžeta i poslovnog plana.',
-    image: 'account-poslovni-projekti',
-    imageAlt:
-      'Planiranje uz otvorenu bilježnicu, plave kartice i uzorke materijala, pored tamnoplavog fascikla sa znakom ACCOUNT (ilustrativna scena)',
     intro:
       'Pomažemo vam da ideju pretočite u jasan poslovni plan s budžetom i brojkama koje možete obrazložiti.',
     forWhom: [

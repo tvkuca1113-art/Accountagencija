@@ -52,18 +52,6 @@ const href = service ? `/kontakt?usluga=${service}#upit` : '/kontakt#upit';
     position: relative;
     overflow: hidden;
   }
-  .cta__box::after {
-    content: '';
-    position: absolute;
-    right: -80px;
-    top: -80px;
-    width: 280px;
-    height: 280px;
-    border-radius: 40px;
-    transform: rotate(18deg);
-    background: linear-gradient(135deg, rgb(0 160 236 / 0.35), rgb(0 160 236 / 0));
-    pointer-events: none;
-  }
   @media (min-width: 900px) {
     .cta__box {
       grid-template-columns: 1.4fr 1fr;

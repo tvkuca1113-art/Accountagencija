@@ -1,0 +1,107 @@
+---
+// Urednička lista savjeta: datum, naslov i kratak opis, odvojeni tankim linijama (bez fotografija).
+import Icon from './Icon.astro';
+import { articles, formatDate } from '../data/articles.ts';
+
+interface Props {
+  headingLevel?: 'h2' | 'h3';
+}
+const { headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+---
+
+<ul class="alist">
+  {
+    articles.map((a) => (
+      <li class="alist__item">
+        <p class="alist__meta">
+          <time datetime={a.published}>{formatDate(a.published)}</time>
+          <span>{a.readingMinutes} min čitanja</span>
+        </p>
+        <div class="alist__body">
+          <H class="alist__title">
+            <a href={`/savjeti/${a.slug}`}>{a.title}</a>
+          </H>
+          <p>{a.description}</p>
+        </div>
+        <Icon name="arrow" size={22} class="alist__arrow" />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .alist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--c-stone-line);
+  }
+  .alist__item {
+    position: relative;
+    display: grid;
+    gap: 6px 40px;
+    padding: 26px 44px 26px 0;
+    border-bottom: 1px solid var(--c-stone-line);
+  }
+  @media (min-width: 900px) {
+    .alist__item {
+      grid-template-columns: 11rem 1fr;
+      padding-block: 32px;
+    }
+  }
+  .alist__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 12px;
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--c-ink-muted);
+  }
+  @media (min-width: 900px) {
+    .alist__meta {
+      flex-direction: column;
+      padding-top: 6px;
+    }
+  }
+  .alist__title {
+    margin: 0 0 6px;
+    font-size: clamp(1.1875rem, 1.1rem + 0.5vw, 1.5rem);
+  }
+  .alist__title a {
+    color: var(--c-navy-900);
+    text-decoration: none;
+  }
+  /* Cijeli red je klikabilan preko linka u naslovu. */
+  .alist__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .alist__title a:focus-visible {
+    outline: none;
+  }
+  .alist__item:has(a:focus-visible) {
+    outline: 3px solid var(--c-focus);
+    outline-offset: 4px;
+  }
+  .alist__item:hover .alist__title a {
+    color: var(--c-blue-600);
+  }
+  .alist__body p {
+    margin: 0;
+    max-width: 44rem;
+    color: var(--c-ink-muted);
+  }
+  .alist :global(.alist__arrow) {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    margin-top: -11px;
+    color: var(--c-blue-600);
+    transition: transform 0.2s ease;
+  }
+  .alist__item:hover :global(.alist__arrow) {
+    transform: translateX(4px);
+  }
+</style>

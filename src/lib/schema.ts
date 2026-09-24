@@ -53,7 +53,7 @@ export function serviceSchema(service: Service) {
   };
 }
 
-export function articleSchema(a: { title: string; description: string; slug: string; published: string; updated: string; image: string }) {
+export function articleSchema(a: { title: string; description: string; slug: string; published: string; updated: string }) {
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
@@ -61,7 +61,7 @@ export function articleSchema(a: { title: string; description: string; slug: str
     description: a.description,
     datePublished: a.published,
     dateModified: a.updated,
-    image: `${site.url}/images/${a.image}-1200.webp`,
+    image: `${site.url}/images/og-account.jpg`,
     mainEntityOfPage: `${site.url}/savjeti/${a.slug}`,
     author: { '@type': 'Organization', '@id': orgId, name: site.legalName },
     publisher: { '@type': 'Organization', '@id': orgId, name: site.legalName },

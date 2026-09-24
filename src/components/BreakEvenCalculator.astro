@@ -67,14 +67,20 @@ import Icon from './Icon.astro';
       Uz varijabilne troškove od 100 % ili više svaki prihod odmah odlazi na troškove, pa u ovom modelu nema konačnog praga
       pokrića. Provjerite unos ili razgovarajte s računovođom o strukturi troškova.
     </p>
+    <p class="calc__notes-title">Pretpostavke izračuna</p>
     <ul class="calc__notes">
+      <li>Fiksni troškovi su isti svaki mjesec, a varijabilni su stalan procenat prihoda.</li>
+      <li>Prihodi i troškovi uneseni su na istoj osnovi u pogledu PDV-a.</li>
       <li>Planski višak nije neto dobit, novčani tok ni porezni obračun.</li>
       <li>Porezi, doprinosi, krediti i druge stavke koje niste unijeli nisu uračunati.</li>
       <li>Alat ne procjenjuje da li će prihod biti i naplaćen.</li>
     </ul>
   </div>
 </div>
-<p class="calc__disclaimer">Informativan izračun na osnovu vaših unosa. Za detaljan pregled poslovanja razgovarajte s računovođom.</p>
+<p class="calc__disclaimer">
+  Informativan izračun na osnovu vaših unosa, služi kao ilustracija i nije porezni ni računovodstveni savjet. Za detaljan
+  pregled poslovanja razgovarajte s računovođom.
+</p>
 
 <script>
   import { calculateBreakEven, formatKM, parseAmount, type FieldError } from '../lib/breakeven.ts';
@@ -302,10 +308,17 @@ import Icon from './Icon.astro';
     border-left: 3px solid #ffcf66;
     color: #fff;
   }
-  .calc__notes {
+  .calc__notes-title {
     margin: 20px 0 0;
-    padding: 18px 0 0 1.1em;
+    padding-top: 18px;
     border-top: 1px solid rgb(255 255 255 / 0.12);
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #fff;
+  }
+  .calc__notes {
+    margin: 8px 0 0;
+    padding: 0 0 0 1.1em;
     font-size: 0.875rem;
     color: #a9bdd6;
     display: grid;

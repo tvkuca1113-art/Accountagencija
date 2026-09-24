@@ -24,5 +24,6 @@ npm run build
 - [Sadržaj i izvori — provjereno, tvrdnje, za potvrdu](docs/SADRZAJ-I-IZVORI.md)
 - [Mapa starih i novih URL-ova](docs/MAPA-URL.md)
 - [Sažetak izvršenih provjera](docs/PROVJERE.md)
+- [Izvještaj o redizajnu, snimci prije/poslije](docs/REDIZAJN-IZVJESTAJ.md)
 
 Stranica je zadano zaštićena od indeksiranja. U produkciji postaviti `PUBLIC_ALLOW_INDEXING=true` (vidi `.env.example`).

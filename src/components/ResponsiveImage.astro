@@ -1,7 +1,7 @@
 ---
 // <picture> s AVIF/WebP varijantama iz scripts/optimize-images.mjs, eksplicitnim dimenzijama (bez CLS-a)
 // i odgođenim učitavanjem osim kad je slika prioritetna (hero).
-import type { ImageName } from '../data/services.ts';
+export type ImageName = 'account-hero-kamen' | 'mostar-stari-most';
 
 interface Props {
   name: ImageName;
@@ -9,38 +9,38 @@ interface Props {
   sizes: string;
   priority?: boolean;
   class?: string;
-  /** Za hero: poseban kadar 4:5 za uske ekrane. */
+  /** Za hero: poseban kadar (`<name>-mobile`) za uže ekrane. */
   mobileArtDirection?: boolean;
+  mobileMedia?: string;
   objectPosition?: string;
 }
 
 const variants: Record<string, { widths: number[]; width: number; height: number }> = {
-  'account-hero': { widths: [640, 960, 1280, 1672], width: 1672, height: 941 },
-  'account-hero-mobile': { widths: [480, 800, 1254], width: 1254, height: 941 },
+  'account-hero-kamen': { widths: [640, 960, 1280, 1672], width: 1672, height: 941 },
+  'account-hero-kamen-mobile': { widths: [480, 800, 972], width: 972, height: 729 },
   'mostar-stari-most': { widths: [480, 800, 1200], width: 1200, height: 800 },
-  card: { widths: [480, 800, 1200], width: 1200, height: 900 },
 };
 
-// Žarišta za rezanje u uže okvire (16:10, 16:9): fascikl sa znakom i ključni motiv ostaju vidljivi.
-const focal: Partial<Record<ImageName, string>> = {
-  'account-knjigovodstvo': '50% 72%',
-  'account-inostrana-preduzeca': '50% 62%',
-  'account-registracija': '50% 68%',
-  'account-poslovni-projekti': '50% 22%',
-};
-
-const { name, alt, sizes, priority = false, class: className, mobileArtDirection = false, objectPosition = focal[name] } = Astro.props;
-const v = variants[name] ?? variants.card;
+const {
+  name,
+  alt,
+  sizes,
+  priority = false,
+  class: className,
+  mobileArtDirection = false,
+  mobileMedia = '(max-width: 767px)',
+  objectPosition,
+} = Astro.props;
+const v = variants[name];
 const srcset = (base: string, widths: number[], ext: string) =>
   widths.map((w) => `/images/${base}-${w}.${ext} ${w}w`).join(', ');
 const fallback = `/images/${name}-${v.widths.at(-2) ?? v.widths[0]}.webp`;
-const mobile = variants['account-hero-mobile'];
-const mobileMedia = '(max-width: 767px)';
+const mobile = variants[`${name}-mobile`];
 ---
 
 <picture class={className}>
   {
-    mobileArtDirection && (
+    mobileArtDirection && mobile && (
       <>
         <source
           media={mobileMedia}

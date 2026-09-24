@@ -60,6 +60,23 @@ const logo = site.logo;
     text-transform: uppercase;
     color: var(--c-blue-600);
   }
+  @media (max-width: 400px) {
+    .logo {
+      gap: 10px;
+    }
+    .logo__mark img {
+      height: calc(var(--logo-h) * 0.86);
+    }
+    .logo__name {
+      font-size: 1.1875rem;
+      letter-spacing: 0.16em;
+    }
+    .logo__tag {
+      font-size: 0.5625rem;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+  }
   .logo--light .logo__name {
     color: #fff;
   }

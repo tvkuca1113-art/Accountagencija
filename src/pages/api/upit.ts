@@ -21,7 +21,7 @@ type Outcome =
 
 const messages: Record<string, string> = {
   rate_limited: 'Poslali ste više upita u kratkom roku. Pokušajte ponovo za nekoliko minuta ili nas pozovite.',
-  not_configured: 'Slanje upita trenutno nije dostupno. Pozovite nas ili pišite direktno na e-mail.',
+  not_configured: 'Slanje upita trenutno nije dostupno. Pozovite nas ili nam pošaljite e-mail.',
   provider_error: 'Upit trenutno nije moguće poslati. Vaš unos je sačuvan — pokušajte ponovo ili nas pozovite.',
   bad_request: 'Zahtjev nije ispravan. Osvježite stranicu i pokušajte ponovo.',
   forbidden: 'Zahtjev nije dozvoljen.',
@@ -102,7 +102,7 @@ function htmlResponse(outcome: Outcome) {
   const html = `<!doctype html><html lang="bs-BA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Upit nije poslan | ${site.name}</title>
 <style>body{font-family:system-ui,sans-serif;max-width:40rem;margin:3rem auto;padding:0 1rem;line-height:1.6;color:#0e1f3a}a{color:#1d6db3}</style></head>
 <body><h1>Upit nije poslan</h1><ul>${items}</ul>
-<p><a href="/kontakt#upit">Vratite se na formu</a> ili nas pozovite na <a href="${primaryPhone.href}">${primaryPhone.display}</a>.</p></body></html>`;
+<p><a href="/kontakt#upit">Vratite se na obrazac</a> ili nas pozovite na <a href="${primaryPhone.href}">${primaryPhone.display}</a>.</p></body></html>`;
   return new Response(html, { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' } });
 }
 

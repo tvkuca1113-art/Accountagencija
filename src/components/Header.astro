@@ -5,12 +5,13 @@ import { nav, site, primaryPhone } from '../data/site.ts';
 import { services } from '../data/services.ts';
 
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isHome = path === '/';
 const serviceSlugs = services.map((s) => `/${s.slug}`);
 const isCurrent = (href: string) =>
   path === href || (href === '/usluge' && serviceSlugs.includes(path)) || (href !== '/' && path.startsWith(`${href}/`));
 ---
 
-<div class="topbar">
+<div class:list={['topbar', { 'topbar--home': isHome }]}>
   <div class="container topbar__inner">
     <span class="topbar__place">
       <Icon name="pin" size={16} />
@@ -33,10 +34,10 @@ const isCurrent = (href: string) =>
   </div>
 </div>
 
-<header class="header" data-header>
+<header class:list={['header', { 'header--home': isHome }]} data-header>
   <div class="container header__inner">
     <a href="/" class="header__logo">
-      <Logo />
+      <Logo variant={isHome ? 'light' : 'dark'} />
       <span class="visually-hidden"> — početna stranica</span>
     </a>
 
@@ -102,9 +103,18 @@ const isCurrent = (href: string) =>
     });
     matchMedia('(min-width: 1024px)').addEventListener('change', (e) => e.matches && setOpen(false));
   }
+  const homeHeader = document.querySelector<HTMLElement>('.header--home');
+  const heroCta = document.querySelector('[data-hero-cta]');
+  if (homeHeader && heroCta && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(([entry]) => {
+      homeHeader.classList.toggle('is-cta-ready', !entry.isIntersecting && entry.boundingClientRect.bottom < 0);
+    });
+    observer.observe(heroCta);
+  }
 </script>
 
 <style>
+  .topbar.topbar--home { display: none; }
   .topbar {
     display: none;
     background: var(--c-navy-950);
@@ -176,6 +186,24 @@ const isCurrent = (href: string) =>
   }
   .header__cta {
     display: none;
+  }
+  .header--home {
+    border-bottom: 1px solid rgb(255 255 255 / 0.09);
+  }
+  .header--home::before,
+  :global(.nav-open) .header--home::before {
+    background: #101d2c;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .header--home .header__call {
+    display: none;
+  }
+  .header--home .nav__toggle {
+    color: #fff;
+  }
+  .header--home :global(:focus-visible) {
+    outline-color: #fff;
   }
   /* Telefon jednim dodirom u mobilnom zaglavlju */
   .header__call {
@@ -310,6 +338,23 @@ const isCurrent = (href: string) =>
     }
     .header__cta {
       display: inline-flex;
+    }
+    .header--home .nav__list a {
+      color: #e9f1fa;
+    }
+    .header--home .nav__list a:hover,
+    .header--home .nav__list a[aria-current='page'] {
+      background: rgb(255 255 255 / 0.12);
+      color: #fff;
+    }
+    .header--home .header__cta {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .header--home.is-cta-ready .header__cta {
+      opacity: 1;
+      pointer-events: auto;
     }
   }
 </style>

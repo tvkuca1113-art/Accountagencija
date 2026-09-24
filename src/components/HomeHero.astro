@@ -1,186 +1,158 @@
 ---
-// Hero početne: tekst na tamnoj pozadini u boji zida sa fotografije, fotografija desno se prirodno stapa s njom
-// (kratak prijelaz na lijevoj ivici umjesto tamnog sloja preko cijele slike). Brojke su čist tekstualni dokaz
-// ispod poziva na akciju. Na mobitelu su naslov i dugmad iznad fotografije, a kadar 4:3 zadržava ruke i fascikl.
 import Icon from './Icon.astro';
-import ResponsiveImage from './ResponsiveImage.astro';
 import { site } from '../data/site.ts';
 ---
 
 <section class="hero" aria-labelledby="hero-naslov">
+  <picture class="hero__art" aria-hidden="true">
+    <source media="(max-width: 767px)" srcset="/images/account-znak-3d-mobile.webp" />
+    <img src="/images/account-znak-3d-desktop.webp" alt="" width="1536" height="1024" fetchpriority="high" decoding="async" />
+  </picture>
   <div class="container hero__content">
-    <div class="hero__text">
-      <p class="eyebrow hero__eyebrow">Računovodstvena agencija · Mostar</p>
-      <h1 id="hero-naslov">Vi vodite posao. Mi brinemo o&nbsp;računovodstvu.</h1>
-      <p class="hero__lead">
-        Od poslovnih knjiga i poreznih prijava do savjeta za sljedeći korak — ACCOUNT pruža podršku vašem poslovanju.
-      </p>
+    <div class="hero__intro">
+      <p class="eyebrow hero__eyebrow">Računovodstvo · Mostar</p>
+      <h1 id="hero-naslov">Vi vodite posao.<br />Mi brinemo<br />o brojkama.</h1>
+      <p class="hero__lead">Uredne knjige.<br />Jasan savjet.<br />Pouzdan partner.</p>
       <div class="hero__actions">
-        <a class="btn btn--bright" href="/kontakt#upit">Zatražite ponudu <Icon name="arrow" size={18} /></a>
-        <a class="btn btn--glass" href="#usluge">Pogledajte usluge</a>
+        <a class="btn btn--bright hero__primary" href="/kontakt#upit" data-hero-cta>
+          Zatražite ponudu <Icon name="arrow" size={20} />
+        </a>
+        <a class="hero__secondary" href="#usluge">Usluge <Icon name="arrow" size={19} /></a>
       </div>
-      <ul class="hero__proof">
-        {
-          site.stats.map((s) => (
-            <li>
-              <strong>{s.value}</strong> {s.label}
-            </li>
-          ))
-        }
-        <li class="hero__proof-note">
-          <Icon name="doc" size={17} />
-          Dokumentaciju možete dostavljati i e-mailom.
-        </li>
-      </ul>
     </div>
-  </div>
-
-  <div class="hero__media">
-    <ResponsiveImage
-      name="account-hero"
-      alt="Osoba otvara tamnoplavu fasciklu sa znakom ACCOUNT na drvenom radnom stolu (ilustrativna scena)"
-      sizes="(min-width: 900px) 68vw, 100vw"
-      priority
-      mobileArtDirection
-      class="hero__photo"
-    />
+    <ul class="hero__proof" aria-label="Iskustvo agencije">
+      {site.stats.map((s) => <li><strong>{s.value}</strong><span>{s.label}</span></li>)}
+    </ul>
   </div>
 </section>
 
 <style>
   .hero {
-    --hero-bg: #0d131d; /* boja zida na fotografiji — spoj bez vidljive ivice */
     position: relative;
     isolation: isolate;
     overflow: hidden;
-    background: var(--hero-bg);
-    color: #c9d4e3;
+    background: #101d2c;
+    color: #e5ebf4;
   }
-
+  .hero__art {
+    position: absolute;
+    z-index: 0;
+    inset: 0 0 0 auto;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  .hero__art img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center bottom;
+  }
   .hero__content {
     position: relative;
-    z-index: 2;
-    padding-block: 36px 28px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 622px;
+    padding-top: 54px;
+    padding-bottom: 27px;
   }
+  .hero__intro { max-width: 42rem; }
   .hero__eyebrow {
-    color: var(--c-cyan-400);
+    margin-bottom: 26px;
+    color: #49c7fa;
+    letter-spacing: 0.14em;
   }
-  .hero__eyebrow::before {
-    background: var(--c-cyan-400);
-  }
+  .hero__eyebrow::before { background: #49c7fa; }
   .hero h1 {
+    max-width: 16ch;
+    margin-bottom: 28px;
     color: #fff;
-    max-width: 13ch;
+    font-size: clamp(2.35rem, 9.6vw, 3.25rem);
+    line-height: 1.09;
+    letter-spacing: -0.055em;
+    font-weight: 800;
   }
   .hero__lead {
-    max-width: 34rem;
-    margin-bottom: 28px;
-    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
-    line-height: 1.6;
-    color: #c9d4e3;
+    margin: 0 0 30px;
+    font-size: 1.0625rem;
+    line-height: 1.48;
+    color: #e1e9f2;
   }
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    align-items: center;
+    gap: 12px 22px;
   }
-  @media (max-width: 899px) {
-    .hero__actions .btn {
-      min-height: 48px;
-      padding: 10px 18px;
-      font-size: 0.9375rem;
-    }
-    .hero__actions .btn :global(svg) {
-      display: none;
-    }
+  .hero__primary {
+    justify-content: space-between;
+    min-height: 52px;
+    padding-inline: 22px;
+    box-shadow: 0 9px 24px rgb(3 14 28 / 0.12);
   }
-  .hero :global(:focus-visible) {
-    outline-color: #fff;
-  }
-
-  /* Brojke kao čist tekstualni dokaz ispod poziva na akciju */
-  .hero__proof {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 8px 24px;
-    margin: 28px 0 0;
-    padding: 18px 0 0;
-    border-top: 1px solid rgb(255 255 255 / 0.12);
-    max-width: 34rem;
-    font-size: 0.9375rem;
-    color: #a9b7c9;
-  }
-  .hero__proof strong {
-    margin-right: 4px;
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: #fff;
-  }
-  .hero__proof-note {
+  .hero__secondary {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    flex-basis: 100%;
+    min-height: 44px;
+    padding: 6px 0;
+    border-bottom: 1px solid #4ec8f6;
+    color: #fff;
+    font-weight: 750;
+    text-decoration: none;
   }
-  .hero__proof-note :global(svg) {
-    color: var(--c-cyan-400);
+  .hero__secondary:hover { color: #80d7fa; }
+  .hero__secondary :global(svg) { color: #49c7fa; }
+  .hero__proof {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 26px;
+    margin: 22px 0 0;
+    padding: 0;
+    list-style: none;
   }
-
-  /* Fotografija */
-  .hero__media {
-    position: relative;
-    z-index: 1;
-    aspect-ratio: 4 / 3;
-    width: 100%;
-    max-height: 620px;
+  .hero__proof li {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    font-size: 0.9rem;
+    color: #d9e2ed;
+    white-space: nowrap;
   }
-  .hero__media :global(.hero__photo) {
-    position: absolute;
-    inset: 0;
-    display: block;
-    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%);
-    mask-image: linear-gradient(180deg, transparent 0%, #000 14%);
+  .hero__proof strong {
+    color: #fff;
+    font-size: 1.55rem;
+    line-height: 1;
+    font-weight: 800;
   }
-  .hero__media :global(.hero__photo img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 60% 50%;
+  .hero :global(:focus-visible) { outline-color: #fff; }
+  @media (max-width: 767px) {
+    .hero__content { min-height: 660px; }
+    .hero__art { inset: auto 0 0; height: 76%; }
+    .hero__art img { object-position: center bottom; }
+    .hero__intro, .hero__proof { position: relative; z-index: 1; }
+    .hero__lead { margin-bottom: 22px; }
   }
-  @media (min-width: 768px) and (max-width: 899px) {
-    .hero__media {
-      aspect-ratio: 16 / 9;
-    }
+  @media (max-width: 370px) {
+    .hero__content { min-height: 645px; padding-top: 40px; }
+    .hero h1 { font-size: 2.16rem; margin-bottom: 20px; }
+    .hero__actions { gap: 4px 15px; }
+    .hero__primary { padding-inline: 16px; }
+    .hero__proof { gap: 12px; }
+    .hero__proof li { font-size: 0.75rem; gap: 5px; }
+    .hero__proof strong { font-size: 1.3rem; }
   }
-
-  /* Desktop: tekst lijevo na boji zida, fotografija desno */
-  @media (min-width: 900px) {
-    .hero {
-      display: flex;
-      align-items: center;
-      min-height: clamp(600px, 78vh, 760px);
-    }
-    .hero__content {
-      padding-block: 96px;
-    }
-    .hero__text {
-      max-width: 33rem;
-    }
-    .hero__media {
-      position: absolute;
-      inset: 0 0 0 auto;
-      width: 68%;
-      max-height: none;
-      aspect-ratio: auto;
-    }
-    .hero__media :global(.hero__photo) {
-      -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 26%);
-      mask-image: linear-gradient(90deg, transparent 0%, #000 26%);
-    }
-    .hero__media :global(.hero__photo img) {
-      object-position: 62% 50%;
-    }
+  @media (min-width: 768px) {
+    .hero__content { min-height: clamp(610px, 72vh, 740px); padding-top: 110px; padding-bottom: 46px; }
+    .hero__art { width: min(78%, 1190px); }
+    .hero__art img { object-position: right bottom; }
+    .hero h1 { font-size: clamp(3.4rem, 4.6vw, 5rem); }
+    .hero__lead { font-size: 1.25rem; margin-bottom: 32px; }
+    .hero__proof { gap: 35px; }
+    .hero__proof li { font-size: 1rem; }
+    .hero__proof strong { font-size: 2.1rem; }
   }
 </style>

@@ -20,6 +20,8 @@ Preuzeti su principi art direkcije, a ne tuđi logotipi ili slike. Ove reference
 
 ## Izrada
 
+Provjera: Astro check prolazi bez grešaka, upozorenja i napomena; produkcijski build prolazi. Vercel objava `e1df0f9` je uspješna. Vizuelno pregledana stvarna objava na desktopu i mobilni raspored u iframeu širine 360 i 390 px. Ovo nije test fizičkog iPhone uređaja. Snimci objavljene verzije su u `docs/snimci-v4/`.
+
 Korišten ugrađeni generator slika uz originalni ACCOUNT znak kao referencu. Finalni prompt:
 
 ```text

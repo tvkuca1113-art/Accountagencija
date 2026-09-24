@@ -27,3 +27,5 @@ npm run build
 - [Izvještaj o redizajnu, snimci prije/poslije](docs/REDIZAJN-IZVJESTAJ.md)
 
 Stranica je zadano zaštićena od indeksiranja. U produkciji postaviti `PUBLIC_ALLOW_INDEXING=true` (vidi `.env.example`).
+
+- [Novi redizajn i provjera izvornog sadržaja, 24. 9. 2026.](docs/REDIZAJN-24-09-2026.md)

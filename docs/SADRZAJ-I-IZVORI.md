@@ -2,18 +2,11 @@
 
 Ovaj dokument nije dio web stranice i ne prikazuje se posjetiocima. Razdvaja provjerene podatke, tvrdnje postojećeg weba, nove prijedloge sadržaja i stavke koje agencija treba potvrditi prije objave.
 
-Stanje: 23. 9. 2026. (ažurirano nakon potvrde agencije i prijema originalnog znaka)
+Stanje: 24. 9. 2026. (upoređeno sa živom izvornom stranicom)
 
-## Važno ograničenje pri izradi
+## Dopuna provjere izvora
 
-Mrežna politika razvojnog okruženja blokirala je pristup domenama `agencija-account.com`, `instagram.com`, `facebook.com` i `web.archive.org`. Zbog toga:
-
-- tekstovi postojećih podstranica (`/o-nama`, `/racunovodstvo`, `/konzultantske-usluge`, `/zastupanje-inostranih-poduzeca`, `/ostale-usluge` i njihove `.html` varijante) **nisu preuzeti doslovno** niti popisani iz izvora. Sadržaj je napisan na osnovu podataka iz Superprompta (odjeljak 1) i javne pretrage (naslov početne: „Agencija Account - Računovodstvena agencija | Pouzdana & Efikasna“);
-- originalni logo nije preuzet sa starog weba, ali ga je agencija naknadno dostavila (vidi odjeljak 6);
-- postojeće verifikacijske meta oznake (npr. Google Search Console) nisu poznate;
-- objave na Instagramu nisu otvorene; kartice na stranici opisuju samo teme navedene u Superpromptu.
-
-Prije produkcije: otvoriti postojeći web, popisati sadržaj svih podstranica, uporediti s novim tekstom i prenijeti eventualne dodatne informacije.
+Dana 24. 9. 2026. otvorena je živa izvorna stranica i pregledane su sve stranice ponude. Recenzije su upoređene doslovno s izvornim HTML-om, a nedostajući dijelovi ponude vraćeni su u podatke o uslugama. Ranije ograničenje pristupa originalnom sajtu više ne vrijedi za ovu provjeru. Instagram objave ostaju preuzete iz ranije dokumentovanog istraživanja.
 
 ## 1. Provjereni kontakt podaci
 
@@ -41,16 +34,16 @@ Tvrdnja postojećeg weba koja ostaje u tekstu: FAQ (digitalna dostava e-mailom, 
 
 ## 3. Recenzije (prikazane na početnoj)
 
-Recenzije s dosadašnjeg weba prikazane su s istim imenima i tekstom, bez zvjezdica, ocjena, datuma ili oznake Googlea (`src/data/reviews.ts`). Tekst je preuzet iz indeksa pretraživača jer stranici agencija-account.com nije bilo moguće pristupiti iz razvojnog okruženja — **prije produkcije uporediti sa živom stranicom**.
+Četiri recenzije provjerene su na živoj stranici 24. 9. 2026. Imena, tekstovi i redoslijed odgovaraju originalu. Nema dodanih zvjezdica, ocjena, datuma ni oznake Googlea. Test `reviews.test.ts` poredi podatke s nezavisno izvučenim izvornim HTML-om.
 
 | Ime | Tekst |
 |---|---|
 | Adis Krvavac | Stvarno su odlični! Profesionalni, brzi i uvijek na raspolaganju kada treba pomoć ili savjet. Zaista su pravi izbor za svakoga ko traži kvalitetnu i pouzdanu računovodstvenu podršku. Preporučujem ih od srca! |
 | Maja | Uvijek su na raspolaganju i stvarno znaju svoj posao. Bez obzira na složenost, sve završe precizno i tačno, a komunikacija s njima je uvijek jasna i ugodna. Definitivno ih preporučujem svima koji žele pouzdan tim na svojoj strani! |
-| Alem Šunja | Preporučujem. |
+| Alem Šunje | Preporučujem. |
 | Almir Eglenović | Preporučujem. |
 
-Umjesto fotografija osoba prikazuju se inicijali.
+Prikazane su originalne fotografije Adisa, Alema i Almira; Maja ima inicijal jer original koristi generičku ikonu.
 
 ## 4. Novi sadržaj (prijedlozi napisani za redizajn)
 
@@ -78,7 +71,7 @@ Umjesto fotografija osoba prikazuju se inicijali.
 
 ## 6. Slike (treća runda, 24. 9. 2026.)
 
-- **Početna:** `ACCOUNT-hero-koncept-bez-mosta.png` — stilizovana konceptualna fotografija hercegovačkog kamena i tamnoplavog papira. Nije dokumentarna fotografija prostora agencije (napomena u podnožju). Logo nije ucrtan u fotografiju; originalni znak je zaseban element u zaglavlju i podnožju.
+- **Početna:** `source-images/hero-v3/account-rad.jpg` — ilustrativna fotografija pregleda računovodstvene dokumentacije. Originalni logo prikazuje se zasebno preko slike. Fotografija ne predstavlja stvarno osoblje ili prostor agencije.
 - **Stranice usluga i pregled usluga:** umjesto inscenirane scene svaka usluga ima vlastiti ravni motiv izveden iz znaka (`src/components/ServiceMotif.astro`): poslovna knjiga, dva trokuta (savjet), globus s oznakom (inostrana preduzeća), stepenice (registracija), plan s putanjom (projekti).
 - **Savjeti:** bez fotografija, urednička lista.
 - **O nama:** stvarna fotografija Starog mosta (Alen Kajimović, CC0 1.0, https://commons.wikimedia.org/wiki/File:Old_Bridge_Mostar_(125653963).jpeg), s potpisom; izvornik u `source-images/mostar/`.

@@ -20,6 +20,18 @@ export const generalFaq: Faq[] = [
   },
   {
     q: 'Hoću li imati pregled svog poslovanja?',
-    a: 'Pripremamo periodične izvještaje, u dogovorenoj dinamici, kako biste znali kako posluje vaša firma.',
+    a: 'Kroz redovne finansijske izvještaje i sastanke pomažemo vam da pratite prihode, rashode i obaveze. Dinamiku izvještavanja dogovaramo prema vašim potrebama.',
+  },
+  {
+    q: 'Koje usluge pružate?',
+    a: 'Pružamo računovodstvene i knjigovodstvene usluge, poslovno i porezno savjetovanje te zastupanje inostranih preduzeća. Pomažemo i pri registraciji firmi, obrta i udruženja te pripremi poslovnih projekata.',
+  },
+  {
+    q: 'Koja je dokumentacija potrebna za početak saradnje?',
+    a: 'Ako već poslujete, pripremite postojeće finansijske izvještaje, evidencije prihoda i rashoda, bilanse i porezne prijave. Tačan spisak dokumentacije utvrđujemo nakon razgovora o vašem poslovanju.',
+  },
+  {
+    q: 'Kako održavamo komunikaciju tokom saradnje?',
+    a: 'Redovna komunikacija pomaže nam da pratimo promjene u vašem poslovanju i pravovremeno reagujemo. Dogovaramo način razmjene dokumentacije, izvještavanja i razgovora, a za pitanja nas možete kontaktirati telefonom ili e-mailom.',
   },
 ];

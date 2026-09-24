@@ -1,4 +1,4 @@
-/* ACCOUNT — dizajnerski sistem: tamnoplava i plava iz izvornog znaka, tople kamene neutralne površine,
+/* ACCOUNT — dizajnerski sistem: tamnoplava i plava iz izvornog znaka, svijetle neutralne površine,
    urednička tipografija i ravni detalji izvedeni iz znaka (trokut s tamnijom lijevom i svjetlijom desnom polovinom).
    Plavi tonovi preuzeti su iz originalnog znaka: #00A0EC (svijetla ploha), #187CC4 (tamna ploha), #14B8EC (akcent).
    Za tekst i dugmad koristi se nešto tamnija nijansa (#1D6DB3) radi kontrasta s bijelom ≥ 4,5:1. */
@@ -35,16 +35,16 @@
   --c-blue-200: #bcdcf5;
   --c-blue-100: #e4f1fb;
   --c-cyan-400: #14b8ec; /* akcent iz znaka, u maloj količini */
-  --c-ink-950: #0e1420; /* tamni zid s naslovne fotografije */
-  --c-stone: #f3eee6; /* topla kamena površina */
-  --c-stone-line: #ddd3c3;
-  --c-bg: #f3eee6;
-  --c-cream: #f6f2eb;
-  --c-cream-line: #e6ddcf;
+  --c-ink-950: #0e1420; /* najtamniji ton */
+  --c-stone: #f1f6fa; /* svijetla podloga sekcija */
+  --c-stone-line: #d8e3ed;
+  --c-bg: #f1f6fa;
+  --c-cream: #f7f9fb;
+  --c-cream-line: #dce6ee;
   --c-surface: #ffffff;
   --c-ink: #0f2340;
   --c-ink-muted: #475a74;
-  --c-line: #e1dbd0;
+  --c-line: #dce4eb;
   --c-success: #17784a;
   --c-danger: #b42318;
   --c-focus: #0b72c9;
@@ -56,9 +56,9 @@
   --fs-h2: clamp(1.875rem, 1.45rem + 1.6vw, 3rem); /* 30 → 48 px */
   --fs-h3: clamp(1.1875rem, 1.1rem + 0.35vw, 1.375rem);
 
-  --radius-lg: 20px;
-  --radius: 14px;
-  --radius-sm: 10px;
+  --radius-lg: 12px;
+  --radius: 8px;
+  --radius-sm: 6px;
   --shadow-sm: 0 1px 2px rgb(15 35 64 / 0.06), 0 1px 1px rgb(15 35 64 / 0.04);
   --shadow: 0 12px 32px -12px rgb(15 35 64 / 0.18), 0 2px 6px rgb(15 35 64 / 0.06);
 

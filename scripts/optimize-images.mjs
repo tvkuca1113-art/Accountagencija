@@ -9,11 +9,8 @@ const OUT = 'public/images';
 
 // crop: dio izvorne slike koji se zadržava (u pikselima izvornika).
 const jobs = [
-  // Naslovna konceptualna fotografija (hercegovački kamen i tamnoplavi papir), 1672×941.
-  // Desktop: cijela scena, tamni zid lijevo je prostor za tipografiju.
-  { name: 'account-hero-kamen', from: 'hero-koncept/ACCOUNT-hero-koncept-bez-mosta', widths: [640, 960, 1280, 1672], quality: { webp: 80, avif: 60 } },
-  // Mobitel i tablet: kadar 4:3 s prelazom zid–kamen i papirom.
-  { name: 'account-hero-kamen-mobile', from: 'hero-koncept/ACCOUNT-hero-koncept-bez-mosta', crop: { left: 700, top: 150, width: 972, height: 729 }, widths: [480, 800, 972], quality: { webp: 80, avif: 60 } },
+  // Ilustrativna fotografija rada, originalni znak prikazan je odvojeno u HTML-u.
+  { name: 'account-rad', from: 'hero-v3/account-rad', ext: 'jpg', widths: [480, 800, 1122], quality: { webp: 80, avif: 55 } },
   // Stvarna fotografija Starog mosta (Alen Kajimović, CC0 1.0) — O nama.
   { name: 'mostar-stari-most', from: 'mostar/mostar-originalna-fotografija', ext: 'jpeg', widths: [480, 800, 1200], quality: { webp: 78, avif: 58 } },
 ];
@@ -44,8 +41,16 @@ for (const job of jobs) {
 }
 
 // OG slika za društvene mreže (1200×630), JPEG radi kompatibilnosti.
-await sharp(path.join(SRC, 'hero-koncept/ACCOUNT-hero-koncept-bez-mosta.png'))
+await sharp(path.join(SRC, 'hero-v3/account-rad.jpg'))
   .resize({ width: 1200, height: 630, fit: 'cover', position: 'centre' })
   .jpeg({ quality: 80, mozjpeg: true })
   .toFile(path.join(OUT, 'og-account.jpg'));
 console.log(`og-account.jpg: ${await kb(path.join(OUT, 'og-account.jpg'))} KB`);
+
+// Portreti iz izvornih recenzija; 2x veličina za prikaz od 52 px.
+await mkdir(path.join(OUT, 'reviews'), { recursive: true });
+for (const name of ['Adis-Krvavac', 'Alem-Sunje', 'Almir-Eglenovic']) {
+  await sharp(path.join(SRC, 'reviews', `${name}.jpg`))
+    .resize(104, 104, { fit: 'cover' }).webp({ quality: 85 })
+    .toFile(path.join(OUT, 'reviews', `${name}.webp`));
+}

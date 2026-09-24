@@ -27,7 +27,7 @@ export const articles: Article[] = [
       { href: '/racunovodstvo', label: 'Računovodstvo i knjigovodstvo' },
     ],
     body: `
-<p>Kad na račun stigne veća uplata, lako je zaključiti da posao ide odlično. Ali prihod pokazuje samo koliko je novca ušlo u poslovanje. Koliko od toga zaista ostaje, vidi se tek kad od prihoda oduzmete troškove.</p>
+<p>Kad na račun stigne veća uplata, lako je zaključiti da posao ide odlično. Uplata, prihod i dobit nisu ista stvar: uplata je kretanje novca, dok se rezultat poslovanja utvrđuje poređenjem prihoda i rashoda odgovarajućeg perioda.</p>
 
 <h2>Prihod je tek početak priče</h2>
 <p>Prihod je iznos koji ste ostvarili prodajom proizvoda ili usluga. Dobit je ono što ostane kad se od prihoda oduzmu svi troškovi koji su bili potrebni da taj prihod nastane. Dvije firme s istim prihodom mogu imati potpuno različit rezultat, zavisno od toga koliko ih posao košta.</p>

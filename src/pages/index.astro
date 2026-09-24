@@ -8,12 +8,10 @@ import ArticleList from '../components/ArticleList.astro';
 import FaqList from '../components/FaqList.astro';
 import { services, audiences } from '../data/services.ts';
 import { generalFaq } from '../data/faq.ts';
-import { reviews, initials } from '../data/reviews.ts';
+import ClientReviews from '../components/ClientReviews.astro';
 import { site, fullAddress } from '../data/site.ts';
 import { organizationSchema } from '../lib/schema.ts';
 
-const [leadReview, ...otherReviews] = reviews.filter((r) => r.text.length > 40);
-const shortReviews = reviews.filter((r) => r.text.length <= 40);
 ---
 
 <Base
@@ -28,8 +26,8 @@ const shortReviews = reviews.filter((r) => r.text.length <= 40);
     <div class="container services__grid">
       <div class="services__head" data-reveal>
         <p class="eyebrow">Usluge</p>
-        <h2 id="usluge-naslov">Šta radimo za vaše poslovanje</h2>
-        <p>Pet oblasti, od registracije do urednih knjiga i planiranja. Obim svake usluge dogovaramo na početku saradnje.</p>
+        <h2 id="usluge-naslov">Od prvog koraka do sljedeće odluke.</h2>
+        <p>Računovodstvo, savjetovanje i podrška pri pokretanju posla. Pronađite ono što je vašem poslovanju potrebno.</p>
         <a class="link-arrow" href="#vodic">Niste sigurni šta vam treba? <Icon name="arrow" size={18} /></a>
       </div>
       <ol class="services__list">
@@ -43,7 +41,7 @@ const shortReviews = reviews.filter((r) => r.text.length <= 40);
                 <h3>
                   <a href={`/${s.slug}`}>{s.title}</a>
                 </h3>
-                <p>{s.intro}</p>
+                <p>{s.benefit}</p>
               </div>
               <Icon name="arrow" size={22} class="services__arrow" />
             </li>
@@ -58,7 +56,7 @@ const shortReviews = reviews.filter((r) => r.text.length <= 40);
     <div class="container">
       <div class="audiences__head" data-reveal>
         <p class="eyebrow">Za koga radimo</p>
-        <h2 id="kome-naslov">Firme, obrti, novi preduzetnici i inostrana preduzeća</h2>
+        <h2 id="kome-naslov">Gdje god da ste na svom poslovnom putu.</h2>
       </div>
       <ul class="audiences__list" data-reveal>
         {
@@ -79,76 +77,7 @@ const shortReviews = reviews.filter((r) => r.text.length <= 40);
     </div>
   </section>
 
-  <!-- 3. Dokaz: potvrđeni podaci i recenzije s dosadašnjeg weba -->
-  <section class="section proof" aria-labelledby="dokaz-naslov">
-    <div class="container">
-      <div class="proof__top">
-        <div data-reveal>
-          <p class="eyebrow proof__eyebrow">Iskustvo i preporuke</p>
-          <h2 id="dokaz-naslov">Lokalna agencija s više od deset godina iskustva</h2>
-        </div>
-        <dl class="proof__facts" data-reveal>
-          {
-            site.stats.map((s) => (
-              <div>
-                <dt>{s.label}</dt>
-                <dd>{s.value}</dd>
-              </div>
-            ))
-          }
-          <div class="proof__fact-text">
-            <dt>stranih poreznih obveznika</dt>
-            <dd>Ovlašteno zastupanje</dd>
-          </div>
-        </dl>
-      </div>
-
-      <div class="proof__reviews">
-        {
-          leadReview && (
-            <figure class="quote quote--lead" data-reveal>
-              <blockquote>
-                <p>„{leadReview.text}“</p>
-              </blockquote>
-              <figcaption>
-                <span class="quote__avatar" aria-hidden="true">
-                  {initials(leadReview.name)}
-                </span>
-                {leadReview.name}
-              </figcaption>
-            </figure>
-          )
-        }
-        <div class="proof__side" data-reveal>
-          {
-            otherReviews.map((r) => (
-              <figure class="quote">
-                <blockquote>
-                  <p>„{r.text}“</p>
-                </blockquote>
-                <figcaption>
-                  <span class="quote__avatar" aria-hidden="true">
-                    {initials(r.name)}
-                  </span>
-                  {r.name}
-                </figcaption>
-              </figure>
-            ))
-          }
-          <ul class="proof__short">
-            {
-              shortReviews.map((r) => (
-                <li>
-                  „{r.text}“ <span>— {r.name}</span>
-                </li>
-              ))
-            }
-          </ul>
-        </div>
-      </div>
-      <p class="proof__source">Recenzije objavljene na dosadašnjoj web stranici agencije, s imenima i tekstom kako su objavljene.</p>
-    </div>
-  </section>
+  <ClientReviews />
 
   <!-- 4. Saradnja -->
   <ProcessSection />
@@ -193,7 +122,7 @@ const shortReviews = reviews.filter((r) => r.text.length <= 40);
       <div data-reveal>
         <p class="eyebrow">Česta pitanja</p>
         <h2 id="faq-naslov">Prije prvog razgovora</h2>
-        <FaqList items={generalFaq.slice(0, 3)} />
+        <FaqList items={generalFaq} />
       </div>
       <aside class="contact-card" aria-labelledby="kontakt-kartica-naslov" data-reveal>
         <h2 id="kontakt-kartica-naslov">Vi vodite posao. Mi brinemo o računovodstvu.</h2>
@@ -375,148 +304,6 @@ const shortReviews = reviews.filter((r) => r.text.length <= 40);
     color: var(--c-blue-600);
   }
 
-  /* Dokaz */
-  .proof {
-    background: var(--c-ink-950);
-    color: #c7d0dc;
-  }
-  .proof h2 {
-    color: #fff;
-    margin: 0;
-    max-width: 16ch;
-  }
-  .proof__eyebrow {
-    color: #7fcdf2;
-  }
-  .proof__top {
-    display: grid;
-    gap: 32px;
-    align-items: end;
-    padding-bottom: clamp(32px, 4vw, 56px);
-    border-bottom: 1px solid rgb(255 255 255 / 0.12);
-  }
-  @media (min-width: 1024px) {
-    .proof__top {
-      grid-template-columns: 1fr 1.1fr;
-      gap: 64px;
-    }
-  }
-  .proof__facts {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px 32px;
-    margin: 0;
-  }
-  @media (min-width: 640px) {
-    .proof__facts {
-      grid-template-columns: auto auto 1fr;
-    }
-  }
-  .proof__facts div {
-    display: flex;
-    flex-direction: column;
-  }
-  .proof__facts dd {
-    order: -1;
-    margin: 0;
-    font-size: clamp(2.5rem, 2rem + 2vw, 3.75rem);
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 1;
-    color: #fff;
-  }
-  .proof__facts dt {
-    margin-top: 8px;
-    color: #a9b5c5;
-  }
-  .proof__fact-text {
-    grid-column: 1 / -1;
-  }
-  @media (min-width: 640px) {
-    .proof__fact-text {
-      grid-column: auto;
-      padding-left: 28px;
-      border-left: 1px solid rgb(255 255 255 / 0.16);
-    }
-  }
-  .proof__facts .proof__fact-text dd {
-    font-size: clamp(1.375rem, 1.2rem + 0.8vw, 1.75rem);
-    letter-spacing: -0.01em;
-    line-height: 1.2;
-  }
-  .proof__reviews {
-    display: grid;
-    gap: 40px;
-    padding-top: clamp(32px, 4vw, 56px);
-  }
-  @media (min-width: 1024px) {
-    .proof__reviews {
-      grid-template-columns: 1.3fr 1fr;
-      gap: 64px;
-    }
-  }
-  .quote {
-    margin: 0;
-  }
-  .quote blockquote {
-    margin: 0 0 20px;
-  }
-  .quote p {
-    margin: 0;
-    color: #e3e8ef;
-    font-size: 1.0625rem;
-    line-height: 1.65;
-  }
-  .quote--lead p {
-    color: #fff;
-    font-size: clamp(1.375rem, 1.15rem + 1vw, 2rem);
-    line-height: 1.4;
-    letter-spacing: -0.01em;
-    font-weight: 500;
-  }
-  .quote figcaption {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-weight: 700;
-    color: #fff;
-  }
-  .quote__avatar {
-    display: grid;
-    place-items: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid rgb(255 255 255 / 0.3);
-    font-size: 0.8125rem;
-    font-weight: 800;
-    color: #fff;
-  }
-  .proof__side {
-    display: grid;
-    gap: 28px;
-    align-content: start;
-  }
-  .proof__short {
-    list-style: none;
-    margin: 0;
-    padding: 20px 0 0;
-    border-top: 1px solid rgb(255 255 255 / 0.12);
-    display: grid;
-    gap: 8px;
-    color: #fff;
-    font-weight: 600;
-  }
-  .proof__short span {
-    font-weight: 500;
-    color: #a9b5c5;
-  }
-  .proof__source {
-    margin: 40px 0 0;
-    font-size: 0.875rem;
-    color: #8f9cad;
-  }
-
   /* Alat */
   .guide-wrap {
     display: grid;
@@ -603,8 +390,7 @@ const shortReviews = reviews.filter((r) => r.text.length <= 40);
     font-size: 0.85rem;
     color: #9fb0c6;
   }
-  .contact-card :global(:focus-visible),
-  .proof :global(:focus-visible) {
+  .contact-card :global(:focus-visible) {
     outline-color: #fff;
   }
 </style>

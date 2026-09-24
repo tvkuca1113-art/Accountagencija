@@ -1,203 +1,95 @@
 ---
-// Naslovni ekran: konceptualna fotografija hercegovačkog kamena i tamnoplavog papira (bez logotipa u fotografiji).
-// Desktop (≥1100 px): tipografija u tamnoj lijevoj zoni fotografije, bez tamnog sloja preko cijele slike.
-// Mobitel i tablet: prvo naslov, podnaslov, pozivi i potvrđeni podaci, zatim kadar 4:3 (zid–kamen–papir).
 import Icon from './Icon.astro';
-import ResponsiveImage from './ResponsiveImage.astro';
 import { site } from '../data/site.ts';
 ---
-
-<section class="hero" aria-labelledby="hero-naslov">
-  <div class="container hero__content">
-    <div class="hero__text">
-      <p class="eyebrow hero__eyebrow">Računovodstvena agencija ACCOUNT</p>
-      <h1 id="hero-naslov">Računovodstvo za firme i&nbsp;obrte u&nbsp;Mostaru.</h1>
-      <p class="hero__lead">Poslovne knjige, porezne obaveze i savjetovanje uz jasan dogovor i dostupnu podršku.</p>
+<section class="hero" aria-labelledby="hero-naslov" data-home-hero>
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="hero__location"><span></span> RAČUNOVODSTVO · MOSTAR</p>
+      <h1 id="hero-naslov">Manje brige.<br /><em>Više prostora</em><br />za vaš posao.</h1>
+      <p class="hero__lead">Vi gradite posao. Mi vodimo knjige, pripremamo porezne prijave i pomažemo vam da odlučujete sigurnije.</p>
       <div class="hero__actions">
-        <a class="btn btn--bright" href="/kontakt#upit">Zatražite ponudu <Icon name="arrow" size={18} /></a>
-        <a class="btn btn--glass" href="#usluge">Pregledajte usluge</a>
+        <a class="hero__cta" href="/kontakt#upit" data-hero-cta>Zatražite ponudu <Icon name="arrow" size={20} /></a>
+        <a class="hero__link" href="#usluge">Naše usluge <Icon name="arrow" size={18} /></a>
       </div>
-      <ul class="hero__facts">
-        {
-          site.stats.map((s) => (
-            <li>
-              <strong>{s.value}</strong>
-              <span>{s.label}</span>
-            </li>
-          ))
-        }
-        <li class="hero__facts-place">
-          <Icon name="pin" size={18} />
-          <span>Lacina bb, Villa Neretva, Mostar</span>
-        </li>
-      </ul>
+      <p class="hero__note">Za firme, obrte i preduzetnike — od prvog koraka.</p>
+    </div>
+    <div class="hero__visual">
+      <picture>
+        <source type="image/avif" srcset="/images/account-rad-480.avif 480w, /images/account-rad-800.avif 800w, /images/account-rad-1122.avif 1122w" sizes="(min-width: 768px) 46vw, 100vw" />
+        <img src="/images/account-rad-800.webp" srcset="/images/account-rad-480.webp 480w, /images/account-rad-800.webp 800w, /images/account-rad-1122.webp 1122w" sizes="(min-width: 768px) 46vw, 100vw" width="1122" height="1402" alt="Ilustrativni prikaz pregleda finansijske dokumentacije" fetchpriority="high" decoding="async" />
+      </picture>
+      <div class="hero__signature" aria-hidden="true">
+        <img src={site.logo!.src} alt="" width="35" height="44" />
+        <span>ACCOUNT<small>Svaka stavka na svom mjestu.</small></span>
+      </div>
+      <span class="hero__edition" aria-hidden="true">JASNE BROJKE. JASNIJI KORACI.</span>
     </div>
   </div>
-
-  <div class="hero__media">
-    <ResponsiveImage
-      name="account-hero-kamen"
-      alt="Tamnoplavi presavijeni papir naslonjen na hercegovački kamen (konceptualna fotografija)"
-      sizes="100vw"
-      priority
-      mobileArtDirection
-      mobileMedia="(max-width: 1099px)"
-      class="hero__photo"
-    />
+  <div class="container">
+    <div class="hero__trust">
+      <p>Tu smo za vaš<br /><strong>sljedeći korak.</strong></p>
+      {site.stats.map(s => <div class="hero__stat"><strong>{s.value}</strong><span>{s.label}</span></div>)}
+      <a href="/o-nama" class="hero__about">Upoznajte ACCOUNT <Icon name="arrow" size={20}/></a>
+    </div>
   </div>
 </section>
-
 <style>
-  .hero {
-    --hero-bg: #0e1420; /* boja tamnog zida na fotografiji */
-    position: relative;
-    isolation: isolate;
-    overflow: hidden;
-    background: var(--hero-bg);
-    color: #c7d0dc;
-  }
-  .hero__content {
-    position: relative;
-    z-index: 2;
-    padding-block: 40px 28px;
-  }
-  .hero__eyebrow {
-    color: #7fcdf2;
-  }
-  .hero h1 {
-    color: #fff;
-    max-width: 12ch;
-    font-size: clamp(2.375rem, 1.6rem + 3.2vw, 4rem);
-  }
-  .hero__lead {
-    max-width: 30rem;
-    margin-bottom: 28px;
-    font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
-    line-height: 1.6;
-    color: #c7d0dc;
-  }
-  .hero__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  @media (max-width: 480px) {
-    .hero__actions .btn {
-      min-height: 48px;
-      padding: 10px 18px;
-      font-size: 0.9375rem;
-    }
-    .hero__actions .btn :global(svg) {
-      display: none;
-    }
-  }
-  .hero :global(:focus-visible) {
-    outline-color: #fff;
-  }
-
-  /* Potvrđeni podaci kao čist tekst */
-  .hero__facts {
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 12px 28px;
-    margin: 32px 0 0;
-    padding: 20px 0 0;
-    border-top: 1px solid rgb(255 255 255 / 0.14);
-    max-width: 34rem;
-  }
-  .hero__facts li {
-    display: flex;
-    align-items: baseline;
-    gap: 8px;
-    font-size: 0.9375rem;
-    color: #a9b5c5;
-  }
-  .hero__facts strong {
-    font-size: 1.75rem;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    color: #fff;
-    line-height: 1;
-  }
-  .hero__facts-place {
-    align-items: center !important;
-    flex-basis: 100%;
-  }
-  .hero__facts-place :global(svg) {
-    color: #7fcdf2;
-    flex: none;
-  }
-
-  /* Fotografija — mobitel i tablet: ispod teksta */
-  .hero__media {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    aspect-ratio: 4 / 3;
-    max-height: 560px;
-  }
-  .hero__media :global(.hero__photo) {
-    position: absolute;
-    inset: 0;
-    display: block;
-    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 16%);
-    mask-image: linear-gradient(180deg, transparent 0%, #000 16%);
-  }
-  .hero__media :global(.hero__photo img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: 70% 60%;
-  }
-  @media (min-width: 768px) and (max-width: 1099px) {
-    .hero__content {
-      padding-block: 64px 32px;
-    }
-    .hero__media {
-      aspect-ratio: 16 / 9;
-      max-height: 540px;
-    }
-  }
-
-  /* Desktop: fotografija preko cijelog heroja, tipografija na tamnom zidu */
-  @media (min-width: 1100px) {
-    .hero {
-      display: flex;
-      align-items: center;
-      min-height: clamp(620px, 80vh, 780px);
-    }
-    .hero__content {
-      padding-block: 104px;
-    }
-    .hero__text {
-      max-width: 34rem;
-    }
-    .hero__media {
-      position: absolute;
-      inset: 0;
-      max-height: none;
-      aspect-ratio: auto;
-    }
-    .hero__media :global(.hero__photo) {
-      -webkit-mask-image: none;
-      mask-image: none;
-    }
-    .hero__media :global(.hero__photo img) {
-      object-position: 100% 30%;
-    }
-    /* Samo lokalno: svijetli pod ispod teksta u boji zida; na širokim ekranima lijeva zona je već tamni zid. */
-    .hero__media::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg, var(--hero-bg) 0%, rgb(14 20 32 / 0.85) 30%, rgb(14 20 32 / 0) 52%),
-        linear-gradient(0deg, rgb(14 20 32 / 0.9) 0%, rgb(14 20 32 / 0) 34%);
-      -webkit-mask-image: linear-gradient(90deg, #000 45%, transparent 68%);
-      mask-image: linear-gradient(90deg, #000 45%, transparent 68%);
-      pointer-events: none;
-    }
-  }
+.hero{background:#f7f9fb;overflow:hidden;padding-top:clamp(24px,3.8vw,58px);color:var(--c-navy-950)}
+.hero__grid{display:grid;gap:28px;align-items:center}
+.hero__copy{padding-bottom:4px}
+.hero__location{display:flex;align-items:center;gap:10px;font-size:.6875rem;letter-spacing:.16em;font-weight:800;color:#426079;margin:0 0 20px}
+.hero__location span{width:7px;height:7px;background:#008ed3;border-radius:50%}
+.hero h1{font-size:clamp(2.35rem,10.1vw,3.1rem);line-height:1.07;letter-spacing:-.055em;font-weight:650;margin:0 0 20px;text-wrap:initial;color:#10263c}
+.hero h1 em{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-.055em;color:#176caf}
+.hero__lead{font-size:.975rem;line-height:1.65;color:#4d5e6e;max-width:29rem;margin:0 0 23px}
+.hero__actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap}
+.hero__cta{display:inline-flex;align-items:center;justify-content:space-between;gap:20px;background:#1269ad;color:#fff;text-decoration:none;font-weight:750;font-size:.875rem;padding:15px 20px;border-radius:6px;min-height:50px;transition:background .18s}
+.hero__cta:hover{background:#0a4d83;color:#fff}
+.hero__link{display:inline-flex;align-items:center;gap:7px;color:#17324b;font-size:.8125rem;font-weight:700;text-decoration:none;padding-block:12px}
+.hero__link:hover{text-decoration:underline}
+.hero__note{font-size:.75rem;color:#667887;margin:14px 0 0}
+.hero__visual{position:relative;min-width:0;margin:0;aspect-ratio:1.48;border-radius:9px;isolation:isolate}
+.hero__visual picture{display:block;width:100%;height:100%;overflow:hidden;border-radius:9px}
+.hero__visual picture img{width:100%;height:100%;object-fit:cover;object-position:50% 39%}
+.hero__signature{position:absolute;bottom:16px;left:16px;right:16px;display:flex;align-items:center;gap:11px;background:rgba(255,255,255,.96);padding:13px 15px;max-width:305px;border-radius:4px;box-shadow:0 10px 35px rgb(10 30 50 / .10)}
+.hero__signature>img{width:26px;height:auto;flex:none}
+.hero__signature>span{font-weight:800;font-size:.875rem;letter-spacing:.16em;line-height:1.4}
+.hero__signature small{display:block;font-size:.65rem;font-weight:500;letter-spacing:0;color:#516473;margin-top:2px}
+.hero__edition{display:none}
+.hero__trust{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:20px;padding:24px 0 28px;margin-top:24px;border-top:1px solid #d7e0e7}
+.hero__trust>p{display:none;font-size:.85rem;line-height:1.55;margin:0;color:#5b6d7c}
+.hero__trust>p strong{color:#153047;font-weight:700}
+.hero__stat{display:flex;align-items:center;gap:10px}
+.hero__stat strong{font-size:2rem;letter-spacing:-.06em;font-weight:700;line-height:1}
+.hero__stat span{max-width:7rem;font-size:.72rem;line-height:1.4;color:#536879}
+.hero__about{display:none;align-items:center;justify-content:flex-end;gap:14px;font-size:.8125rem;color:#17324b;font-weight:700;text-decoration:none}
+@media(min-width:768px){
+.hero__grid{grid-template-columns:1.04fr 1fr;gap:40px}
+.hero h1{font-size:clamp(2.75rem,5.4vw,4.65rem);margin-bottom:26px}
+.hero__location{font-size:.67rem;margin-bottom:26px}
+.hero__lead{font-size:1rem}
+.hero__visual{aspect-ratio:1 / 1.08}
+.hero__visual picture img{object-position:center}
+.hero__signature{left:-23px;right:auto;bottom:35px;padding:16px 21px;min-width:285px}
+.hero__signature>img{width:32px}
+.hero__signature>span{font-size:1rem}
+.hero__signature small{font-size:.7rem}
+.hero__trust{grid-template-columns:1fr 1fr 1fr;gap:32px;padding-block:26px;margin-top:40px}
+.hero__trust>p{display:block}
+.hero__stat strong{font-size:2.8rem}
+.hero__stat span{font-size:.85rem}
+}
+@media(min-width:1100px){
+.hero__grid{gap:75px}
+.hero__copy{padding-top:4px}
+.hero__lead{font-size:1.0625rem;max-width:27rem;margin-bottom:28px}
+.hero__cta{font-size:.9375rem;padding:17px 24px}
+.hero__link{font-size:.875rem}
+.hero__location{font-size:.75rem}
+.hero__trust{grid-template-columns:1.1fr 1fr 1fr 1.1fr}
+.hero__about{display:flex}
+.hero__edition{display:block;position:absolute;right:18px;top:20px;writing-mode:vertical-rl;font-size:.57rem;letter-spacing:.13em;color:#fff;text-shadow:0 1px 6px #17324b}
+}
+@media(max-width:370px){.hero__actions{gap:17px}.hero__cta{padding-inline:16px;gap:12px}.hero__note{font-size:.7rem}}
 </style>

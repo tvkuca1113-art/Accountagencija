@@ -22,7 +22,14 @@ import { primaryPhone } from '../data/site.ts';
     document.body.classList.add('has-mobile-bar');
     let fieldFocused = false;
     let formVisible = false;
-    const update = () => bar.classList.toggle('is-hidden', fieldFocused || formVisible);
+    let heroVisible = !!document.querySelector("[data-home-hero]");
+    const update = () => bar.classList.toggle('is-hidden', fieldFocused || formVisible || heroVisible);
+
+    update();
+    const hero = document.querySelector('[data-home-hero]');
+    if (hero && 'IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => { heroVisible = entry.isIntersecting; update(); }, { threshold: 0 }).observe(hero);
+    }
 
     document.addEventListener('focusin', (e) => {
       fieldFocused = (e.target as HTMLElement).matches('input, textarea, select');

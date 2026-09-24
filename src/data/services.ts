@@ -96,7 +96,10 @@ export const services: Service[] = [
       'Porezno savjetovanje u vezi s vašim poslovanjem.',
       'Poslovno savjetovanje i analiza potreba.',
       'Objašnjenje finansijskih izvještaja i ključnih pokazatelja.',
-      'Podrška pri planiranju narednih poslovnih odluka.',
+      'Razvoj poslovne strategije i unapređenje efikasnosti poslovnih procesa.',
+      'Analiza tržišta i konkurencije te procjena mogućnosti rasta i poslovnih rizika.',
+      'Podrška pri uvođenju tehnoloških rješenja i finansijskom upravljanju.',
+      'Savjetovanje o usklađenosti poslovanja s propisima.',
     ],
     steps: [
       { title: 'Razgovor o potrebama', text: 'Opišete situaciju i pitanje na koje tražite odgovor.' },
@@ -141,6 +144,10 @@ export const services: Service[] = [
     scope: [
       'Ovlašteno zastupanje stranih poreznih obveznika.',
       'Lokalna podrška za administrativne i računovodstvene potrebe poslovanja u BiH.',
+      'Podrška pri otvaranju podružnica i registraciji poslovanja u BiH.',
+      'Pomoć u uspostavljanju lokalnih partnerstava i ulasku na tržište.',
+      'Podrška u administrativnim i pravnim procedurama te porezno savjetovanje.',
+      'Analiza poslovnih prilika i rizika na lokalnom tržištu.',
       'Vođenje evidencija i poslovnih knjiga, kao dio računovodstvene podrške.',
     ],
     steps: [
@@ -157,7 +164,7 @@ export const services: Service[] = [
     faq: [
       {
         q: 'Da li je ovo advokatsko zastupanje?',
-        a: 'Ne. Ovlašteno zastupanje stranih poreznih obveznika nije advokatsko zastupanje. Za pravna pitanja i zastupanje pred sudom potreban je advokat.',
+        a: 'Ne. Ovlašteno zastupanje stranih poreznih obveznika nije advokatsko zastupanje. Podršku u administrativnim i pravnim procedurama dogovaramo prema potrebama poslovanja; za zastupanje pred sudom potreban je advokat.',
       },
       {
         q: 'Možemo li sarađivati ako nismo u Mostaru?',
@@ -185,6 +192,7 @@ export const services: Service[] = [
       'Osnivači udruženja.',
     ],
     scope: [
+      'Podrška pri izboru odgovarajućeg pravnog oblika poslovanja.',
       'Razgovor o tome šta planirate i koji su naredni koraci.',
       'Pomoć u pripremi dokumentacije za registraciju.',
       'Podrška kroz korake pokretanja poslovanja.',
@@ -228,14 +236,14 @@ export const services: Service[] = [
       'Pomažemo vam da ideju pretočite u jasan poslovni plan s budžetom i brojkama koje možete obrazložiti.',
     forWhom: [
       'Oni koji pripremaju poslovni plan za novu ideju.',
-      'Firme koje planiraju ulaganje ili novi projekt.',
+      'Firme koje planiraju ulaganje, širenje poslovanja ili ulazak na nova tržišta.',
       'Podnosioci projekata kojima treba finansijski dio dokumentacije.',
     ],
     scope: [
       'Razrada poslovne ideje.',
       'Priprema budžeta i finansijskih projekcija.',
       'Izrada poslovnog plana.',
-      'Priprema poslovnih projekata.',
+      'Priprema poslovnih projekata za finansiranje, širenje poslovanja i nova tržišta.',
     ],
     steps: [
       { title: 'Razgovor o ideji', text: 'Opišete ideju, cilj projekta i rok do kojeg vam treba dokumentacija.' },
